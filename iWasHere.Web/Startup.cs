@@ -25,7 +25,7 @@ namespace iWasHere.Web
             Configuration = configuration;
         }
 
-        // Victor was here.
+        // Victor was here!
 
         public IConfiguration Configuration { get; }
 
