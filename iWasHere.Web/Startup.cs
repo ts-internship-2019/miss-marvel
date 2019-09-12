@@ -20,10 +20,13 @@ namespace iWasHere.Web
 {   //test push
     public class Startup
     {
+        //Comentariu - Cata
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
+
+        // Victor was here!
 
         public IConfiguration Configuration { get; }
 
