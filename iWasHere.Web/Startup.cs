@@ -17,9 +17,10 @@ using iWasHere.Domain.Model;
 using iWasHere.Domain.Service;
 
 namespace iWasHere.Web
-{
+{   //test push
     public class Startup
     {
+        //Comentariu - Cata
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
