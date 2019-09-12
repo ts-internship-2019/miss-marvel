@@ -20,6 +20,7 @@ namespace iWasHere.Web
 {
     public class Startup
     {
+        //Comentariu - Cata
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
