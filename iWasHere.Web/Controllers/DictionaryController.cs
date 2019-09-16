@@ -7,16 +7,12 @@ using iWasHere.Domain.DTOs;
 using iWasHere.Domain.Models;
 using iWasHere.Domain.Service;
 using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
+
 using Microsoft.AspNetCore.Mvc;
-using iWasHere.Domain.Models;
-using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
-using System.Linq;
-using Kendo.Mvc.Extensions;
+
 using iWasHere.Web;
 using iWasHere.Domain;
-using iWasHere.Domain.Models;
+
 
 
 namespace iWasHere.Web.Controllers

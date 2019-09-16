@@ -1,7 +1,7 @@
 ﻿using System;
 using iWasHere.Domain.Models;
 using System.Collections.Generic;
-using iWasHere.Domain.Models;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -32,18 +32,7 @@ namespace iWasHere.Domain.Model
         public virtual DbSet<DictionaryCounty> DictionaryCounty { get; set; }
         public virtual DbSet<DictionaryCurrencyType> DictionaryCurrencyType { get; set; }
         public virtual DbSet<DictionaryLandmarkPeriod> DictionaryLandmarkPeriod { get; set; }
-        public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
-        public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
-        public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
-        public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
-        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
-        public virtual DbSet<DictionaryCity> DictionaryCity { get; set; }
-        public virtual DbSet<DictionaryCountry> DictionaryCountry { get; set; }
-        public virtual DbSet<DictionaryCounty> DictionaryCounty { get; set; }
-        public virtual DbSet<DictionaryCurrencyType> DictionaryCurrencyType { get; set; }
-        public virtual DbSet<DictionaryLandmarkPeriod> DictionaryLandmarkPeriod { get; set; }
+    
         public virtual DbSet<DictionaryLandmarkType> DictionaryLandmarkType { get; set; }
         public virtual DbSet<DictionaryTicketType> DictionaryTicketType { get; set; }
         public virtual DbSet<Landmark> Landmark { get; set; }
