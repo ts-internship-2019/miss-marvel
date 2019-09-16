@@ -24,6 +24,7 @@ namespace iWasHere.Web
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
         }
 
         // Victor was here!

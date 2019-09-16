@@ -16,6 +16,7 @@ namespace iWasHere.Web
         {
 
             CreateWebHostBuilder(args).Build().Run();
+
         }
 
 
