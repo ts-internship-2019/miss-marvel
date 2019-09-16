@@ -1,4 +1,5 @@
 ﻿using System;
+using iWasHere.Domain.Models;
 using System.Collections.Generic;
 using iWasHere.Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,8 @@ namespace iWasHere.Domain.Model
             : base(options)
         {
         }
+
+        public virtual DbSet<DictionaryCountry> DictionaryCountry { get; set; }
 
         public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
@@ -267,6 +270,30 @@ namespace iWasHere.Domain.Model
                     .HasName("PK__Landmark__80F73FED07CDCF1A");
 
                 entity.Property(e => e.LandmarkPeriodName)
+                    .HasMaxLength(256)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<DictionaryCountry>(entity =>
+            {
+                entity.HasKey(e => e.CountryId)
+                    .HasName("PK__Country__10D1609FA42B66F3");
+
+                entity.HasIndex(e => e.CountryCode)
+                    .HasName("UQ__Dictiona__5D9B0D2CFE731AFA")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.CountryName)
+                    .HasName("UQ__Country__E056F20167A528C4")
+                    .IsUnique();
+
+                entity.Property(e => e.CountryCode)
+                    .IsRequired()
+                    .HasMaxLength(256)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CountryName)
+                    .IsRequired()
                     .HasMaxLength(256)
                     .IsUnicode(false);
             });
