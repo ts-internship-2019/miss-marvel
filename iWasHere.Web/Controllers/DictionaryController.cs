@@ -59,7 +59,33 @@ namespace iWasHere.Web.Controllers
 
             return View(dictionaryCities);
         }
+
+
+        public partial class TextBox : Controller
+        {
+    
+            public ActionResult Index()
+            {
+                
+                return View();
+            }
+        }
+
+        // ADD Button Currency
+        public partial class ButtonController : Controller
+        {
+
+            public IActionResult Events()
+            {
+                // Actiune pe add
+                
+                return View();
+            }
+        }
+
         
+   
+
         public IActionResult Currency()
         {
             List<DictionaryCurrencyType> dictionaryCurrencies = _dictionaryService.GetDictionaryCurrencyType();
