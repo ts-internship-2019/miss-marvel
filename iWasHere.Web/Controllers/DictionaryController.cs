@@ -32,5 +32,20 @@ namespace iWasHere.Web.Controllers
         }
 
 
+
+        public IActionResult LandmarkType(String searchString)
+        {
+
+            List<DictionaryLandmarkType> dictionaryLandmarkType = _dictionaryService.GetDictionaryLandmarkType(searchString);
+
+            return View(dictionaryLandmarkType);
+        }
+
+        public IActionResult Cities()
+        {
+            List<DictionaryCity> dictionaryCities = _dictionaryService.GetDictionaryCities();
+
+            return View(dictionaryCities);
+        }
     }
 }
