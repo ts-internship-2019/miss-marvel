@@ -6,6 +6,7 @@ using iWasHere.Domain.DTOs;
 using iWasHere.Domain.Models;
 using iWasHere.Domain.Service;
 using Microsoft.AspNetCore.Mvc;
+using iWasHere.Domain.Models;
 
 namespace iWasHere.Web.Controllers
 {
@@ -24,6 +25,36 @@ namespace iWasHere.Web.Controllers
 
             return View(dictionaryLandmarkTypeModels);
         }
+
+        public IActionResult Country()
+        {
+            List<DictionaryCountry> dictionaryCountries = _dictionaryService.GetDictionaryCountries();
+            return View(dictionaryCountries);
+        }
+
+
+
+        public IActionResult LandmarkType(String searchString)
+        {
+
+            List<DictionaryLandmarkType> dictionaryLandmarkType = _dictionaryService.GetDictionaryLandmarkType(searchString);
+
+            return View(dictionaryLandmarkType);
+        }
+
+        public IActionResult Cities()
+        {
+            List<DictionaryCity> dictionaryCities = _dictionaryService.GetDictionaryCities();
+
+            return View(dictionaryCities);
+        }
+        
+        public IActionResult Currency()
+        {
+            List<DictionaryCurrencyType> dictionaryCurrencies = _dictionaryService.GetDictionaryCurrencyType();
+            return View(dictionaryCurrencies);
+        }
+
 
         public IActionResult County()
         {
