@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using iWasHere.Domain.DTOs;
 using iWasHere.Domain.Service;
 using Microsoft.AspNetCore.Mvc;
+using iWasHere.Domain.Models;
 
 namespace iWasHere.Web.Controllers
 {
@@ -23,5 +24,12 @@ namespace iWasHere.Web.Controllers
 
             return View(dictionaryLandmarkTypeModels);
         }
+        
+        public IActionResult Currency()
+        {
+            List<DictionaryCurrencyType> dictionaryCurrencies = _dictionaryService.GetDictionaryCurrencyType();
+            return View(dictionaryCurrencies);
+        }
+
     }
 }
