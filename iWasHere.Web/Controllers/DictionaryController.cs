@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using iWasHere.Domain.DTOs;
 using iWasHere.Domain.Models;
 using iWasHere.Domain.Service;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iWasHere.Web.Controllers
@@ -47,5 +49,28 @@ namespace iWasHere.Web.Controllers
 
             return View(dictionaryCities);
         }
+
+
+       
+
+   
+
+        public IActionResult Country_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            return Json(GetCountry().ToDataSourceResult(request));
+        }
+
+        private static IEnumerable<DictionaryCountry> GetCountry()
+        {
+            using (var northwind = new MissMarvelContext())
+            {
+                return northwind.DictionaryCountry.Select(country => new DictionaryCountry
+                {
+                    CountryCode = country.CountryCode,
+                    CountryName = country.CountryName
+                   
+                }).ToList();
+            }
+        }  
     }
 }
