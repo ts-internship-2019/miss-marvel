@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using iWasHere.Domain.DTOs;
+using iWasHere.Domain.Models;
 using iWasHere.Domain.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,5 +24,13 @@ namespace iWasHere.Web.Controllers
 
             return View(dictionaryLandmarkTypeModels);
         }
+
+        public IActionResult Country()
+        {
+            List<DictionaryCountry> dictionaryCountries = _dictionaryService.GetDictionaryCountries();
+            return View(dictionaryCountries);
+        }
+
+
     }
 }
