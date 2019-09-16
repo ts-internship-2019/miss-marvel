@@ -1,0 +1,88 @@
+﻿@model IEnumerable<iWasHere.Domain.Models.DictionaryCounty>
+
+@{
+    ViewData["Title"] = "County";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<h1>County</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CountyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CountyCode)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CountyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CountyCode)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CountyId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.CountyId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CountyId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>*@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>County</title>
+</head>
+<body>
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <form asp-action="County" method="get">
+        <div class="row">
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary ">Search</button>
+            </div>
+            <div class="form-group">
+                <input type="text" name="SearchString" class="form-control" placeholder="Search">
+            </div>
+        </div>
+        <div class="container mt-5">
+            @(Html.Kendo().Grid(Model)
+            .Name("Grid")
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.CountyName).Title("ItemCode");
+                columns.Bound(p => p.CountyCode).Title("ItemName");
+            })
+            .Pageable()
+            .Sortable()
+            .Scrollable(scr => scr.Height(430))
+            .Filterable()
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(20)
+                .ServerOperation(false)
+             )
+            )
+        </div>
+    </form>
+</body>
+</html>
+
