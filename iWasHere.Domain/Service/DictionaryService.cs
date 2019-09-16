@@ -5,6 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using iWasHere.Domain.Models;
+using System.Configuration;
+
+
 
 namespace iWasHere.Domain.Service
 {
@@ -18,11 +22,13 @@ namespace iWasHere.Domain.Service
 
         public List<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypeModels()
         {
+
             List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
             {
                 Id = a.DictionaryItemId,
                 Name = a.DictionaryItemName
-            }).ToList();
+
+             }).ToList();
 
             return dictionaryLandmarkTypeModels;
         }
@@ -83,6 +89,37 @@ namespace iWasHere.Domain.Service
             return dictionaryCountries;
         }
 
+        public List<DictionaryCurrencyType> GetDictionaryCurrencyType()
+
+        {
+            List<DictionaryCurrencyType> dictionaryCurrencyType = _dbContext.DictionaryCurrencyType.Select(a => new DictionaryCurrencyType()
+            {
+                CurrencyTypeId = a.CurrencyTypeId,
+                CurrencyName = a.CurrencyName,
+                CurrencyCode = a.CurrencyCode,
+                CurrencyExRate = a.CurrencyExRate
+
+            }).ToList();
+
+            return dictionaryCurrencyType;
+        }
+
+        public List<DictionaryCounty> GetDictionaryCounty()
+        {
+            List<DictionaryCounty> dictionaryCounty = _dbContext.DictionaryCounty.Select(a => new DictionaryCounty()
+            {
+                CountyId = a.CountyId,
+                CountyName = a.CountyName, 
+                CountryId = a.CountryId,
+                CountyCode = a.CountyCode
+            }).ToList();
+
+            return dictionaryCounty;
+        }
+       
+
+
        
     }
 }
+
