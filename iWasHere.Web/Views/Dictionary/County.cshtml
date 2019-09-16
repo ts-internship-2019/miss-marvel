@@ -1,0 +1,42 @@
+﻿@model IEnumerable<iWasHere.Domain.Models.DictionaryCounty>
+
+@{
+    ViewData["Title"] = "County";
+}
+
+<h1>County</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CountyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CountyCode)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CountyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CountyCode)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CountyId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.CountyId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.CountyId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
