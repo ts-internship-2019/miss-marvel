@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Kendo.Mvc.UI;
 using System.Threading.Tasks;
 using iWasHere.Domain.DTOs;
 using iWasHere.Domain.Service;
 using Microsoft.AspNetCore.Mvc;
+using Kendo.Mvc.Extensions;
+using iWasHere.Web;
+using iWasHere.Domain;
+using iWasHere.Domain.Models;
 
 namespace iWasHere.Web.Controllers
 {
@@ -23,5 +28,28 @@ namespace iWasHere.Web.Controllers
 
             return View(dictionaryLandmarkTypeModels);
         }
+
     }
+
+    public partial class GridController : Controller
+    {
+
+        public IActionResult Period_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            return Json(GetPeriod().ToDataSourceResult(request));
+        }
+
+        private static IEnumerable<DictionaryLandmarkPeriod> GetPeriod()
+        {
+            using (var landperiod = new MissMarvelContext())
+            {
+                return landperiod.DictionaryLandmarkPeriod.Select(period => new DictionaryLandmarkPeriod
+                {
+                    LandmarkPeriodName = period.LandmarkPeriodName
+                }).ToList();
+            }
+        }
+
+    }
+
 }
