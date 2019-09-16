@@ -6,7 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using iWasHere.Domain.Models;
-using System.Configuration; 
+using System.Configuration;
+
 
 
 namespace iWasHere.Domain.Service
@@ -101,6 +102,8 @@ namespace iWasHere.Domain.Service
 
             return dictionaryCurrencyType;
         }
+       
+
     }
 }
 

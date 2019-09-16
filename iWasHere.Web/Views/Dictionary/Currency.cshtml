@@ -6,42 +6,28 @@
 
 <h1>Currency</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CurrencyCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CurrencyName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CurrencyExRate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CurrencyCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CurrencyName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CurrencyExRate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CurrencyTypeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CurrencyTypeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CurrencyTypeId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<body>
+    @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryCurrencyType>()
+  .Name("grid")
+  .Columns(columns =>
+  {
+      columns.Bound(c => c.CurrencyCode).Width(140);
+      columns.Bound(c => c.CurrencyName).Width(190);
+      columns.Bound(c => c.CurrencyExRate).Width(140);
+    
+
+  })
+  .HtmlAttributes(new { style = "height: 380px;" })
+  .Scrollable()
+  .Groupable()
+  .Sortable()
+  .Pageable(pageable => pageable
+      .Refresh(true)
+      .PageSizes(true)
+      .ButtonCount(5))
+  .DataSource(dataSource => dataSource
+      .Ajax()
+      .Read(read => read.Action("Currency_Read", "Dictionary"))
+  )
+)
+</body>

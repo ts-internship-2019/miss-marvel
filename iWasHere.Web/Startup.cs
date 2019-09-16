@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using iWasHere.Domain.Model;
 using iWasHere.Domain.Service;
 using iWasHere.Domain.Models;
+using Newtonsoft.Json.Serialization;
 
 namespace iWasHere.Web
 {   //test push
@@ -50,7 +51,7 @@ namespace iWasHere.Web
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
             services.AddKendo();
             services.AddScoped<DictionaryService>();
         }

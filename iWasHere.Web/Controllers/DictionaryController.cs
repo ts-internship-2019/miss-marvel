@@ -7,6 +7,10 @@ using iWasHere.Domain.Models;
 using iWasHere.Domain.Service;
 using Microsoft.AspNetCore.Mvc;
 using iWasHere.Domain.Models;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
+using System.Linq;
+
 
 namespace iWasHere.Web.Controllers
 {
@@ -55,5 +59,34 @@ namespace iWasHere.Web.Controllers
             return View(dictionaryCurrencies);
         }
 
+
+        
+     
+        
+
+            public IActionResult Currency_Read([DataSourceRequest] DataSourceRequest request)
+            {
+                return Json(GetCurrency().ToDataSourceResult(request));
+            }
+
+            private static IEnumerable<DictionaryCurrencyType> GetCurrency()
+            {
+                using (var northwind = new MissMarvelContext())
+                {
+                    return northwind.DictionaryCurrencyType.Select(currency => new DictionaryCurrencyType
+                    {
+                 
+                        CurrencyName = currency.CurrencyName,
+                        CurrencyCode = currency.CurrencyCode,
+                        CurrencyExRate= currency.CurrencyExRate
+
+                    }).ToList();
+                }
+            }
+
+         
+            
+
+       
     }
 }
