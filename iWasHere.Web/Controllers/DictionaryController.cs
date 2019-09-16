@@ -88,5 +88,14 @@ namespace iWasHere.Web.Controllers
             
 
        
+
+        public IActionResult County()
+        {
+            List<DictionaryCounty> dictionaryCounty = _dictionaryService.GetDictionaryCounty();
+
+            return View(dictionaryCounty);
+
+        }
+
     }
 }

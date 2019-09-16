@@ -27,7 +27,8 @@ namespace iWasHere.Domain.Service
             {
                 Id = a.DictionaryItemId,
                 Name = a.DictionaryItemName
-            }).ToList();
+
+             }).ToList();
 
             return dictionaryLandmarkTypeModels;
         }
@@ -101,6 +102,19 @@ namespace iWasHere.Domain.Service
             }).ToList();
 
             return dictionaryCurrencyType;
+        }
+
+        public List<DictionaryCounty> GetDictionaryCounty()
+        {
+            List<DictionaryCounty> dictionaryCounty = _dbContext.DictionaryCounty.Select(a => new DictionaryCounty()
+            {
+                CountyId = a.CountyId,
+                CountyName = a.CountyName, 
+                CountryId = a.CountryId,
+                CountyCode = a.CountyCode
+            }).ToList();
+
+            return dictionaryCounty;
         }
        
 
