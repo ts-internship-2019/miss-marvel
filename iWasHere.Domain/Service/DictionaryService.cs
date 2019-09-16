@@ -1,5 +1,6 @@
 ﻿using iWasHere.Domain.DTOs;
 using iWasHere.Domain.Model;
+using iWasHere.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,5 +26,36 @@ namespace iWasHere.Domain.Service
 
             return dictionaryLandmarkTypeModels;
         }
+
+        public List<Models.DictionaryLandmarkType> GetDictionaryLandmarkType(String searchText)
+        {
+
+            List<Models.DictionaryLandmarkType> dictionaryLandmarkType;
+            if (!String.IsNullOrWhiteSpace(searchText))
+            {
+                dictionaryLandmarkType = _dbContext.DictionaryLandmarkType.Where(a => a.DictionaryItemName.StartsWith(searchText)).Select(a => new Models.DictionaryLandmarkType()
+                {
+                    DictionaryItemId = a.DictionaryItemId,
+                    DictionaryItemName = a.DictionaryItemName,
+                    DictionaryItemCode = a.DictionaryItemCode,
+                    Description = a.Description
+
+                }).ToList();
+            }
+            else
+            {
+                dictionaryLandmarkType = _dbContext.DictionaryLandmarkType.Select(a => new Models.DictionaryLandmarkType()
+                {
+                    DictionaryItemId = a.DictionaryItemId,
+                    DictionaryItemName = a.DictionaryItemName,
+                    DictionaryItemCode = a.DictionaryItemCode,
+                    Description = a.Description
+
+                }).ToList();
+            }
+
+            return dictionaryLandmarkType;
+        }
+
     }
 }
