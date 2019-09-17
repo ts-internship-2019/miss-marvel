@@ -77,15 +77,18 @@ namespace iWasHere.Domain.Service
             return dictionaryCities;
         }
 
-        public List<DictionaryCountry> GetDictionaryCountries()
+        public List<DictionaryCountryModel> GetDictionaryCountries(int pageNo, int pageSize, out int totalCount)
+
         {
-            List<DictionaryCountry> dictionaryCountries = _dbContext.DictionaryCountry.Select(a => new DictionaryCountry()
+            totalCount = _dbContext.DictionaryCountry.Count();
+            int skip = (pageNo-1) * pageSize;
+            List<DictionaryCountryModel> dictionaryCountries = _dbContext.DictionaryCountry.Select(a => new DictionaryCountryModel()
             {
                 CountryId = a.CountryId,
                 CountryName = a.CountryName,
                 CountryCode = a.CountryCode
 
-            }).ToList();
+            }).Skip(skip).Take(pageSize).ToList();
 
             return dictionaryCountries;
         }

@@ -124,13 +124,21 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult Country()
         {
-            List<DictionaryCountry> dictionaryCountries = _dictionaryService.GetDictionaryCountries();
-            return View(dictionaryCountries);
+            //List<DictionaryCountry> dictionaryCountries = _dictionaryService.GetDictionaryCountries();
+            return View();
         }
+
+
 
         public IActionResult Country_Read([DataSourceRequest] DataSourceRequest request)
         {
-            return Json(GetCountry().ToDataSourceResult(request));
+            int totalCount = 0;
+            var y = _dictionaryService.GetDictionaryCountries(request.Page, request.PageSize, out totalCount);
+            DataSourceResult dataSource = new DataSourceResult();
+            dataSource.Data = y;
+            dataSource.Total = totalCount;
+           
+            return Json(dataSource);
         }
 
         private static IEnumerable<DictionaryCountry> GetCountry()
