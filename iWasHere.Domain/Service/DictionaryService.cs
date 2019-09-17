@@ -89,18 +89,21 @@ namespace iWasHere.Domain.Service
 
             return dictionaryCountries;
         }
-
-        public List<DictionaryCurrencyType> GetDictionaryCurrencyType()
+        //paginare
+        public List<DictionaryCurrencyTypeModel> GetDictionaryCurrencyType(int pageNo, int pageSize, out int totalCount)
 
         {
-            List<DictionaryCurrencyType> dictionaryCurrencyType = _dbContext.DictionaryCurrencyType.Select(a => new DictionaryCurrencyType()
+            totalCount = _dbContext.DictionaryCurrencyType.Count();
+            int skip = (pageNo - 1) * pageSize;
+
+            List<DictionaryCurrencyTypeModel> dictionaryCurrencyType = _dbContext.DictionaryCurrencyType.Select(a => new DictionaryCurrencyTypeModel()
             {
                 CurrencyTypeId = a.CurrencyTypeId,
                 CurrencyName = a.CurrencyName,
                 CurrencyCode = a.CurrencyCode,
                 CurrencyExRate = a.CurrencyExRate
 
-            }).ToList();
+            }).Skip(skip).Take(pageSize).ToList();
 
             return dictionaryCurrencyType;
         }

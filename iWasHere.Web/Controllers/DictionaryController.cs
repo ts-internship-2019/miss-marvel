@@ -67,16 +67,20 @@ namespace iWasHere.Web.Controllers
         }
 
         // ------------------- Currency
-
-        public IActionResult Currency()
+         public IActionResult Currency()
         {
-            List<DictionaryCurrencyType> dictionaryCurrencies = _dictionaryService.GetDictionaryCurrencyType();
-            return View(dictionaryCurrencies);
+            return View();
         }
 
-            public IActionResult Currency_Read([DataSourceRequest] DataSourceRequest request)
+            public IActionResult Currency_Read([DataSourceRequest] DataSourceRequest request)  //paginare
             {
-                return Json(GetCurrency().ToDataSourceResult(request));
+            int totalCount = 0;
+            var y = _dictionaryService.GetDictionaryCurrencyType(request.Page, request.PageSize, out totalCount);
+            DataSourceResult dataSource = new DataSourceResult();
+            dataSource.Data = y;
+            dataSource.Total = totalCount;
+
+                return Json(dataSource);
             }
 
             private static IEnumerable<DictionaryCurrencyType> GetCurrency()
