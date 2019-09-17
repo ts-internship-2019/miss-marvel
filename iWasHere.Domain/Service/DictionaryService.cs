@@ -109,22 +109,22 @@ namespace iWasHere.Domain.Service
             return dictionaryCurrencyType;
         }
 
-        public List<DictionaryCounty> GetDictionaryCounty()
+        public List<DictionaryCountyModel> GetDictionaryCounty(int skip, int take, out int totalCount)
         {
-            List<DictionaryCounty> dictionaryCounty = _dbContext.DictionaryCounty.Select(a => new DictionaryCounty()
+            totalCount = _dbContext.DictionaryCounty.Count();
+            int toSkip = (skip - 1) * take;
+
+            List<DictionaryCountyModel> dictionaryCounty = _dbContext.DictionaryCounty.Select(a => new DictionaryCountyModel()
             {
                 CountyId = a.CountyId,
                 CountyName = a.CountyName, 
-                CountryId = a.CountryId,
+                //CountryId = a.CountryId, //doar daca ne trebuie legatura
                 CountyCode = a.CountyCode
-            }).ToList();
+            }).Skip(toSkip).Take(take).ToList();
 
             return dictionaryCounty;
         }
-       
 
-
-       
     }
 }
 
