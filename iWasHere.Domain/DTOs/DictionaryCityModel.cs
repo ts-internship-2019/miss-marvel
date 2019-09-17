@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iWasHere.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,6 +9,8 @@ namespace iWasHere.Domain.DTOs
     {
         public string CityName { get; set; }
         public string CityCode { get; set; }
+        public int CityId { get; set; }
+      
 
     }
 }
