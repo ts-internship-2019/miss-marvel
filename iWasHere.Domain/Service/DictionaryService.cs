@@ -65,14 +65,18 @@ namespace iWasHere.Domain.Service
         }
 
 
-        public List<DictionaryCity> GetDictionaryCities()
+        public List<DictionaryCityModel> GetDictionaryCities(int skip, int take, out int totalCount)
         {
-            List<DictionaryCity> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCity()
+            totalCount = _dbContext.DictionaryCity.Count();
+            int toSkip = (skip-1) * take;
+
+            List<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
             {
                 CityName = a.CityName,
-                CityCode = a.CityCode
+                CityCode = a.CityCode,
+                CityId = a.CityId
             }
-            ).ToList();
+            ).Skip(toSkip).Take(take).ToList();
 
             return dictionaryCities;
         }

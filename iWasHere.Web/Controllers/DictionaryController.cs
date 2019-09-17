@@ -40,11 +40,21 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult Cities()
         {
-            List<DictionaryCity> dictionaryCities = _dictionaryService.GetDictionaryCities();
+          
 
-            return View(dictionaryCities);
+            return View();
         }
 
+        public IActionResult Cities_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            int totalCount = 0;
+            var X = _dictionaryService.GetDictionaryCities(request.Page, request.PageSize, out totalCount);
+            DataSourceResult dataSourceResult = new DataSourceResult();
+            dataSourceResult.Data = X;
+            dataSourceResult.Total = totalCount;
+
+            return Json(dataSourceResult);
+        }
         public partial class TextBox : Controller
         {
     
