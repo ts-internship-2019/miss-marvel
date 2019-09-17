@@ -32,9 +32,9 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
-        public IActionResult AddEditLandmarkType([Bind("LandmarkTypeId,DictionaryItemCode,DictionaryItemName,Description")] DictionaryLandmarkType landmarkType)
+        public IActionResult AddEditLandmarkType([Bind("LandmarkTypeId,DictionaryItemCode,DictionaryItemName,Description")] DictionaryLandmarkTypeModel landmarkType, DictionaryLandmarkTypeModel dt)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && dt != null)
             {
                 _dictionaryService.AddDictionaryLandmarkType(landmarkType);
             }
@@ -44,9 +44,21 @@ namespace iWasHere.Web.Controllers
 
         public ActionResult GetLandmarkType([DataSourceRequest]DataSourceRequest request)
         {
-            return Json(_dictionaryService.GetLandmarkType().ToDataSourceResult(request));
+            int rowsNo = 0;
+            var x = _dictionaryService.GetLandmarkType(request.Page, request.PageSize, out rowsNo);
+            DataSourceResult dataSource = new DataSourceResult();
+            dataSource.Data = x;
+            dataSource.Total = rowsNo;
+            return Json(dataSource);
+            
         }
-
+        [HttpPost]
+        public JsonResult GetAjax(String filter)
+        {
+            String s = filter;
+            //return Json(_dictionaryService.GetLandmarkType(request.Page, request.PageSize).ToDataSourceResult(request));
+            return null;
+        }
         public IActionResult Cities()
         {
             List<DictionaryCity> dictionaryCities = _dictionaryService.GetDictionaryCities();

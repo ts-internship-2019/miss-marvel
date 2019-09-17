@@ -14,26 +14,76 @@
 </head>
 <body>
     <p>
-        <a asp-action="AddLandmarkType">Create New</a>
+        <a asp-action="AddEditLandmarkType">Create New</a>
     </p>
+    <div class="row">
+        <div class="col-5">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Item Name" aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button">Filter</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="row">
+        @(Html.Kendo().Button()
+                        .Name("btnSubmit")
+                        .HtmlAttributes(new { type = "button" })
+                        .Content("Filter")
+                        .Events(e => e.Click("DisplayData"))
+
+        )
+        @(Html.Kendo().TextBox()
+            .Name("custom")
+            .HtmlAttributes(new { style = "width: 100%", title = "custom", id="txtFilter" })
+        )
+    </div>
     @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryLandmarkType>()
           .Name("grid")
           .HtmlAttributes(new { style = "height: 500px;" })
+          .Columns(columns =>
+            {
+                columns.Bound(p => p.DictionaryItemCode);
+                columns.Bound(p => p.DictionaryItemName);
+                columns.Bound(p => p.Description);
+                columns.Command(command => command.Edit()).Width(150);
+            })
           .Scrollable()
           .Groupable()
           .Sortable()
           .Filterable()
           .Pageable(pageable => pageable
-              .Refresh(true)
-              .PageSizes(true)
-              .ButtonCount(5))
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5))
           .DataSource(dataSource => dataSource
               .Ajax()
               .Read(read => read.Action("GetLandmarkType", "Dictionary"))
+              .Update(update => update.Action("AddEditLandmarkType", "Grid"))  
           )
     )
 
 
 
 </body>
+<script>
+
+    function DisplayData() {
+        var input = $('#txtFilter').val();
+       
+    $.ajax(
+        {
+            url: "/Dictionary/GetAjax",
+            type: 'post',
+            dataType: "json",
+            data: { filter: input},
+            success: function (result) {
+                var dialog = $("#win").data("kendoWindow");
+                $("#dataWin").html(result);
+                dialog.open();
+            }
+        })
+}
+</script>
 </html>

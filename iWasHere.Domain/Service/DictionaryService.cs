@@ -18,10 +18,12 @@ namespace iWasHere.Domain.Service
 
         public List<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypeModels()
         {
-            List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
+            List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dbContext.DictionaryLandmarkType.Select(LandmarkType => new DictionaryLandmarkTypeModel()
             {
-                Id = a.DictionaryItemId,
-                Name = a.DictionaryItemName
+                DictionaryItemId = LandmarkType.DictionaryItemId,
+                DictionaryItemName = LandmarkType.DictionaryItemName,
+                DictionaryItemCode = LandmarkType.DictionaryItemCode,
+                Description = LandmarkType.Description
             }).ToList();
 
             return dictionaryLandmarkTypeModels;
@@ -43,7 +45,7 @@ namespace iWasHere.Domain.Service
         //    //    }).ToList();
         //    //}
         //    //else
-            
+
         //        dictionaryLandmarkType = _dbContext.DictionaryLandmarkType.Select(a => new Models.DictionaryLandmarkType()
         //        {
         //            DictionaryItemId = a.DictionaryItemId,
@@ -52,25 +54,27 @@ namespace iWasHere.Domain.Service
         //            Description = a.Description
 
         //        }).ToList();
-            
+
 
         //    return dictionaryLandmarkType;
         //}
 
-        public IEnumerable<Models.DictionaryLandmarkType> GetLandmarkType()
+        public IEnumerable<DictionaryLandmarkTypeModel> GetLandmarkType(int pageNo, int pageSize, out int rowsNo )
         {
-           
-            return _dbContext.DictionaryLandmarkType.Select(LandmarkType => new Models.DictionaryLandmarkType
+            rowsNo = 0;
+            rowsNo = _dbContext.DictionaryLandmarkType.Count();
+            return _dbContext.DictionaryLandmarkType.Skip((pageNo - 1) * pageSize ).Take(pageSize).Select(LandmarkType => new DictionaryLandmarkTypeModel
             {
                 DictionaryItemId = LandmarkType.DictionaryItemId,
                 DictionaryItemName = LandmarkType.DictionaryItemName,
                 DictionaryItemCode = LandmarkType.DictionaryItemCode,
                 Description = LandmarkType.Description
             });
+            
         }
 
 
-        public Models.DictionaryLandmarkType AddDictionaryLandmarkType(Models.DictionaryLandmarkType landmarkType)
+        public DictionaryLandmarkTypeModel AddDictionaryLandmarkType(DictionaryLandmarkTypeModel landmarkType)
         {
             if (!String.IsNullOrWhiteSpace(landmarkType.DictionaryItemName))
             {
