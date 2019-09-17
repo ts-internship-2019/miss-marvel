@@ -14,37 +14,26 @@
 </head>
 <body>
     <p>
-        <a asp-action="Create">Create New</a>
+        <a asp-action="AddLandmarkType">Create New</a>
     </p>
-    <form asp-action="LandmarkType" method="get">
-        <div class="row">
-            <div class="text-right">
-                <button type="submit" class="btn btn-primary ">Search</button>
-            </div>
-            <div class="form-group">
-                <input type="text" name="SearchString" class="form-control" placeholder="Search">
-            </div>
-        </div>
-        <div class="container mt-5">
-            @(Html.Kendo().Grid(Model)
-            .Name("Grid")
-            .Columns(columns =>
-            {
-                columns.Bound(p => p.DictionaryItemCode).Title("ItemCode");
-                columns.Bound(p => p.DictionaryItemName).Title("ItemName");
-                columns.Bound(p => p.Description);
-            })
-            .Pageable()
-            .Sortable()
-            .Scrollable(scr => scr.Height(430))
-            .Filterable()
-            .DataSource(dataSource => dataSource
-                .Ajax()
-                .PageSize(20)
-                .ServerOperation(false)
-             )
-            )
-        </div>
-     </form>
+    @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryLandmarkType>()
+          .Name("grid")
+          .HtmlAttributes(new { style = "height: 500px;" })
+          .Scrollable()
+          .Groupable()
+          .Sortable()
+          .Filterable()
+          .Pageable(pageable => pageable
+              .Refresh(true)
+              .PageSizes(true)
+              .ButtonCount(5))
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Read(read => read.Action("GetLandmarkType", "Dictionary"))
+          )
+    )
+
+
+
 </body>
 </html>

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using iWasHere.Domain.DTOs;
 using iWasHere.Domain.Models;
 using iWasHere.Domain.Service;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iWasHere.Web.Controllers
@@ -22,15 +24,27 @@ namespace iWasHere.Web.Controllers
         {
             List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dictionaryService.GetDictionaryLandmarkTypeModels();
 
-            return View(dictionaryLandmarkTypeModels);
+            return View();
         }
 
-        public IActionResult LandmarkType(String searchString)
+        public IActionResult LandmarkType()
         {
+            return View();
+        }
 
-            List<DictionaryLandmarkType> dictionaryLandmarkType = _dictionaryService.GetDictionaryLandmarkType(searchString);
+        public IActionResult AddEditLandmarkType([Bind("LandmarkTypeId,DictionaryItemCode,DictionaryItemName,Description")] DictionaryLandmarkType landmarkType)
+        {
+            if (ModelState.IsValid)
+            {
+                _dictionaryService.AddDictionaryLandmarkType(landmarkType);
+            }
+            return View();
+        }
 
-            return View(dictionaryLandmarkType);
+
+        public ActionResult GetLandmarkType([DataSourceRequest]DataSourceRequest request)
+        {
+            return Json(_dictionaryService.GetLandmarkType().ToDataSourceResult(request));
         }
 
         public IActionResult Cities()
