@@ -9,57 +9,90 @@
 
 <body>
 
-
-
     <div class="demo-section k-content">
         <div>
 
             <p>
 
-                @(Html.Kendo().TextBox()
-              .Name("currencyTextBox")
-              .HtmlAttributes(new { style = "width: 20%", title = "Please a Currency Code" })
-                )
+                <div class="form-horizontal form-widgets col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="filtername">Filter by name</label>
+                        <div class="col-sm-8 col-md-6">
+                            <input id="filtername" placeholder="e.g. Ilfov" class="k-textbox" />
+                        </div>
+                        <label class="control-label col-sm-4" for="countycode">Filter by code</label>
+                        <div class="col-sm-8 col-md-6">
+                            <input id="countycode" placeholder="e.g. IF" class="k-textbox" />
+                        </div>
+                    </div>
+                </div>
+
+                @*@(Html.Kendo().TextBox()
+        .Name("currencyTextBox")
+        .HtmlAttributes(new { style = "width: 20%", title = "Please a County" })
+        )*@
 
                 @(Html.Kendo().Button()
-                        .Name("textButton")
-                        .HtmlAttributes(new { type = "button" })
-                        .Content("Adauga")
-                        .Events(ev => ev.Click("onClick"))
+                .Name("textButton")
+                .HtmlAttributes(new { type = "button" })
+                .Content("Filtreaza")
+                .Events(ev => ev.Click("onClick"))
                 )
 
             </p>
         </div>
     </div>
 
-    @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryCounty>()
-  .Name("grid")
-  .Columns(columns =>
-  {
-      columns.Bound(c => c.CountyCode).Width(140);
-      columns.Bound(c => c.CountyName).Width(190);
 
-  })
-  .HtmlAttributes(new { style = "height: 380px;" })
-  .Scrollable()
-  .Groupable()
-  .Sortable()
-  .Pageable(pageable => pageable
-      .Refresh(true)
-      .PageSizes(true)
-      .ButtonCount(5))
-  .DataSource(dataSource => dataSource
-      .Ajax()
-      .Read(read => read.Action("County_Read", "Dictionary"))
-  )
-    )
+    @*<div class="form-group">
+        <label class="control-label col-sm-4" for="language">Language</label>
+        <div class="col-sm-8 col-md-6">
+            @(Html.Kendo().DropDownList()
+                .Name("language")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .Value("Romanian")
+                .BindTo(new List<SelectListItem>() {
+                      new SelectListItem() {
+                          Text = "English",
+                          Value = "English"
+                      },
+                      new SelectListItem() {
+                          Text = "Romanian",
+                          Value = "Romanian"
+                      }
+                  })
+            )
+        </div>*@
 
-    <script>
-        function onClick(e) {
-            $(e.event.target).closest(".k-button").attr("id");
-        }
+            @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryCounty>()
+              .Name("grid")
+              .Columns(columns =>
+              {
+                  columns.Bound(c => c.CountyCode).Width(140);
+                  columns.Bound(c => c.CountyName).Width(190);
 
-    </script>
+              })
+              .HtmlAttributes(new { style = "height: 380px;" })
+              .Scrollable()
+              .Groupable()
+              .Sortable()
+              .Pageable(pageable => pageable
+                  .Refresh(true)
+                  .PageSizes(true)
+                  .ButtonCount(5))
+              .DataSource(dataSource => dataSource
+                  .Ajax()
+                  .Read(read => read.Action("County_Read", "Dictionary"))
+          )
+            )
+
+            <script>
+                function onClick(e) {
+                    $(e.event.target).closest(".k-button").attr("id");
+                }
+
+            </script>
 
 
 

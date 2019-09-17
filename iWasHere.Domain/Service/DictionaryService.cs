@@ -65,55 +65,68 @@ namespace iWasHere.Domain.Service
         }
 
 
-        public List<DictionaryCity> GetDictionaryCities()
+        public List<DictionaryCityModel> GetDictionaryCities(int skip, int take, out int totalCount)
         {
-            List<DictionaryCity> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCity()
+            totalCount = _dbContext.DictionaryCity.Count();
+            int toSkip = (skip-1) * take;
+
+            List<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
             {
                 CityName = a.CityName,
-                CityCode = a.CityCode
+                CityCode = a.CityCode,
+                CityId = a.CityId
             }
-            ).ToList();
+            ).Skip(toSkip).Take(take).ToList();
 
             return dictionaryCities;
         }
 
-        public List<DictionaryCountry> GetDictionaryCountries()
+        public List<DictionaryCountryModel> GetDictionaryCountries(int pageNo, int pageSize, out int totalCount)
+
         {
-            List<DictionaryCountry> dictionaryCountries = _dbContext.DictionaryCountry.Select(a => new DictionaryCountry()
+            totalCount = _dbContext.DictionaryCountry.Count();
+            int skip = (pageNo-1) * pageSize;
+            List<DictionaryCountryModel> dictionaryCountries = _dbContext.DictionaryCountry.Select(a => new DictionaryCountryModel()
             {
                 CountryId = a.CountryId,
                 CountryName = a.CountryName,
                 CountryCode = a.CountryCode
 
-            }).ToList();
+            }).Skip(skip).Take(pageSize).ToList();
 
             return dictionaryCountries;
         }
-
-        public List<DictionaryCurrencyType> GetDictionaryCurrencyType()
+        //paginare
+        public List<DictionaryCurrencyTypeModel> GetDictionaryCurrencyType(int pageNo, int pageSize, out int totalCount)
 
         {
-            List<DictionaryCurrencyType> dictionaryCurrencyType = _dbContext.DictionaryCurrencyType.Select(a => new DictionaryCurrencyType()
+            totalCount = _dbContext.DictionaryCurrencyType.Count();
+            int skip = (pageNo - 1) * pageSize;
+
+            List<DictionaryCurrencyTypeModel> dictionaryCurrencyType = _dbContext.DictionaryCurrencyType.Select(a => new DictionaryCurrencyTypeModel()
             {
                 CurrencyTypeId = a.CurrencyTypeId,
                 CurrencyName = a.CurrencyName,
                 CurrencyCode = a.CurrencyCode,
                 CurrencyExRate = a.CurrencyExRate
 
-            }).ToList();
+            }).Skip(skip).Take(pageSize).ToList();
 
             return dictionaryCurrencyType;
         }
 
-        public List<DictionaryCounty> GetDictionaryCounty()
+        public List<DictionaryCountyModel> GetDictionaryCounty(int skip, int take, out int totalCount)
         {
-            List<DictionaryCounty> dictionaryCounty = _dbContext.DictionaryCounty.Select(a => new DictionaryCounty()
+            totalCount = _dbContext.DictionaryCounty.Count();
+            int toSkip = (skip - 1) * take;
+
+            List<DictionaryCountyModel> dictionaryCounty = _dbContext.DictionaryCounty.Select(a => new DictionaryCountyModel()
             {
                 CountyId = a.CountyId,
                 CountyName = a.CountyName, 
-                CountryId = a.CountryId,
+                //CountryId = a.CountryId, //doar daca ne trebuie legatura
                 CountyCode = a.CountyCode
-            }).ToList();
+            }).Skip(toSkip).Take(take).ToList();
 
             return dictionaryCounty;
         }
@@ -133,6 +146,7 @@ namespace iWasHere.Domain.Service
 
             return dictionaryPeriods;
         }
+
 
 
     }
