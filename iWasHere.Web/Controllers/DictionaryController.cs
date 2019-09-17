@@ -144,27 +144,23 @@ namespace iWasHere.Web.Controllers
                    
                 }).ToList();
             }
-        }  
-    }
-
-
-    public partial class GridController : Controller
-    {
-
-        public IActionResult Period_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            return Json(GetPeriod().ToDataSourceResult(request));
         }
 
-        private static IEnumerable<DictionaryLandmarkPeriod> GetPeriod()
+        // ------------------- LandmarkPeriod
+
+        public IActionResult LandmarkPeriod()
         {
-            using (var landperiod = new MissMarvelContext())
-            {
-                return landperiod.DictionaryLandmarkPeriod.Select(period => new DictionaryLandmarkPeriod
-                {
-                    LandmarkPeriodName = period.LandmarkPeriodName
-                }).ToList();
-            }
+            return View();
+        }
+        public IActionResult LandmarkPeriod_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            int totalCount = 0;
+            var data = _dictionaryService.GetDictionaryLandmarkPeriods(request.Page, request.PageSize, out totalCount);
+            DataSourceResult dataSourceResult = new DataSourceResult();
+            dataSourceResult.Data = data;
+            dataSourceResult.Total = totalCount;
+
+            return Json(dataSourceResult);
         }
 
     }

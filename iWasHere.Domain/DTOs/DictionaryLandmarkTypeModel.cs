@@ -6,6 +6,7 @@ namespace iWasHere.Domain.DTOs
 {
    public  class DictionaryLandmarkTypeModel
     {
+
         public int Id { get; set; }
         public string Name { get; set; }
     }

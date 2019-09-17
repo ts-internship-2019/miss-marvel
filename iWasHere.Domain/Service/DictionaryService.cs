@@ -117,10 +117,24 @@ namespace iWasHere.Domain.Service
 
             return dictionaryCounty;
         }
-       
+
+        public List<LandmarkPeriodModel> GetDictionaryLandmarkPeriods(int pageNo, int pageSize, out int totalcount)
+        {
+            int toskip;
+            totalcount = _dbContext.DictionaryLandmarkPeriod.Count();
+            toskip = (pageNo - 1) * pageSize;
+
+            List<LandmarkPeriodModel> dictionaryPeriods = _dbContext.DictionaryLandmarkPeriod.Select(a => new LandmarkPeriodModel()
+            {
+                LandmarkPeriodId = a.LandmarkPeriodId,
+                LandmarkPeriodName = a.LandmarkPeriodName
+            }
+            ).Skip(toskip).Take(pageSize).ToList();
+
+            return dictionaryPeriods;
+        }
 
 
-       
     }
 }
 
