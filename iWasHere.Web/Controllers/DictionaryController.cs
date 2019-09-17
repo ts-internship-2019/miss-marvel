@@ -7,12 +7,9 @@ using iWasHere.Domain.DTOs;
 using iWasHere.Domain.Models;
 using iWasHere.Domain.Service;
 using Kendo.Mvc.Extensions;
-
 using Microsoft.AspNetCore.Mvc;
-
 using iWasHere.Web;
 using iWasHere.Domain;
-
 
 
 namespace iWasHere.Web.Controllers
@@ -33,14 +30,6 @@ namespace iWasHere.Web.Controllers
             return View(dictionaryLandmarkTypeModels);
         }
 
-        public IActionResult Country()
-        {
-            List<DictionaryCountry> dictionaryCountries = _dictionaryService.GetDictionaryCountries();
-            return View(dictionaryCountries);
-        }
-
-
-
         public IActionResult LandmarkType(String searchString)
         {
 
@@ -56,7 +45,6 @@ namespace iWasHere.Web.Controllers
             return View(dictionaryCities);
         }
 
-
         public partial class TextBox : Controller
         {
     
@@ -67,7 +55,6 @@ namespace iWasHere.Web.Controllers
             }
         }
 
-        // ADD Button Currency
         public partial class ButtonController : Controller
         {
 
@@ -79,19 +66,13 @@ namespace iWasHere.Web.Controllers
             }
         }
 
-        
-   
+        // ------------------- Currency
 
         public IActionResult Currency()
         {
             List<DictionaryCurrencyType> dictionaryCurrencies = _dictionaryService.GetDictionaryCurrencyType();
             return View(dictionaryCurrencies);
         }
-
-
-        
-     
-        
 
             public IActionResult Currency_Read([DataSourceRequest] DataSourceRequest request)
             {
@@ -113,24 +94,39 @@ namespace iWasHere.Web.Controllers
                 }
             }
 
-         
-            
-
-       
+        // ------------------- County
 
         public IActionResult County()
         {
             List<DictionaryCounty> dictionaryCounty = _dictionaryService.GetDictionaryCounty();
-
             return View(dictionaryCounty);
-
         }
 
+        public IActionResult County_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            return Json(GetCounty().ToDataSourceResult(request));
+        }
 
+        private static IEnumerable<DictionaryCounty> GetCounty()
+        {
+            using (var northwind = new MissMarvelContext())
+            {
+                return northwind.DictionaryCounty.Select(county => new DictionaryCounty
+                {
+                    CountyCode = county.CountyCode,
+                    CountyName = county.CountyName
 
-       
+                }).ToList();
+            }
+        }
 
-   
+        // ------------------- Country
+
+        public IActionResult Country()
+        {
+            List<DictionaryCountry> dictionaryCountries = _dictionaryService.GetDictionaryCountries();
+            return View(dictionaryCountries);
+        }
 
         public IActionResult Country_Read([DataSourceRequest] DataSourceRequest request)
         {
@@ -149,8 +145,8 @@ namespace iWasHere.Web.Controllers
                 }).ToList();
             }
         }  
-
     }
+
 
     public partial class GridController : Controller
     {
