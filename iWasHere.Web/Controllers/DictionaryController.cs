@@ -190,6 +190,24 @@ namespace iWasHere.Web.Controllers
 
             return Json(dataSourceResult);
         }
+
+        // ------------------- TicketType
+
+        public IActionResult TicketType()
+        {
+            return View();
+        }
+
+        public IActionResult TicketType_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            int totalCount = 0;
+            var data = _dictionaryService.GetDictionaryTicketType(request.Page, request.PageSize, out totalCount);
+            DataSourceResult dataSourceResult = new DataSourceResult();
+            dataSourceResult.Data = data;
+            dataSourceResult.Total = totalCount;
+
+            return Json(dataSourceResult);
+        }
     }
 
 }

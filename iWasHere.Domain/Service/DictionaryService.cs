@@ -147,6 +147,21 @@ namespace iWasHere.Domain.Service
             return dictionaryPeriods;
         }
 
+        public List<TicketTypeModel> GetDictionaryTicketType(int pgNo, int pgSize, out int totalCount)
+        {
+           
+            totalCount = _dbContext.DictionaryTicketType.Count();
+            int toSkip = (pgNo - 1) * pgSize;
+
+            List<TicketTypeModel> dictionaryTicketTypes = _dbContext.DictionaryTicketType.Select(x => new TicketTypeModel()
+            {
+                TicketTypeName = x.TicketTypeName
+            }).Skip(toSkip).Take(pgSize).ToList();
+
+            return dictionaryTicketTypes;
+
+        }
+
 
 
     }
