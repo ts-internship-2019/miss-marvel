@@ -42,10 +42,10 @@ namespace iWasHere.Web.Controllers
         }
 
 
-        public ActionResult GetLandmarkType([DataSourceRequest]DataSourceRequest request)
+        public ActionResult GetLandmarkType([DataSourceRequest]DataSourceRequest request, String lFilter)
         {
             int rowsNo = 0;
-            var x = _dictionaryService.GetLandmarkType(request.Page, request.PageSize, out rowsNo);
+            var x = _dictionaryService.GetLandmarkType(request.Page, request.PageSize, out rowsNo, lFilter);
             DataSourceResult dataSource = new DataSourceResult();
             dataSource.Data = x;
             dataSource.Total = rowsNo;

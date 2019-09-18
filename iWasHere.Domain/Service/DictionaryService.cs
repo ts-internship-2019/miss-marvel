@@ -59,18 +59,27 @@ namespace iWasHere.Domain.Service
         //    return dictionaryLandmarkType;
         //}
 
-        public IEnumerable<DictionaryLandmarkTypeModel> GetLandmarkType(int pageNo, int pageSize, out int rowsNo )
+        public IEnumerable<DictionaryLandmarkTypeModel> GetLandmarkType(int pageNo, int pageSize, out int rowsNo, string lFilter )
         {
             rowsNo = 0;
             rowsNo = _dbContext.DictionaryLandmarkType.Count();
-            return _dbContext.DictionaryLandmarkType.Skip((pageNo - 1) * pageSize ).Take(pageSize).Select(LandmarkType => new DictionaryLandmarkTypeModel
-            {
-                DictionaryItemId = LandmarkType.DictionaryItemId,
-                DictionaryItemName = LandmarkType.DictionaryItemName,
-                DictionaryItemCode = LandmarkType.DictionaryItemCode,
-                Description = LandmarkType.Description
-            });
-            
+            if(lFilter == null)
+                return _dbContext.DictionaryLandmarkType.Skip((pageNo - 1) * pageSize ).Take(pageSize).Select(LandmarkType => new DictionaryLandmarkTypeModel
+                {
+                    DictionaryItemId = LandmarkType.DictionaryItemId,
+                    DictionaryItemName = LandmarkType.DictionaryItemName,
+                    DictionaryItemCode = LandmarkType.DictionaryItemCode,
+                    Description = LandmarkType.Description
+                });
+            else
+                return _dbContext.DictionaryLandmarkType.Where(a => a.DictionaryItemName.Contains(lFilter)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(LandmarkType => new DictionaryLandmarkTypeModel
+                {
+                    DictionaryItemId = LandmarkType.DictionaryItemId,
+                    DictionaryItemName = LandmarkType.DictionaryItemName,
+                    DictionaryItemCode = LandmarkType.DictionaryItemCode,
+                    Description = LandmarkType.Description
+                });
+
         }
 
 

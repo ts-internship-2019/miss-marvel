@@ -41,13 +41,16 @@
     </div>
     @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryLandmarkType>()
           .Name("grid")
-          .HtmlAttributes(new { style = "height: 500px;" })
+          .HtmlAttributes(new { style = "height: 500px", id = "grdLandmarkType"  })
           .Columns(columns =>
             {
+                columns.Bound(p => p.DictionaryItemId).Hidden();
                 columns.Bound(p => p.DictionaryItemCode);
                 columns.Bound(p => p.DictionaryItemName);
                 columns.Bound(p => p.Description);
-                columns.Command(command => command.Edit()).Width(150);
+                columns.Command(c => {
+                c.Custom("EditRecord").Text("Edit").Click("dgChange");
+            });
             })
           .Scrollable()
           .Groupable()
@@ -59,7 +62,7 @@
             .ButtonCount(5))
           .DataSource(dataSource => dataSource
               .Ajax()
-              .Read(read => read.Action("GetLandmarkType", "Dictionary"))
+              .Read(read => read.Action("GetLandmarkType", "Dictionary").Data("myFunction"))
               .Update(update => update.Action("AddEditLandmarkType", "Grid"))  
           )
     )
@@ -70,20 +73,35 @@
 <script>
 
     function DisplayData() {
-        var input = $('#txtFilter').val();
+       $("#grdLandmarkType").data("kendoGrid").dataSource.read()
+
        
-    $.ajax(
-        {
-            url: "/Dictionary/GetAjax",
-            type: 'post',
-            dataType: "json",
-            data: { filter: input},
-            success: function (result) {
-                var dialog = $("#win").data("kendoWindow");
-                $("#dataWin").html(result);
-                dialog.open();
-            }
-        })
-}
+    //$.ajax(
+    //    {
+    //        url: "/Dictionary/GetAjax",
+    //        type: 'post',
+    //        dataType: "json",
+    //        data: { filter: input},
+    //        success: function (result) {
+    //            var dialog = $("#win").data("kendoWindow");
+    //            $("#dataWin").html(result);
+    //            dialog.open();
+    //        }
+    //    })
+    }
+    function dgChange(e) {
+        grid = $("#grdLandmarkType").data("kendoGrid");
+        var row = e.currentTarget.closest("tr").cells[0].outerText;
+       
+        
+ 
+    }
+
+    function myFunction() {
+        var filter = $("#txtFilter").val();
+        var obj = {};
+        obj["lFilter"] = filter;
+        return obj;
+    }
 </script>
 </html>
