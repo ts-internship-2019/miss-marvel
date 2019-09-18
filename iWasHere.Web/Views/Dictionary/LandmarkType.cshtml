@@ -62,7 +62,7 @@
             .ButtonCount(5))
           .DataSource(dataSource => dataSource
               .Ajax()
-              .Read(read => read.Action("GetLandmarkType", "Dictionary").Data("myFunction"))
+              .Read(read => read.Action("GetLandmarkType", "Dictionary").Data("filterFunction"))
               .Update(update => update.Action("AddEditLandmarkType", "Grid"))  
           )
     )
@@ -92,12 +92,13 @@
     function dgChange(e) {
         grid = $("#grdLandmarkType").data("kendoGrid");
         var row = e.currentTarget.closest("tr").cells[0].outerText;
+        window.location = '/Dictionary/AddEditLandmarkType?id=' + row
        
         
  
     }
 
-    function myFunction() {
+    function filterFunction() {
         var filter = $("#txtFilter").val();
         var obj = {};
         obj["lFilter"] = filter;

@@ -32,13 +32,20 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
-        public IActionResult AddEditLandmarkType([Bind("LandmarkTypeId,DictionaryItemCode,DictionaryItemName,Description")] DictionaryLandmarkTypeModel landmarkType, DictionaryLandmarkTypeModel dt)
+        public ActionResult AddEditLandmarkType(DictionaryLandmarkTypeModel dt)
         {
             if (ModelState.IsValid && dt != null)
             {
-                _dictionaryService.AddDictionaryLandmarkType(landmarkType);
+                _dictionaryService.AddDictionaryLandmarkType(dt);
             }
             return View();
+        }
+        public ActionResult GetLT([DataSourceRequest] DataSourceRequest request, String LandmarkTypeId)
+        {
+            int rowsNo = 0;
+            var x = _dictionaryService.LoadLandmarkType(Convert.ToInt32(LandmarkTypeId));
+            return Json(x);
+
         }
 
 
