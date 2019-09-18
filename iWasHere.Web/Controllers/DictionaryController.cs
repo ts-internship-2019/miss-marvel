@@ -77,11 +77,27 @@ namespace iWasHere.Web.Controllers
             return Json(dataSource);
             
         }
+
+        public ActionResult GetComboCountyyy()
+        {
+            List<DictionaryCountyModel> comboCounty = _dictionaryService.GetComboCounty();
+            
+            
+            return Json(comboCounty);
+        }
+        public ActionResult GetComboCounty(string text)
+        {
+
+            List<DictionaryCountyModel> result = _dictionaryService.GetComboCounty(text);
+
+            return Json(result);
+        }
+     
         [HttpPost]
         public JsonResult GetAjax(String filter)
         {
             String s = filter;
-            //return Json(_dictionaryService.GetLandmarkType(request.Page, request.PageSize).ToDataSourceResult(request));
+            
             return null;
         }
 

@@ -92,32 +92,39 @@
     <p>
         <a asp-action="AddEditCity">Create New</a>
     </p>
-    @*<div class="row">
-        <div class="col-5">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Item Name" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button">Filter</button>
-                </div>
-            </div>
-        </div>
-    </div>*@
-<div class="row">
-    @(Html.Kendo().TextBox()
-       .Name("custom")
-       .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtFilter" })
-    )
-    @(Html.Kendo().Button()
-                    .Name("btnSubmit")
-                    .HtmlAttributes(new { type = "button" })
-                    .Content("Filter")
-                    .Events(e => e.Click("DisplayData"))
-
-
-
-    )
-
-</div>
+ 
+    <div class="row">
+        @(Html.Kendo().TextBox()
+           .Name("custom")
+           .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtFilter" })
+        )
+        @(Html.Kendo().Button()
+                        .Name("btnSubmit")
+                        .HtmlAttributes(new { type = "button" })
+                        .Content("Filter")
+                        .Events(e => e.Click("DisplayData"))
+        )
+       </div>
+    <div>
+        @(Html.Kendo().ComboBox()
+         .Name("county")
+         .Placeholder("Judet..")
+         .DataTextField("CountyName")
+         .DataValueField("CountyId")
+         .HtmlAttributes(new { style = "width:100%;" })
+         .Filter(FilterType.Contains)
+         .AutoBind(false)
+         .MinLength(1)
+         .DataSource(source =>
+         {
+             source.Read(read =>
+             {
+                 read.Action("GetComboCounty", "Dictionary");
+             })
+             .ServerFiltering(true);
+         })
+         )
+    </div>
     @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCityModel>()
           .Name("grid")
           .HtmlAttributes(new { style = "height: 500px", id = "grdCities" })

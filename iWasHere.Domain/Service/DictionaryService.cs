@@ -104,7 +104,17 @@ namespace iWasHere.Domain.Service
 
         }
 
+        public List<DictionaryCountyModel> GetComboCounty(string text)
+        {
+            List<DictionaryCountyModel> comboCounty = _dbContext.DictionaryCounty.Select(a => new DictionaryCountyModel()
+            {
+                CountyId = a.CountyId,
+                CountyName = a.CountyName,
 
+            }).ToList();
+                return comboCounty;
+        }
+  
 
         public DictionaryCityModel AddDictionaryLandmarkType(DictionaryCityModel cityModel)
         {
