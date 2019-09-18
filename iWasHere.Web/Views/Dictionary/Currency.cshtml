@@ -1,0 +1,68 @@
+﻿@model IEnumerable<iWasHere.Domain.Models.DictionaryCurrencyType>
+
+@{
+    ViewData["Title"] = "Currency";
+}
+
+<h1>Currency</h1>
+
+<body>
+
+
+    <div class="demo-section k-content">
+        <div>
+
+            <p>
+
+                @(Html.Kendo().TextBox()
+              .Name("currencyTextBox")
+              .HtmlAttributes(new { style = "width: 20%", title = "Please a Currency Code" })
+                )
+
+                @(Html.Kendo().Button()
+                        .Name("textButton")
+                        .HtmlAttributes(new { type = "button" })
+                        .Content("Filter")
+                        .Events(ev => ev.Click("onClick"))
+                        )
+
+            </p>
+        </div>
+    </div>
+
+    @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryCurrencyType>()
+  .Name("grid")
+  .Columns(columns =>
+  {
+      columns.Bound(c => c.CurrencyCode).Width(140);
+      columns.Bound(c => c.CurrencyName).Width(190);
+      columns.Bound(c => c.CurrencyExRate).Width(140);
+
+
+  })
+  .HtmlAttributes(new { style = "height: 380px;" })
+  .Scrollable()
+  .Groupable()
+  .Sortable()
+  .Pageable(pageable => pageable
+      .Refresh(true)
+      .PageSizes(true)
+      .ButtonCount(5))
+  .DataSource(dataSource => dataSource
+      .Ajax()
+      .Read(read => read.Action("Currency_Read", "Dictionary"))
+  )
+    )
+
+    <script>
+        function onClick(e) {
+            $(e.event.target).closest(".k-button").attr("id");
+            console.log("apasat");
+
+        }
+
+    </script>
+
+
+
+</body>

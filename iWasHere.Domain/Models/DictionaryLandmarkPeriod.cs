@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace iWasHere.Domain.Models
 {
-    public partial class DictionaryLandmarkPeriod
+    public partial class DictionaryLandmarkPeriod  
     {
         public DictionaryLandmarkPeriod()
         {
