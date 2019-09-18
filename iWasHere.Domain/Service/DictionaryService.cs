@@ -23,45 +23,64 @@ namespace iWasHere.Domain.Service
 
         public List<DictionaryLandmarkTypeModel> GetDictionaryLandmarkTypeModels()
         {
-
-            List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dbContext.DictionaryLandmarkType.Select(a => new DictionaryLandmarkTypeModel()
+            List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dbContext.DictionaryLandmarkType.Select(LandmarkType => new DictionaryLandmarkTypeModel()
             {
-                Id = a.DictionaryItemId,
-                Name = a.DictionaryItemName
-
-             }).ToList();
+                DictionaryItemId = LandmarkType.DictionaryItemId,
+                DictionaryItemName = LandmarkType.DictionaryItemName,
+                DictionaryItemCode = LandmarkType.DictionaryItemCode,
+                Description = LandmarkType.Description
+            }).ToList();
 
             return dictionaryLandmarkTypeModels;
         }
 
-        public List<Models.DictionaryLandmarkType> GetDictionaryLandmarkType(String searchText)
+
+        public IEnumerable<DictionaryLandmarkTypeModel> GetLandmarkType(int pageNo, int pageSize, out int rowsNo, string lFilter )
         {
-
-            List<Models.DictionaryLandmarkType> dictionaryLandmarkType;
-            if (!String.IsNullOrWhiteSpace(searchText))
-            {
-                dictionaryLandmarkType = _dbContext.DictionaryLandmarkType.Where(a => a.DictionaryItemName.StartsWith(searchText)).Select(a => new Models.DictionaryLandmarkType()
+            rowsNo = 0;
+            rowsNo = _dbContext.DictionaryLandmarkType.Count();
+            if (lFilter == null)
+                return _dbContext.DictionaryLandmarkType.Skip((pageNo - 1) * pageSize).Take(pageSize).Select(LandmarkType => new DictionaryLandmarkTypeModel
                 {
-                    DictionaryItemId = a.DictionaryItemId,
-                    DictionaryItemName = a.DictionaryItemName,
-                    DictionaryItemCode = a.DictionaryItemCode,
-                    Description = a.Description
-
-                }).ToList();
-            }
+                    DictionaryItemId = LandmarkType.DictionaryItemId,
+                    DictionaryItemName = LandmarkType.DictionaryItemName,
+                    DictionaryItemCode = LandmarkType.DictionaryItemCode,
+                    Description = LandmarkType.Description
+                });
             else
             {
-                dictionaryLandmarkType = _dbContext.DictionaryLandmarkType.Select(a => new Models.DictionaryLandmarkType()
+                rowsNo = _dbContext.DictionaryLandmarkType.Where(a => a.DictionaryItemName.Contains(lFilter)).Count();
+                return _dbContext.DictionaryLandmarkType.Where(a => a.DictionaryItemName.Contains(lFilter)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(LandmarkType => new DictionaryLandmarkTypeModel
                 {
-                    DictionaryItemId = a.DictionaryItemId,
-                    DictionaryItemName = a.DictionaryItemName,
-                    DictionaryItemCode = a.DictionaryItemCode,
-                    Description = a.Description
-
-                }).ToList();
+                    DictionaryItemId = LandmarkType.DictionaryItemId,
+                    DictionaryItemName = LandmarkType.DictionaryItemName,
+                    DictionaryItemCode = LandmarkType.DictionaryItemCode,
+                    Description = LandmarkType.Description
+                });
             }
+        }
 
-            return dictionaryLandmarkType;
+        public IEnumerable<DictionaryLandmarkTypeModel> LoadLandmarkType(int LandmarkTypeId)
+        {
+            return _dbContext.DictionaryLandmarkType.Where(a => a.DictionaryItemId == LandmarkTypeId).Select(LandmarkType => new DictionaryLandmarkTypeModel
+            {
+                DictionaryItemId = LandmarkType.DictionaryItemId,
+                DictionaryItemName = LandmarkType.DictionaryItemName,
+                DictionaryItemCode = LandmarkType.DictionaryItemCode,
+                Description = LandmarkType.Description
+            });
+
+        }
+
+        public DictionaryLandmarkTypeModel AddDictionaryLandmarkType(DictionaryLandmarkTypeModel landmarkType)
+        {
+            if(landmarkType.DictionaryItemId != null)
+            if (!String.IsNullOrWhiteSpace(landmarkType.DictionaryItemName))
+            {
+                _dbContext.Add(landmarkType);
+                _dbContext.SaveChanges();
+            }
+            return null;
         }
 
 
