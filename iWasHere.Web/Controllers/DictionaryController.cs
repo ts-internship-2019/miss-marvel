@@ -33,6 +33,8 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult LandmarkType()
         {
+
+
             return View();
         }
 
