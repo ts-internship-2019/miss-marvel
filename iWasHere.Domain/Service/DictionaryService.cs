@@ -97,6 +97,32 @@ namespace iWasHere.Domain.Service
             return dictionaryCountries;
         }
 
+
+        public IEnumerable<DictionaryCountryModel> GetCountry(int pageNo, int pageSize, out int rowsNo, string lFilter)
+        {
+            rowsNo = 0;
+            rowsNo = _dbContext.DictionaryCountry.Count();
+            if (lFilter == null)
+                return _dbContext.DictionaryCountry.Skip((pageNo - 1) * pageSize).Take(pageSize).Select(a => new DictionaryCountryModel
+                {
+                    CountryId = a.CountryId,
+                    CountryName = a.CountryName,
+                    CountryCode = a.CountryCode
+                });
+            else
+                return _dbContext.DictionaryCountry.Where(a => a.CountryName.Contains(lFilter)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(a => new DictionaryCountryModel
+                {
+                    CountryId = a.CountryId,
+                    CountryName = a.CountryName,
+                    CountryCode = a.CountryCode
+                });
+
+
+
+        }
+
+
+
         public List<DictionaryCurrencyType> GetDictionaryCurrencyType()
 
         {
@@ -127,6 +153,8 @@ namespace iWasHere.Domain.Service
 
             return dictionaryCounty;
         }
+
+    
 
     }
 }

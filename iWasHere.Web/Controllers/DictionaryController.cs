@@ -104,6 +104,32 @@ namespace iWasHere.Web.Controllers
                 }
             }
 
+
+        public ActionResult GetCountry([DataSourceRequest]DataSourceRequest request, String lFilter)
+        {
+            int rowsNo = 0;
+            var x = _dictionaryService.GetCountry(request.Page, request.PageSize, out rowsNo, lFilter);
+            DataSourceResult dataSource = new DataSourceResult();
+            dataSource.Data = x;
+            dataSource.Total = rowsNo;
+            return Json(dataSource);
+
+        }
+        [HttpPost]
+        public JsonResult GetJsonResult(String filter)
+        {
+            String s = filter;
+            return null;
+        }
+
+
+
+        //public ActionResult Delete([DataSourceRequest] DataSourceRequest request, DictionaryCountryModel countryModel)
+        //{
+        //    var data = _dbContext.
+        //}
+
+
         // ------------------- County
 
         public IActionResult County()
@@ -123,18 +149,23 @@ namespace iWasHere.Web.Controllers
             return Json(dataSourceResult);
         }
 
-        private static IEnumerable<DictionaryCounty> GetCounty()
-        {
-            using (var northwind = new MissMarvelContext())
-            {
-                return northwind.DictionaryCounty.Select(county => new DictionaryCounty
-                {
-                    CountyCode = county.CountyCode,
-                    CountyName = county.CountyName
 
-                }).ToList();
-            }
-        }
+
+   
+
+
+        //private static IEnumerable<DictionaryCounty> GetCounty()
+        //{
+        //    using (var northwind = new MissMarvelContext())
+        //    {
+        //        return northwind.DictionaryCounty.Select(county => new DictionaryCounty
+        //        {
+        //            CountyCode = county.CountyCode,
+        //            CountyName = county.CountyName
+
+        //        }).ToList();
+        //    }
+        //}
 
         // ------------------- Country
 
