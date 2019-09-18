@@ -10,6 +10,7 @@ using Kendo.Mvc.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using iWasHere.Web;
 using iWasHere.Domain;
+using Kendo.Mvc.UI;
 
 
 namespace iWasHere.Web.Controllers
@@ -93,7 +94,25 @@ namespace iWasHere.Web.Controllers
                 return Json(dataSource);
             }
 
-            private static IEnumerable<DictionaryCurrencyType> GetCurrency()
+        public ActionResult GetCurrencies([DataSourceRequest]DataSourceRequest request, String lFilter)
+        {
+            int rowsNo = 0;
+            var x = _dictionaryService.GetDictionaryCurrencyTypes(request.Page, request.PageSize, out rowsNo, lFilter);
+            DataSourceResult dataSource = new DataSourceResult();
+            dataSource.Data = x;
+            dataSource.Total = rowsNo;
+            return Json(dataSource);
+
+        }
+
+        public JsonResult GetAjax(String filter)
+        {
+            String s = filter;
+            return null;
+        }
+
+
+        private static IEnumerable<DictionaryCurrencyType> GetCurrency()
             {
                 using (var northwind = new MissMarvelContext())
                 {
@@ -106,8 +125,10 @@ namespace iWasHere.Web.Controllers
 
                     }).ToList();
                 }
+
             }
 
+        
         // ------------------- County
 
         public IActionResult County()
@@ -195,5 +216,8 @@ namespace iWasHere.Web.Controllers
             }
         }
     }
+
+
+   
 
 }

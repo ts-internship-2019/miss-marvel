@@ -4,65 +4,105 @@
     ViewData["Title"] = "Currency";
 }
 
-<h1>Currency</h1>
+<h1 style="margin-left=90px">Currency Details</h1>
 
-<body>
+    <body>
+        <p>
+            <a asp-action="AddCurrency_Read">Filter</a>
+        </p>
+       
+      
 
 
-    <div class="demo-section k-content">
-        <div>
+            <div class="demo-section k-content">
+                <div>
 
-            <p>
+                    <p>
 
-                @(Html.Kendo().TextBox()
-              .Name("currencyTextBox")
-              .HtmlAttributes(new { style = "width: 20%", title = "Please a Currency Code" })
-                )
-
-                @(Html.Kendo().Button()
-                        .Name("textButton")
-                        .HtmlAttributes(new { type = "button" })
-                        .Content("Filter")
-                        .Events(ev => ev.Click("onClick"))
+                        @(Html.Kendo().TextBox()
+                      .Name("custom")
+                      .HtmlAttributes(new { style = "width: 30%", title = "custom", id = "txtFilter" })
                         )
 
-            </p>
-        </div>
-    </div>
+                        @(Html.Kendo().Button()
+                                .Name("btnSubmit")
+                                .HtmlAttributes(new { type = "button" })
+                                .Content("Filter")
+                                .Events(ev => ev.Click("DisplayData"))
+                        )
 
-    @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryCurrencyType>()
-  .Name("grid")
-  .Columns(columns =>
-  {
-      columns.Bound(c => c.CurrencyCode).Width(140);
-      columns.Bound(c => c.CurrencyName).Width(190);
-      columns.Bound(c => c.CurrencyExRate).Width(140);
+                    </p>
+                </div>
+            </div>
 
-
-  })
-  .HtmlAttributes(new { style = "height: 380px;" })
-  .Scrollable()
-  .Groupable()
-  .Sortable()
-  .Pageable(pageable => pageable
-      .Refresh(true)
-      .PageSizes(true)
-      .ButtonCount(5))
-  .DataSource(dataSource => dataSource
-      .Ajax()
-      .Read(read => read.Action("Currency_Read", "Dictionary"))
-  )
-    )
-
-    <script>
-        function onClick(e) {
-            $(e.event.target).closest(".k-button").attr("id");
-            console.log("apasat");
-
-        }
-
-    </script>
+            @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryCurrencyType>()
+          .Name("grid")
+          .HtmlAttributes(new { style = "height: 500px", id = "grdCurrencyType" })
+          .Columns(columns =>
+          {
+              columns.Bound(c => c.CurrencyCode).Width(240);
+              columns.Bound(c => c.CurrencyName).Width(240);
+              columns.Bound(c => c.CurrencyExRate).Width(240);
+              columns.Command(c =>
+                        {
+                c.Custom("EditRecord").Text("Edit").Click("dgChange");
+            });
+                   columns.Command(c =>
+                        {
+                c.Custom("DeleteRecord").Text("Delete").Click("dgChange");
+            });
 
 
+          })
 
-</body>
+          .Scrollable()
+          .Groupable()
+          .Sortable()
+          .Filterable()
+          .Pageable(pageable => pageable
+              .Refresh(true)
+              .PageSizes(true)
+              .ButtonCount(5))
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Read(read => read.Action("GetCurrencies", "Dictionary").Data("myFunction"))
+              .Update(update => update.Action("GetCurrencies", "Grid"))
+          )
+            )
+
+            <script>
+                function onClick(e) {
+                    $(e.event.target).closest(".k-button").attr("id");
+                    console.log("apasat");
+
+                }
+
+            </script>
+
+
+
+    </body>
+
+<script>
+
+    function DisplayData() {
+        $("#grdCurrencyType").data("kendoGrid").dataSource.read()
+
+    }
+    function dgChange(e) {
+        grid = $("#grdCurrencyType").data("kendoGrid");
+        var row = e.currentTarget.closest("tr").cells[0].outerText;
+
+
+
+    }
+
+    function myFunction() {
+        var filter = $("#txtFilter").val();
+        var obj = {};
+        obj["lFilter"] = filter;
+        return obj;
+    }
+</script>
+
+

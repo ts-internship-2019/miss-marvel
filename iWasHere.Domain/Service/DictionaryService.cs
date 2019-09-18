@@ -29,7 +29,7 @@ namespace iWasHere.Domain.Service
                 Id = a.DictionaryItemId,
                 Name = a.DictionaryItemName
 
-             }).ToList();
+            }).ToList();
 
             return dictionaryLandmarkTypeModels;
         }
@@ -68,7 +68,7 @@ namespace iWasHere.Domain.Service
         public List<DictionaryCityModel> GetDictionaryCities(int skip, int take, out int totalCount)
         {
             totalCount = _dbContext.DictionaryCity.Count();
-            int toSkip = (skip-1) * take;
+            int toSkip = (skip - 1) * take;
 
             List<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
             {
@@ -85,7 +85,7 @@ namespace iWasHere.Domain.Service
 
         {
             totalCount = _dbContext.DictionaryCountry.Count();
-            int skip = (pageNo-1) * pageSize;
+            int skip = (pageNo - 1) * pageSize;
             List<DictionaryCountryModel> dictionaryCountries = _dbContext.DictionaryCountry.Select(a => new DictionaryCountryModel()
             {
                 CountryId = a.CountryId,
@@ -123,13 +123,40 @@ namespace iWasHere.Domain.Service
             List<DictionaryCountyModel> dictionaryCounty = _dbContext.DictionaryCounty.Select(a => new DictionaryCountyModel()
             {
                 CountyId = a.CountyId,
-                CountyName = a.CountyName, 
+                CountyName = a.CountyName,
                 //CountryId = a.CountryId, //doar daca ne trebuie legatura
                 CountyCode = a.CountyCode
             }).Skip(toSkip).Take(take).ToList();
 
             return dictionaryCounty;
         }
+
+    
+
+    public IEnumerable<DictionaryCurrencyTypeModel> GetDictionaryCurrencyTypes(int pageNo, int pageSize, out int rowsNo, string lFilter)
+    {
+        rowsNo = 0;
+        rowsNo = _dbContext.DictionaryCurrencyType.Count();
+        if (lFilter == null)
+            return _dbContext.DictionaryCurrencyType.Skip((pageNo - 1) * pageSize).Take(pageSize).Select(CurrencyType => new DictionaryCurrencyTypeModel
+            {
+                CurrencyTypeId = CurrencyType.CurrencyTypeId,
+                CurrencyName = CurrencyType.CurrencyName,
+                CurrencyCode = CurrencyType.CurrencyCode,
+                CurrencyExRate = CurrencyType.CurrencyExRate
+            }); 
+        else
+            return _dbContext.DictionaryCurrencyType.Where(a => a.CurrencyName.Contains(lFilter)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(CurrencyType => new DictionaryCurrencyTypeModel
+            {
+                CurrencyTypeId = CurrencyType.CurrencyTypeId,
+                CurrencyName = CurrencyType.CurrencyName,
+                CurrencyCode = CurrencyType.CurrencyCode,
+                CurrencyExRate = CurrencyType.CurrencyExRate
+                
+            });
+
+
+    }
 
     }
 }
