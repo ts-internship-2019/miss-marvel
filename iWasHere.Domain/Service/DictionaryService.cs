@@ -65,20 +65,55 @@ namespace iWasHere.Domain.Service
         }
 
 
-        public List<DictionaryCityModel> GetDictionaryCities(int skip, int take, out int totalCount)
+        //public List<DictionaryCityModel> GetDictionaryCities(int skip, int take, out int totalCount)
+        //{
+        //    totalCount = _dbContext.DictionaryCity.Count();
+        //    int toSkip = (skip-1) * take;
+
+        //    List<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
+        //    {
+        //        CityName = a.CityName,
+        //        CityCode = a.CityCode,
+        //        CityId = a.CityId
+        //    }
+        //    ).Skip(toSkip).Take(take).ToList();
+
+        //    return dictionaryCities;
+        //}
+
+        public IEnumerable<DictionaryCityModel> GetCities(int pageNo, int pageSize, out int rowsNo, string lFilter)
         {
-            totalCount = _dbContext.DictionaryCity.Count();
-            int toSkip = (skip-1) * take;
+            rowsNo = 0;
+            rowsNo = _dbContext.DictionaryCity.Count();
+            if (lFilter == null)
+                return _dbContext.DictionaryCity.Skip((pageNo - 1) * pageSize).Take(pageSize).Select(Cities => new DictionaryCityModel
+                {
+                    CityId = Cities.CityId,
+                    CityName = Cities.CityName,
+                    CityCode = Cities.CityCode
 
-            List<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
+                }) ;
+            else
+                return _dbContext.DictionaryCity.Where(a => a.CityName.Contains(lFilter)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(Cities => new DictionaryCityModel
+                {
+                    CityId = Cities.CityId,
+                    CityName = Cities.CityName,
+                    CityCode = Cities.CityCode
+                });
+
+
+        }
+
+
+
+        public DictionaryCityModel AddDictionaryLandmarkType(DictionaryCityModel cityModel)
+        {
+            if (!String.IsNullOrWhiteSpace(cityModel.CityName))
             {
-                CityName = a.CityName,
-                CityCode = a.CityCode,
-                CityId = a.CityId
+                _dbContext.Add(cityModel);
+                _dbContext.SaveChanges();
             }
-            ).Skip(toSkip).Take(take).ToList();
-
-            return dictionaryCities;
+            return cityModel;
         }
 
         public List<DictionaryCountryModel> GetDictionaryCountries(int pageNo, int pageSize, out int totalCount)

@@ -45,16 +45,47 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
-        public IActionResult Cities_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            int totalCount = 0;
-            var X = _dictionaryService.GetDictionaryCities(request.Page, request.PageSize, out totalCount);
-            DataSourceResult dataSourceResult = new DataSourceResult();
-            dataSourceResult.Data = X;
-            dataSourceResult.Total = totalCount;
+        //public IActionResult Cities_Read([DataSourceRequest] DataSourceRequest request)
+        //{
+        //    int totalCount = 0;
+        //    var X = _dictionaryService.GetDictionaryCities(request.Page, request.PageSize, out totalCount);
+        //    DataSourceResult dataSourceResult = new DataSourceResult();
+        //    dataSourceResult.Data = X;
+        //    dataSourceResult.Total = totalCount;
 
-            return Json(dataSourceResult);
+        //    return Json(dataSourceResult);
+        //}
+
+          public IActionResult AddEditCity([Bind("CityId,CityName,CityCode")] DictionaryCityModel cityModel, DictionaryCityModel dt)
+        {
+            if (ModelState.IsValid && dt != null)
+            {
+                _dictionaryService.AddDictionaryLandmarkType(cityModel);
+            }
+            return View();
         }
+
+
+
+        public ActionResult GetCities([DataSourceRequest]DataSourceRequest request, String lFilter)
+        {
+            int rowsNo = 0;
+            var x = _dictionaryService.GetCities(request.Page, request.PageSize, out rowsNo, lFilter);
+            DataSourceResult dataSource = new DataSourceResult();
+            dataSource.Data = x;
+            dataSource.Total = rowsNo;
+            return Json(dataSource);
+            
+        }
+        [HttpPost]
+        public JsonResult GetAjax(String filter)
+        {
+            String s = filter;
+            //return Json(_dictionaryService.GetLandmarkType(request.Page, request.PageSize).ToDataSourceResult(request));
+            return null;
+        }
+
+
         public partial class TextBox : Controller
         {
     
