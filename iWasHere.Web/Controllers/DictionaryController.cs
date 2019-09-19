@@ -38,13 +38,27 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
-        public ActionResult AddEditLandmarkType(DictionaryLandmarkTypeModel dt)
+        public ActionResult AddEditLandmarkType( [Bind("DictionaryItemId, DictionaryItemCode, DictionaryItemName, Description")]DictionaryLandmarkType dt, int id)
         {
-            if (ModelState.IsValid && dt != null)
+
+            String exMessage;
+            if (/*ModelState.IsValid &&*/ dt.DictionaryItemCode != null)
             {
-                _dictionaryService.AddDictionaryLandmarkType(dt);
+               var result = _dictionaryService.AddEditDictionaryLandmarkType(dt, out exMessage);
+                if(result == null)
+                {
+                    ModelState.AddModelError(string.Empty, exMessage);
+                    return View();
+                }
             }
-            return View();
+            if (id != 0)
+            {
+                return View(_dictionaryService.GetDictionaryLandmarkType(id));
+            }
+            else
+            {
+                return View();
+            }
         }
         public ActionResult GetLT([DataSourceRequest] DataSourceRequest request, String LandmarkTypeId)
         {
@@ -53,6 +67,17 @@ namespace iWasHere.Web.Controllers
             return Json(x);
 
         }
+
+        public ActionResult DeleteLandmarkType([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            if (id != -1)
+            {
+                _dictionaryService.DeleteLandmarkType(id);
+            }
+
+            return Json(ModelState.ToDataSourceResult());
+        }
+
 
 
         public ActionResult GetLandmarkType([DataSourceRequest]DataSourceRequest request, String lFilter)
@@ -111,13 +136,13 @@ namespace iWasHere.Web.Controllers
             return Json(dataSource);
             
         }
-        [HttpPost]
-        public JsonResult GetAjax(String filter)
-        {
-            String s = filter;
-            //return Json(_dictionaryService.GetLandmarkType(request.Page, request.PageSize).ToDataSourceResult(request));
-            return null;
-        }
+      
+        //public JsonResult GetAjax(String filter)
+        //{
+        //    String s = filter;
+        //    //return Json(_dictionaryService.GetLandmarkType(request.Page, request.PageSize).ToDataSourceResult(request));
+        //    return null;
+        //}
 
 
         public partial class TextBox : Controller

@@ -72,17 +72,59 @@ namespace iWasHere.Domain.Service
 
         }
 
-        public DictionaryLandmarkTypeModel AddDictionaryLandmarkType(DictionaryLandmarkTypeModel landmarkType)
+        public IEnumerable<DictionaryLandmarkTypeModel> GetLandmarkType(out int totalRows)
         {
-            if(landmarkType.DictionaryItemId != null)
-            if (!String.IsNullOrWhiteSpace(landmarkType.DictionaryItemName))
+            totalRows = _dbContext.DictionaryLandmarkType.Count();
+            return _dbContext.DictionaryLandmarkType.Select(LandmarkType => new DictionaryLandmarkTypeModel
             {
-                _dbContext.Add(landmarkType);
-                _dbContext.SaveChanges();
+                DictionaryItemId = LandmarkType.DictionaryItemId,
+                DictionaryItemName = LandmarkType.DictionaryItemName,
+                DictionaryItemCode = LandmarkType.DictionaryItemCode,
+                Description = LandmarkType.Description
+            });
+        }
+    
+
+    public Models.DictionaryLandmarkType AddEditDictionaryLandmarkType(Models.DictionaryLandmarkType landmarkType, out String errMsg)
+        {
+            errMsg = null;
+            try
+            {
+
+                if (landmarkType.DictionaryItemId == 0)
+                {
+                    _dbContext.Add(landmarkType);
+                    _dbContext.SaveChanges();
+                }
+                else
+                {
+                    _dbContext.Update(landmarkType);
+                    _dbContext.SaveChanges();
+                }
+
+                return landmarkType;
             }
-            return null;
+            catch(Exception ex)
+            {
+                errMsg = ex.Message.ToString();
+                return null;
+            }
         }
 
+        public void DeleteLandmarkType(int id)
+        {
+          Models.DictionaryLandmarkType landmarkType = new Models.DictionaryLandmarkType() { DictionaryItemId = id };
+
+            _dbContext.DictionaryLandmarkType.Remove(landmarkType);
+            _dbContext.SaveChanges();
+
+
+        }
+        public Models.DictionaryLandmarkType GetDictionaryLandmarkType(int landmarkTypeId)
+        {
+            Models.DictionaryLandmarkType landmarkType = _dbContext.DictionaryLandmarkType.Find(landmarkTypeId);
+            return landmarkType;
+        }
 
         //public List<DictionaryCityModel> GetDictionaryCities(int skip, int take, out int totalCount)
         //{

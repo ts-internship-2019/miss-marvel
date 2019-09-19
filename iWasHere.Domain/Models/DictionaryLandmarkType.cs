@@ -13,11 +13,11 @@ namespace iWasHere.Domain.Models
         }
 
         public int DictionaryItemId { get; set; }
-        [DisplayName("Item Code")]
-        [Required (ErrorMessage = "This field is required")]
+        //[DisplayName("Item Code")]
+        //[Required (ErrorMessage = "This field is required")]
         public string DictionaryItemCode { get; set; }
-        [Required(ErrorMessage = "This field is required")]
-        [DisplayName("Item Name")]
+        //[Required(ErrorMessage = "This field is required")]
+        //[DisplayName("Item Name")]
         public string DictionaryItemName { get; set; }
 
         public string Description { get; set; }
