@@ -7,6 +7,46 @@
 <h3>Categorii bilete disponibile</h3>
 
 <body>
+    <div class="filtrare">
+        <p>
+            @(Html.Kendo().TextBox()
+                .Name("ktxtFilter")
+                .HtmlAttributes(new { style = "width: 25%", title = "userInput", id = "txtFilter" })
+            )
+
+            @(Html.Kendo().Button()
+                    .Name("btnFilter")
+                    .Icon("filter")
+                    .HtmlAttributes(new { type = "button" })
+                    .Content("Filtreaza datele")
+                    .Events(e => e.Click("DisplayData"))
+
+            )
+
+            @(Html.Kendo().Button()
+                   .Name("kendoIconTextButton")
+                   .Tag("a")
+                   .Icon("filter-clear")
+                   .Content("Sterge filtre")
+                   .Events(e => e.Click("ClearFilter"))
+                   .HtmlAttributes(new { style = "background-color:orange;color:white;width:150px" }))
+
+            @*@(Html.Kendo().Button()
+                .Name("iconButton")
+                .Tag("em")
+                .Icon("refresh")
+                .Events(e => e.Click("DisplayData"))
+                .Content("<span class='k-icon' title='Refresh'></span>"))*@
+
+
+        </p>
+
+        <p>
+            <button type="button" class="k-button k-primary">Adauga</button>
+
+        </p>
+    </div>
+
     @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryTicketType>
     ()
     .Name("grid")
@@ -16,7 +56,7 @@
         columns.Command(command => { command.Edit(); command.Destroy(); }).Width(250);
     })
     .Editable(editable => editable.Mode(GridEditMode.PopUp))
-    .HtmlAttributes(new { style = "height: 380px;" })
+    .HtmlAttributes(new { style = "height: 500px", id = "gridTicketType" })
     .Scrollable()
     .Sortable()
     .Pageable(pageable => pageable
@@ -25,27 +65,38 @@
     .ButtonCount(5))
     .DataSource(dataSource => dataSource
     .Ajax()
-    .Read(read => read.Action("TicketType_Read", "Dictionary"))
+    .Read(read => read.Action("TicketType_Read", "Dictionary").Data("filterFunction"))
     .Update(update => update.Action("EditingPopup_Update", "Grid"))
     .Destroy(update => update.Action("EditingPopup_Destroy", "Grid"))
     )
     )
 
-    <script type="text/javascript">
-    function error_handler(e) {
-        if (e.errors) {
-            var message = "Errors:\n";
-            $.each(e.errors, function (key, value) {
-                if ('errors' in value) {
-                    $.each(value.errors, function () {
-                        message += this + "\n";
-                    });
-                }
-            });
-            alert(message);
-        }
-    }
-    </script>
-
 
 </body>
+
+<script type="text/javascript">
+
+    function DisplayData() {
+        $("#gridTicketType").data("kendoGrid").dataSource.read();
+        $("#gridTicketType").data("kendoGrid").dataSource.page(1);
+    }
+
+    function filterFunction() {
+        var filter = $("#txtFilter").val();
+        var obj = {};
+        obj["FilterTicketType"] = filter;
+        return obj;
+    }
+
+    function ClearFilter() {
+        $('#txtFilter').val(null);
+
+        $('#gridTicketType').data("kendoGrid").dataSource.read();
+        $('#gridTicketType').data("kendoGrid").dataSource.page(1);
+    }
+
+
+
+
+
+</script>
