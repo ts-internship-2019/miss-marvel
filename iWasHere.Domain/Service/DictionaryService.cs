@@ -115,6 +115,16 @@ namespace iWasHere.Domain.Service
             }
         }
 
+        public DictionaryCountryModel AddDictionaryCountry(DictionaryCountryModel country)
+        {
+            if(country.CountryId != null)
+                if (!String.IsNullOrWhiteSpace(country.CountryName))
+                {
+                    _dbContext.Add(country);
+                    _dbContext.SaveChanges();
+                }
+            return null;
+        }
         public void DeleteLandmarkType(int id)
         {
           Models.DictionaryLandmarkType landmarkType = new Models.DictionaryLandmarkType() { DictionaryItemId = id };
@@ -194,6 +204,14 @@ namespace iWasHere.Domain.Service
             }
 
         }
+        public void DeleteCity(int id)
+        {
+            DictionaryCity language = new DictionaryCity() { CityId = id };
+
+            _dbContext.DictionaryCity.Remove(language);
+            _dbContext.SaveChanges();
+
+        }
 
         public List<DictionaryCounty> GetComboCounty(string text)
         {
@@ -208,9 +226,9 @@ namespace iWasHere.Domain.Service
        
 
 
-        public DictionaryCityModel AddDictionaryLandmarkType(DictionaryCityModel cityModel)
+        public Models.DictionaryLandmarkType AddDictionaryLandmarkType(Models.DictionaryLandmarkType cityModel)
         {
-            if (!String.IsNullOrWhiteSpace(cityModel.CityName))
+            if (!String.IsNullOrWhiteSpace(cityModel.DictionaryItemName))
             {
                 _dbContext.Add(cityModel);
                 _dbContext.SaveChanges();
@@ -234,12 +252,39 @@ namespace iWasHere.Domain.Service
             return dictionaryCountries;
         }
         //paginare
+      //  public List<DictionaryCurrencyTypeModel> GetDictionaryCurrencyType(int pageNo, int pageSize, out int totalCount)
+
+
+        public IEnumerable<DictionaryCountryModel> GetCountry(int pageNo, int pageSize, out int rowsNo, string lFilter)
+        {
+            rowsNo = 0;
+            rowsNo = _dbContext.DictionaryCountry.Count();
+            if (lFilter == null)
+                return _dbContext.DictionaryCountry.Skip((pageNo - 1) * pageSize).Take(pageSize).Select(a => new DictionaryCountryModel
+                {
+                    CountryId = a.CountryId,
+                    CountryName = a.CountryName,
+                    CountryCode = a.CountryCode
+                });
+            else
+                return _dbContext.DictionaryCountry.Where(a => a.CountryName.Contains(lFilter)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(a => new DictionaryCountryModel
+                {
+                    CountryId = a.CountryId,
+                    CountryName = a.CountryName,
+                    CountryCode = a.CountryCode
+                });
+
+
+
+        }
+
+
+        //-------------------------------------------------------
         public List<DictionaryCurrencyTypeModel> GetDictionaryCurrencyType(int pageNo, int pageSize, out int totalCount)
 
         {
             totalCount = _dbContext.DictionaryCurrencyType.Count();
             int skip = (pageNo - 1) * pageSize;
-
             List<DictionaryCurrencyTypeModel> dictionaryCurrencyType = _dbContext.DictionaryCurrencyType.Select(a => new DictionaryCurrencyTypeModel()
             {
                 CurrencyTypeId = a.CurrencyTypeId,
@@ -268,21 +313,56 @@ namespace iWasHere.Domain.Service
             return dictionaryCounty;
         }
 
-        public List<LandmarkPeriodModel> GetDictionaryLandmarkPeriods(int pageNo, int pageSize, out int totalcount)
+        //LandmarkPeriods
+
+        public IEnumerable<LandmarkPeriodModel> GetDictionaryLandmarkPeriods(int pageNo, int pageSize, out int totalcount, string search)
         {
             int toskip;
+            totalcount = 0;
             totalcount = _dbContext.DictionaryLandmarkPeriod.Count();
             toskip = (pageNo - 1) * pageSize;
-
-            List<LandmarkPeriodModel> dictionaryPeriods = _dbContext.DictionaryLandmarkPeriod.Select(a => new LandmarkPeriodModel()
+            if (string.IsNullOrEmpty(search))
             {
-                LandmarkPeriodId = a.LandmarkPeriodId,
-                LandmarkPeriodName = a.LandmarkPeriodName
-            }
-            ).Skip(toskip).Take(pageSize).ToList();
 
-            return dictionaryPeriods;
+                return _dbContext.DictionaryLandmarkPeriod.Skip((pageNo - 1) * pageSize).Take(pageSize).Select(landmarkPeriod => new LandmarkPeriodModel
+                {
+                    LandmarkPeriodId = landmarkPeriod.LandmarkPeriodId,
+                    LandmarkPeriodName = landmarkPeriod.LandmarkPeriodName,
+                });
+            }
+            else
+            {
+                return _dbContext.DictionaryLandmarkPeriod.Where(a => a.LandmarkPeriodName.Contains(search)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(landmarkPeriod => new LandmarkPeriodModel
+                {
+                    LandmarkPeriodId = landmarkPeriod.LandmarkPeriodId,
+                    LandmarkPeriodName = landmarkPeriod.LandmarkPeriodName,
+                });
+            }
         }
+        //public IEnumerable<LandmarkPeriodModel> EditLandmarkPeriods()
+        //{
+        //    int toskip;
+        //    totalcount = 0;
+        //    totalcount = _dbContext.DictionaryLandmarkPeriod.Count();
+        //    toskip = (pageNo - 1) * pageSize;
+        //    if (string.IsNullOrEmpty(search))
+        //    {
+
+        //        return _dbContext.DictionaryLandmarkPeriod.Skip((pageNo - 1) * pageSize).Take(pageSize).Select(landmarkPeriod => new LandmarkPeriodModel
+        //        {
+        //            LandmarkPeriodId = landmarkPeriod.LandmarkPeriodId,
+        //            LandmarkPeriodName = landmarkPeriod.LandmarkPeriodName,
+        //        });
+        //    }
+        //    else
+        //    {
+        //        return _dbContext.DictionaryLandmarkPeriod.Where(a => a.LandmarkPeriodName.Contains(search)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(landmarkPeriod => new LandmarkPeriodModel
+        //        {
+        //            LandmarkPeriodId = landmarkPeriod.LandmarkPeriodId,
+        //            LandmarkPeriodName = landmarkPeriod.LandmarkPeriodName,
+        //        });
+        //    }
+        //}
 
 
         public IEnumerable<DictionaryTicketTypeModel> GetDictionaryTicketType(int pgNo, int pgSize, out int countRows, string FilterTicketType)
@@ -306,7 +386,14 @@ namespace iWasHere.Domain.Service
 
 
 
-    
+
+        public void DeleteCountry(int id)
+        {
+            Models.DictionaryCountry country = new Models.DictionaryCountry() { CountryId = id };
+
+            _dbContext.DictionaryCountry.Remove(country);
+            _dbContext.SaveChanges();
+        }
 
     public IEnumerable<DictionaryCurrencyTypeModel> GetDictionaryCurrencyTypes(int pageNo, int pageSize, out int rowsNo, string lFilter)
     {
