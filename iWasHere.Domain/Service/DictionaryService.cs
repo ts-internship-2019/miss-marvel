@@ -83,6 +83,19 @@ namespace iWasHere.Domain.Service
             return null;
         }
 
+        public DictionaryCountryModel AddDictionaryCountry(DictionaryCountryModel country)
+        {
+            if(country.CountryId != null)
+                if (!String.IsNullOrWhiteSpace(country.CountryName))
+                {
+                    _dbContext.Add(country);
+                    _dbContext.SaveChanges();
+                }
+            return null;
+        }
+
+
+
 
         //public List<DictionaryCityModel> GetDictionaryCities(int skip, int take, out int totalCount)
         //{
@@ -161,7 +174,7 @@ namespace iWasHere.Domain.Service
             return dictionaryCountries;
         }
         //paginare
-        public List<DictionaryCurrencyTypeModel> GetDictionaryCurrencyType(int pageNo, int pageSize, out int totalCount)
+      //  public List<DictionaryCurrencyTypeModel> GetDictionaryCurrencyType(int pageNo, int pageSize, out int totalCount)
 
 
         public IEnumerable<DictionaryCountryModel> GetCountry(int pageNo, int pageSize, out int rowsNo, string lFilter)
@@ -188,13 +201,12 @@ namespace iWasHere.Domain.Service
         }
 
 
-
-        public List<DictionaryCurrencyType> GetDictionaryCurrencyType()
+        //-------------------------------------------------------
+        public List<DictionaryCurrencyTypeModel> GetDictionaryCurrencyType(int pageNo, int pageSize, out int totalCount)
 
         {
             totalCount = _dbContext.DictionaryCurrencyType.Count();
             int skip = (pageNo - 1) * pageSize;
-
             List<DictionaryCurrencyTypeModel> dictionaryCurrencyType = _dbContext.DictionaryCurrencyType.Select(a => new DictionaryCurrencyTypeModel()
             {
                 CurrencyTypeId = a.CurrencyTypeId,
@@ -254,9 +266,14 @@ namespace iWasHere.Domain.Service
 
         }
 
-    
 
+        public void DeleteCountry(int id)
+        {
+            Models.DictionaryCountry country = new Models.DictionaryCountry() { CountryId = id };
 
+            _dbContext.DictionaryCountry.Remove(country);
+            _dbContext.SaveChanges();
+        }
 
     }
 }

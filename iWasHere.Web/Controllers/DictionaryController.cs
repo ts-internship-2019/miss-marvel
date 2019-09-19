@@ -28,7 +28,7 @@ namespace iWasHere.Web.Controllers
         {
             List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dictionaryService.GetDictionaryLandmarkTypeModels();
 
-            return View();
+            return View(dictionaryLandmarkTypeModels);
         }
 
         public IActionResult LandmarkType()
@@ -46,6 +46,17 @@ namespace iWasHere.Web.Controllers
             }
             return View();
         }
+//----------------------------------------
+
+        public ActionResult AddDictionaryCountry(DictionaryCountryModel country)
+        {
+            if(ModelState.IsValid && country != null)
+            {
+                _dictionaryService.AddDictionaryCountry(country);
+            }
+            return View();
+        }
+
         public ActionResult GetLT([DataSourceRequest] DataSourceRequest request, String LandmarkTypeId)
         {
             int rowsNo = 0;
@@ -100,6 +111,32 @@ namespace iWasHere.Web.Controllers
         }
 
 
+        /*
+
+        public ActionResult AddEditCountryType([Bind("CountryId, CountryName, CountryCode")]DictionaryCountry dc, int id)
+        {
+
+            String exMessage;
+            if (dc.CountryCode != null)
+            {
+                var result = _dictionaryService.AddEditDictionaryCountry(dt, out exMessage);
+                if (result == null)
+                {
+                    ModelState.AddModelError(string.Empty, exMessage);
+                    return View();
+                }
+            }
+            if (id != 0)
+            {
+                return View(_dictionaryService.GetDictionaryCountry(id));
+            }
+            else
+            {
+                return View();
+            }
+        }
+
+    */
 
         public ActionResult GetCities([DataSourceRequest]DataSourceRequest request, String lFilter)
         {
@@ -112,9 +149,9 @@ namespace iWasHere.Web.Controllers
             
         }
 
-        public ActionResult GetComboCountyyy()
+        public ActionResult GetComboCountyyy(string text)
         {
-            List<DictionaryCountyModel> comboCounty = _dictionaryService.GetComboCounty();
+            List<DictionaryCountyModel> comboCounty = _dictionaryService.GetComboCounty(text);
             
             
             return Json(comboCounty);
@@ -127,13 +164,13 @@ namespace iWasHere.Web.Controllers
             return Json(result);
         }
      
-        [HttpPost]
-        public JsonResult GetAjax(String filter)
-        {
-            String s = filter;
+        //[HttpPost]
+        //public JsonResult GetAjax(String filter)
+        //{
+        //    String s = filter;
             
-            return null;
-        }
+        //    return null;
+        //}
 
 
         public partial class TextBox : Controller
@@ -163,18 +200,19 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
-            public IActionResult Currency_Read([DataSourceRequest] DataSourceRequest request)  //paginare
-            {
+        //---------------------------------------------------
+        public IActionResult Currency_Read([DataSourceRequest] DataSourceRequest request)  //paginare
+        {
             int totalCount = 0;
             var y = _dictionaryService.GetDictionaryCurrencyType(request.Page, request.PageSize, out totalCount);
             DataSourceResult dataSource = new DataSourceResult();
             dataSource.Data = y;
             dataSource.Total = totalCount;
 
-                return Json(dataSource);
-            }
+            return Json(dataSource);
+        }
 
-            private static IEnumerable<DictionaryCurrencyType> GetCurrency()
+        private static IEnumerable<DictionaryCurrencyType> GetCurrency()
             {
                 using (var northwind = new MissMarvelContext())
                 {
@@ -319,6 +357,16 @@ namespace iWasHere.Web.Controllers
             dataSourceResult.Total = totalCount;
 
             return Json(dataSourceResult);
+        }
+
+
+        public ActionResult DeleteCountry([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            if (id != -1)
+            {
+                _dictionaryService.DeleteCountry(id);
+            }
+            return Json(ModelState.ToDataSourceResult());
         }
     }
 
