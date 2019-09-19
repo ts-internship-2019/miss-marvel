@@ -122,34 +122,34 @@ namespace iWasHere.Web.Controllers
         //    return View();
         //}
 
-        public IActionResult AddEditCity([Bind("CityId,CityName,CityCode")] DictionaryCityModel cityModel, DictionaryCityModel dt)
+        
 
-        /*
+        
 
-        public ActionResult AddEditCountryType([Bind("CountryId, CountryName, CountryCode")]DictionaryCountry dc, int id)
-        {
+        //public ActionResult AddEditCountryType([Bind("CountryId, CountryName, CountryCode")]DictionaryCountry dc, int id)
+        //{
 
-            String exMessage;
-            if (dc.CountryCode != null)
-            {
-                var result = _dictionaryService.AddEditDictionaryCountry(dt, out exMessage);
-                if (result == null)
-                {
-                    ModelState.AddModelError(string.Empty, exMessage);
-                    return View();
-                }
-            }
-            if (id != 0)
-            {
-                return View(_dictionaryService.GetDictionaryCountry(id));
-            }
-            else
-            {
-                return View();
-            }
-        }
+        //    String exMessage;
+        //    if (dc.CountryCode != null)
+        //    {
+        //        var result = _dictionaryService.AddEditDictionaryCountry(dc, out exMessage);
+        //        if (result == null)
+        //        {
+        //            ModelState.AddModelError(string.Empty, exMessage);
+        //            return View();
+        //        }
+        //    }
+        //    if (id != 0)
+        //    {
+        //        return View(_dictionaryService.GetDictionaryCountry(id));
+        //    }
+        //    else
+        //    {
+        //        return View();
+        //    }
+        //}
 
-    */
+   
 
         public ActionResult GetCities([DataSourceRequest]DataSourceRequest request, String lFilter, String text)
         {
