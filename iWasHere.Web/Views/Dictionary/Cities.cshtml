@@ -23,52 +23,52 @@
     <p>
         <a asp-action="AddEditCity">Create New</a>
     </p>
+    <p>
+        <div class="row">
+            @(Html.Kendo().TextBox()
+               .Name("custom")
+               .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtFilter" })
+            )
+            @(Html.Kendo().Button()
+                            .Name("btnSubmit")
+                            .HtmlAttributes(new { type = "button" })
+                            .Content("Filter")
+                            .Events(e => e.Click("DisplayData"))
+            )
+        </div>
 
-    <div class="row">
-        @(Html.Kendo().TextBox()
-           .Name("custom")
-           .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtFilter" })
-        )
-        @(Html.Kendo().Button()
-                        .Name("btnSubmit")
-                        .HtmlAttributes(new { type = "button" })
-                        .Content("Filter")
-                        .Events(e => e.Click("DisplayData"))
-        )
-    </div>
+        <td>
+            <label for="countiesCB">Nume Judet:</label>
+        </td>
 
-    <td>
-        <label for="countiesCB">Nume Judet:</label>
-    </td>
-
-    @(Html.Kendo().ComboBox()
-     .Name("countiesCB")
-     .Placeholder("Judet..")
-     .DataTextField("CountyName")
-     .DataValueField("CountyId")
-     .HtmlAttributes(new { style = "width:100%;" })
-     .Filter(FilterType.Contains)
-     .AutoBind(false)
-     .MinLength(3)
-     .DataSource(source =>
-     {
-         source.Read(read =>
+        @(Html.Kendo().ComboBox()
+         .Name("countiesCB")
+         .Placeholder("Judet..")
+         .DataTextField("CountyName")
+         .DataValueField("CountyId")
+         .HtmlAttributes(new { style = "width:100%;" })
+         .Filter(FilterType.Contains)
+         .AutoBind(false)
+         .MinLength(3)
+         .DataSource(source =>
          {
-             read.Action("GetComboCounty", "Dictionary");
+             source.Read(read =>
+             {
+                 read.Action("GetComboCounty", "Dictionary");
+             })
+             .ServerFiltering(true);
          })
-         .ServerFiltering(true);
-     })
-    )
+        )
 
 
-    @(Html.Kendo().Button()
-        .Name("clearFilter")
-        .Icon("clear-filter")
-        .Content("Sterge Filtru")
-        .HtmlAttributes(new { type = "button" })
-        .Events(e => e.Click("delFilters"))
-    )
-
+        @(Html.Kendo().Button()
+            .Name("clearFilter")
+            .Icon("clear-filter")
+            .Content("Sterge Filtru")
+            .HtmlAttributes(new { type = "button" })
+            .Events(e => e.Click("delFilters"))
+        )
+    </p>
 
     @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCityModel>()
           .Name("grid")
@@ -114,10 +114,6 @@
     <script>
         function DisplayData() {
             $("#grdCities").data("kendoGrid").dataSource.read()
-
-
-
-
 
         }
     </script>
