@@ -100,40 +100,67 @@ namespace iWasHere.Domain.Service
         //    return dictionaryCities;
         //}
 
-        public IEnumerable<DictionaryCityModel> GetCities(int pageNo, int pageSize, out int rowsNo, string lFilter)
+        public IEnumerable<DictionaryCityModel> GetCities(int pageNo, int pageSize, out int rowsNo, string lFilter,int text)
         {
             rowsNo = 0;
             rowsNo = _dbContext.DictionaryCity.Count();
-            if (lFilter == null)
+            if (lFilter == null && text <1)
                 return _dbContext.DictionaryCity.Skip((pageNo - 1) * pageSize).Take(pageSize).Select(Cities => new DictionaryCityModel
                 {
                     CityId = Cities.CityId,
                     CityName = Cities.CityName,
-                    CityCode = Cities.CityCode
+                    CityCode = Cities.CityCode,
+                    CountyId = Convert.ToInt32(Cities.CountyId)
 
-                }) ;
-            else
+                });
+            else if (lFilter != null && text < 1)
+            {
+                rowsNo = _dbContext.DictionaryCity.Where(a => a.CityName.Contains(lFilter)).Count();
                 return _dbContext.DictionaryCity.Where(a => a.CityName.Contains(lFilter)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(Cities => new DictionaryCityModel
                 {
                     CityId = Cities.CityId,
                     CityName = Cities.CityName,
-                    CityCode = Cities.CityCode
+                    CityCode = Cities.CityCode,
+                    CountyId = Convert.ToInt32(Cities.CountyId)
                 });
-
+            }
+            else if (lFilter == null && text > 0)
+            {
+                rowsNo = _dbContext.DictionaryCity.Where(a => a.CountyId.Equals(text)).Count();
+                return _dbContext.DictionaryCity.Where(a => a.CountyId.Equals(text)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(Cities => new DictionaryCityModel
+                {
+                    CityId = Cities.CityId,
+                    CityName = Cities.CityName,
+                    CityCode = Cities.CityCode,
+                    CountyId = Convert.ToInt32(Cities.CountyId)
+                });
+            }
+            else
+            {
+                rowsNo = _dbContext.DictionaryCity.Where(a => a.CityName.Contains(lFilter) && a.CountyId.Equals(text)).Count();
+                return _dbContext.DictionaryCity.Where(a => a.CityName.Contains(lFilter) && a.CountyId.Equals(text)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(Cities => new DictionaryCityModel
+                {
+                    CityId = Cities.CityId,
+                    CityName = Cities.CityName,
+                    CityCode = Cities.CityCode,
+                    CountyId = Convert.ToInt32(Cities.CountyId)
+                });
+            }
 
         }
 
-        public List<DictionaryCountyModel> GetComboCounty(string text)
+        public List<DictionaryCounty> GetComboCounty(string text)
         {
-            List<DictionaryCountyModel> comboCounty = _dbContext.DictionaryCounty.Select(a => new DictionaryCountyModel()
+            List<DictionaryCounty> comboCounty = _dbContext.DictionaryCounty.Select(a => new DictionaryCounty()
             {
                 CountyId = a.CountyId,
                 CountyName = a.CountyName,
 
-            }).ToList();
+            }).Where(a => a.CountyName.Contains(text)).Take(10).ToList();
                 return comboCounty;
         }
-  
+       
+
 
         public DictionaryCityModel AddDictionaryLandmarkType(DictionaryCityModel cityModel)
         {

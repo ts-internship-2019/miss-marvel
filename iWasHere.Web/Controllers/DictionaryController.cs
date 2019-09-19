@@ -100,10 +100,10 @@ namespace iWasHere.Web.Controllers
 
 
 
-        public ActionResult GetCities([DataSourceRequest]DataSourceRequest request, String lFilter)
+        public ActionResult GetCities([DataSourceRequest]DataSourceRequest request, String lFilter,String text)
         {
             int rowsNo = 0;
-            var x = _dictionaryService.GetCities(request.Page, request.PageSize, out rowsNo, lFilter);
+            var x = _dictionaryService.GetCities(request.Page, request.PageSize, out rowsNo, lFilter,Convert.ToInt32(text));
             DataSourceResult dataSource = new DataSourceResult();
             dataSource.Data = x;
             dataSource.Total = rowsNo;
@@ -114,23 +114,31 @@ namespace iWasHere.Web.Controllers
         //public ActionResult GetComboCountyyy()
         //{
         //    List<DictionaryCountyModel> comboCounty = _dictionaryService.GetComboCounty();
-            
-            
+
+
         //    return Json(comboCounty);
         //}
-        public ActionResult GetComboCounty(string text)
+        public JsonResult GetComboCounty(string text)
         {
-
-            List<DictionaryCountyModel> result = _dictionaryService.GetComboCounty(text);
-
+            if (String.IsNullOrEmpty(text))
+            {
+                text = "";
+            }
+            List<DictionaryCounty> result = GetComboCounties(text);
             return Json(result);
         }
-     
+
+        public List<DictionaryCounty> GetComboCounties(string filterCounty)
+        {
+            List<DictionaryCounty> countyModels = _dictionaryService.GetComboCounty(filterCounty);
+            return countyModels;
+        }
+
         //[HttpPost]
         //public JsonResult GetAjax(String filter)
         //{
         //    String s = filter;
-            
+
         //    return null;
         //}
 
@@ -278,16 +286,16 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
-        public IActionResult TicketType_Read([DataSourceRequest] DataSourceRequest request,string FilterTicketType)
-        {
-            int totalCount = 0;
-            var data = _dictionaryService.GetDictionaryTicketType(request.Page, request.PageSize, out totalCount, FilterTicketType);
-            DataSourceResult dataSourceResult = new DataSourceResult();
-            dataSourceResult.Data = data;
-            dataSourceResult.Total = totalCount;
+        //public IActionResult TicketType_Read([DataSourceRequest] DataSourceRequest request,string FilterTicketType)
+        //{
+        //    int totalCount = 0;
+        //    var data = _dictionaryService.GetDictionaryTicketType(request.Page, request.PageSize, out totalCount, FilterTicketType);
+        //    DataSourceResult dataSourceResult = new DataSourceResult();
+        //    dataSourceResult.Data = data;
+        //    dataSourceResult.Total = totalCount;
 
-            return Json(dataSourceResult);
-        }
+        //    return Json(dataSourceResult);
+        //}
 
         public IActionResult InsertUpdateTicketType()
         {
