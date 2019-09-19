@@ -113,14 +113,14 @@ namespace iWasHere.Web.Controllers
         //    return Json(dataSourceResult);
         //}
 
-          public IActionResult AddEditCity([Bind("CityId,CityName,CityCode")] DictionaryCityModel cityModel, DictionaryCityModel dt)
-        {
-            if (ModelState.IsValid && dt != null)
-            {
-                _dictionaryService.AddDictionaryLandmarkType(cityModel);
-            }
-            return View();
-        }
+        //  public IActionResult AddEditCity([Bind("CityId,CityName,CityCode")] DictionaryCityModel cityModel, DictionaryCityModel dt)
+        //{
+        //    if (ModelState.IsValid && dt != null)
+        //    {
+        //        _dictionaryServicesk(cityModel);
+        //    }
+        //    return View();
+        //}
 
 
         /*
@@ -161,12 +161,7 @@ namespace iWasHere.Web.Controllers
             
         }
         [HttpPost]
-        public JsonResult GetAjax(String filter)
-        {
-            String s = filter;
-            //return Json(_dictionaryService.GetLandmarkType(request.Page, request.PageSize).ToDataSourceResult(request));
-            return null;
-        }
+       
 
         public List<DictionaryCounty> GetComboCounties(string filterCounty)
         {
@@ -375,13 +370,6 @@ namespace iWasHere.Web.Controllers
         }
 
 
-
-
-
-            return Json(dataSourceResult);
-        }
-
-
         public ActionResult DeleteCountry([DataSourceRequest] DataSourceRequest request, int id)
         {
             if (id != -1)
@@ -390,6 +378,13 @@ namespace iWasHere.Web.Controllers
             }
             return Json(ModelState.ToDataSourceResult());
         }
+
+
+            //return Json(dataSourceResult);
+        }
+
+
+        
     }
 
-}
+

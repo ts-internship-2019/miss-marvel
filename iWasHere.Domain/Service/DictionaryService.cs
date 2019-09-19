@@ -214,9 +214,9 @@ namespace iWasHere.Domain.Service
        
 
 
-        public DictionaryCityModel AddDictionaryLandmarkType(DictionaryCityModel cityModel)
+        public Models.DictionaryLandmarkType AddDictionaryLandmarkType(Models.DictionaryLandmarkType cityModel)
         {
-            if (!String.IsNullOrWhiteSpace(cityModel.CityName))
+            if (!String.IsNullOrWhiteSpace(cityModel.DictionaryItemName))
             {
                 _dbContext.Add(cityModel);
                 _dbContext.SaveChanges();
