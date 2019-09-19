@@ -4,7 +4,7 @@ using System.Text;
 
 namespace iWasHere.Domain.DTOs
 {
-    public class TicketTypeModel
+    public class DictionaryTicketTypeModel
     {
         public string TicketTypeName { get; set; }
 

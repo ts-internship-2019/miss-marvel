@@ -1,0 +1,54 @@
+﻿@model IEnumerable<iWasHere.Domain.Models.DictionaryTicketType>
+
+@{
+    ViewData["Title"] = "InsertUpdateTicketType";
+}
+
+<h1>InsertUpdateTicketType</h1>
+
+<p>
+    <label>Categorie bilet:</label>
+    @(Html.Kendo().TextBox()
+        .HtmlAttributes(new
+        {
+            id = "TicketTypeName",
+            required = "required",
+            validationmessage = "Completati campul inainte de a merge mai departe"
+        })
+    .Name("Name")
+    .Value("")
+    )
+</p>
+
+<div class="demo-section k-content">
+
+
+    @(Html.Kendo().Button()
+        .Name("btnSave")
+        .Content("Save")
+        .HtmlAttributes(new { type = "button" })
+        .Events(ev => ev.Click("onClick")))
+
+    @(Html.Kendo().Button()
+        .Name("btnSaveAndNew")
+        .Content("Save and New")
+        .HtmlAttributes(new { type = "button" })
+        .Events(ev => ev.Click("onClick")))
+
+    @(Html.Kendo().Button()
+        .Name("btnCancel")
+        .Content("Cancel")
+        .HtmlAttributes(new { type = "button" })
+        .Events(ev => ev.Click("onClick")))
+</div>
+
+
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#btnCancel').click(function (e)
+  {
+      window.location = '@Url.Action("TicketType", "Dictionary")';
+  });
+});
+</script>
