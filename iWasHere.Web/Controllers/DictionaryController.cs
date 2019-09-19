@@ -175,20 +175,27 @@ namespace iWasHere.Web.Controllers
         }
 
         // ------------------- LandmarkPeriod
+        
 
         public IActionResult LandmarkPeriod()
         {
             return View();
         }
-        public IActionResult LandmarkPeriod_Read([DataSourceRequest] DataSourceRequest request)
+        public IActionResult LandmarkPeriod_Read([DataSourceRequest] DataSourceRequest request, string search)
         {
             int totalCount = 0;
-            var data = _dictionaryService.GetDictionaryLandmarkPeriods(request.Page, request.PageSize, out totalCount);
+            var data = _dictionaryService.GetDictionaryLandmarkPeriods(request.Page, request.PageSize, out totalCount, search);
             DataSourceResult dataSourceResult = new DataSourceResult();
             dataSourceResult.Data = data;
             dataSourceResult.Total = totalCount;
 
             return Json(dataSourceResult);
+        }
+        public ActionResult AddEditLandmarkPeriod([Bind("LandmarkPeriodId, LandmarkperiodName")]DictionaryLandmarkType dlt, int id)
+        {
+            {
+                return View();
+            }
         }
     }
 

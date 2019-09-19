@@ -1,0 +1,52 @@
+﻿@model iWasHere.Domain.Models.DictionaryLandmarkPeriod
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddLandmarkPeriod</title>
+</head>
+<body>
+
+<h4>DictionaryLandmarkPeriod</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddEditLandmarkPeriod">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input type="hidden" asp-for="LandmarkPeriodId"/>
+                <label asp-for="LandmarkPeriodName" class="control-label"></label>
+                <input asp-for="LandmarkPeriodName" class="form-control" />
+                <span asp-validation-for="LandmarkPeriodName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salveaza" class="btn btn-primary" />
+                <input type="submit" value="Salveaza si nou" class="btn btn-primary" />
+                <input type="submit" value="Renunta" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="LandmarkPeriod">Inapoi la lista</a>
+</div>
+
+</body>
+</html>
+@*<script type="text/javascript">
+    function GetSearchBoxText()
+    {
+        var newPeriod = $("#txtSearchString").val();
+        var obj = {};
+        obj["search"] = text;
+        return obj;
+    }
+</script>*@
