@@ -1,0 +1,61 @@
+﻿@model iWasHere.Domain.Models.DictionaryLandmarkType
+
+@{
+     ViewData["Title"] = "Adauga Dictionar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add Landmark Type</title>
+</head>
+<body>
+
+<h4>DictionaryLandmarkType</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        <form asp-action="Add Landmark Type">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="DictionaryItemId" />
+            <div class="form-group">
+                <label asp-for="DictionaryItemCode" class="control-label"></label>
+                <input asp-for="DictionaryItemCode" id="txtCode" class="form-control" />
+                <span asp-validation-for="DictionaryItemCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DictionaryItemName" class="control-label"></label>
+                <input asp-for="DictionaryItemName" id="txtName" class="form-control" />
+                <span asp-validation-for="DictionaryItemName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" id="txtDescription" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button id="btnAddModify" onclick="SaveChanges" class="btn btn-primary"> Create </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="LandmarkType">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+ <script>
+     $(document).ready(function () {
+      
+     })
+   
+ </script>
+</body>
+</html>

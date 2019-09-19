@@ -27,17 +27,75 @@ namespace iWasHere.Web.Controllers
         {
             List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dictionaryService.GetDictionaryLandmarkTypeModels();
 
-            return View(dictionaryLandmarkTypeModels);
+            return View();
         }
 
-        public IActionResult LandmarkType(String searchString)
+        public IActionResult LandmarkType()
         {
 
-            List<DictionaryLandmarkType> dictionaryLandmarkType = _dictionaryService.GetDictionaryLandmarkType(searchString);
 
-            return View(dictionaryLandmarkType);
+            return View();
         }
 
+        public ActionResult AddEditLandmarkType( [Bind("DictionaryItemId, DictionaryItemCode, DictionaryItemName, Description")]DictionaryLandmarkType dt, int id)
+        {
+
+            String exMessage;
+            if (/*ModelState.IsValid &&*/ dt.DictionaryItemCode != null)
+            {
+               var result = _dictionaryService.AddEditDictionaryLandmarkType(dt, out exMessage);
+                if(result == null)
+                {
+                    ModelState.AddModelError(string.Empty, exMessage);
+                    return View();
+                }
+            }
+            if (id != 0)
+            {
+                return View(_dictionaryService.GetDictionaryLandmarkType(id));
+            }
+            else
+            {
+                return View();
+            }
+        }
+        public ActionResult GetLT([DataSourceRequest] DataSourceRequest request, String LandmarkTypeId)
+        {
+            int rowsNo = 0;
+            var x = _dictionaryService.LoadLandmarkType(Convert.ToInt32(LandmarkTypeId));
+            return Json(x);
+
+        }
+
+        public ActionResult DeleteLandmarkType([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            if (id != -1)
+            {
+                _dictionaryService.DeleteLandmarkType(id);
+            }
+
+            return Json(ModelState.ToDataSourceResult());
+        }
+
+
+
+        public ActionResult GetLandmarkType([DataSourceRequest]DataSourceRequest request, String lFilter)
+        {
+            int rowsNo = 0;
+            var x = _dictionaryService.GetLandmarkType(request.Page, request.PageSize, out rowsNo, lFilter);
+            DataSourceResult dataSource = new DataSourceResult();
+            dataSource.Data = x;
+            dataSource.Total = rowsNo;
+            return Json(dataSource);
+            
+        }
+        [HttpPost]
+        public JsonResult GetAjax(String filter)
+        {
+            String s = filter;
+            //return Json(_dictionaryService.GetLandmarkType(request.Page, request.PageSize).ToDataSourceResult(request));
+            return null;
+        }
         public IActionResult Cities()
         {
           
@@ -45,16 +103,61 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
-        public IActionResult Cities_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            int totalCount = 0;
-            var X = _dictionaryService.GetDictionaryCities(request.Page, request.PageSize, out totalCount);
-            DataSourceResult dataSourceResult = new DataSourceResult();
-            dataSourceResult.Data = X;
-            dataSourceResult.Total = totalCount;
+        //public IActionResult Cities_Read([DataSourceRequest] DataSourceRequest request)
+        //{
+        //    int totalCount = 0;
+        //    var X = _dictionaryService.GetDictionaryCities(request.Page, request.PageSize, out totalCount);
+        //    DataSourceResult dataSourceResult = new DataSourceResult();
+        //    dataSourceResult.Data = X;
+        //    dataSourceResult.Total = totalCount;
 
-            return Json(dataSourceResult);
+        //    return Json(dataSourceResult);
+        //}
+
+          public IActionResult AddEditCity([Bind("CityId,CityName,CityCode")] DictionaryCityModel cityModel, DictionaryCityModel dt)
+        {
+            if (ModelState.IsValid && dt != null)
+            {
+                _dictionaryService.AddDictionaryLandmarkType(cityModel);
+            }
+            return View();
         }
+
+
+
+        public ActionResult GetCities([DataSourceRequest]DataSourceRequest request, String lFilter,String text)
+        {
+            int rowsNo = 0;
+            var x = _dictionaryService.GetCities(request.Page, request.PageSize, out rowsNo, lFilter,Convert.ToInt32(text));
+            DataSourceResult dataSource = new DataSourceResult();
+            dataSource.Data = x;
+            dataSource.Total = rowsNo;
+            return Json(dataSource);
+            
+        }
+        [HttpPost]
+        public JsonResult GetAjax(String filter)
+        {
+            String s = filter;
+            //return Json(_dictionaryService.GetLandmarkType(request.Page, request.PageSize).ToDataSourceResult(request));
+            return null;
+        }
+
+        public List<DictionaryCounty> GetComboCounties(string filterCounty)
+        {
+            List<DictionaryCounty> countyModels = _dictionaryService.GetComboCounty(filterCounty);
+            return countyModels;
+        }
+
+        //[HttpPost]
+        //public JsonResult GetAjax(String filter)
+        //{
+        //    String s = filter;
+
+        //    return null;
+        //}
+
+
         public partial class TextBox : Controller
         {
     
@@ -191,12 +294,34 @@ namespace iWasHere.Web.Controllers
 
             return Json(dataSourceResult);
         }
-        public ActionResult AddEditLandmarkPeriod([Bind("LandmarkPeriodId, LandmarkperiodName")]DictionaryLandmarkType dlt, int id)
+
+        // ------------------- TicketType
+
+        public IActionResult TicketType()
         {
-            {
-                return View();
-            }
+            return View();
         }
+
+        //public IActionResult TicketType_Read([DataSourceRequest] DataSourceRequest request,string FilterTicketType)
+        //{
+        //    int totalCount = 0;
+        //    var data = _dictionaryService.GetDictionaryTicketType(request.Page, request.PageSize, out totalCount, FilterTicketType);
+        //    DataSourceResult dataSourceResult = new DataSourceResult();
+        //    dataSourceResult.Data = data;
+        //    dataSourceResult.Total = totalCount;
+
+        //    return Json(dataSourceResult);
+        //}
+
+        public IActionResult InsertUpdateTicketType()
+        {
+            return View();
+        }
+
+
+
+
+
     }
 
 }
