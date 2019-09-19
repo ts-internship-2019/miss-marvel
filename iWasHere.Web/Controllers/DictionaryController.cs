@@ -7,7 +7,6 @@ using iWasHere.Domain.DTOs;
 using iWasHere.Domain.Models;
 using iWasHere.Domain.Service;
 using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using iWasHere.Web;
 using iWasHere.Domain;
@@ -112,13 +111,13 @@ namespace iWasHere.Web.Controllers
             
         }
 
-        public ActionResult GetComboCountyyy()
-        {
-            List<DictionaryCountyModel> comboCounty = _dictionaryService.GetComboCounty();
+        //public ActionResult GetComboCountyyy()
+        //{
+        //    List<DictionaryCountyModel> comboCounty = _dictionaryService.GetComboCounty();
             
             
-            return Json(comboCounty);
-        }
+        //    return Json(comboCounty);
+        //}
         public ActionResult GetComboCounty(string text)
         {
 
@@ -127,13 +126,13 @@ namespace iWasHere.Web.Controllers
             return Json(result);
         }
      
-        [HttpPost]
-        public JsonResult GetAjax(String filter)
-        {
-            String s = filter;
+        //[HttpPost]
+        //public JsonResult GetAjax(String filter)
+        //{
+        //    String s = filter;
             
-            return null;
-        }
+        //    return null;
+        //}
 
 
         public partial class TextBox : Controller
@@ -279,16 +278,26 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
-        public IActionResult TicketType_Read([DataSourceRequest] DataSourceRequest request)
+        public IActionResult TicketType_Read([DataSourceRequest] DataSourceRequest request,string FilterTicketType)
         {
             int totalCount = 0;
-            var data = _dictionaryService.GetDictionaryTicketType(request.Page, request.PageSize, out totalCount);
+            var data = _dictionaryService.GetDictionaryTicketType(request.Page, request.PageSize, out totalCount, FilterTicketType);
             DataSourceResult dataSourceResult = new DataSourceResult();
             dataSourceResult.Data = data;
             dataSourceResult.Total = totalCount;
 
             return Json(dataSourceResult);
         }
+
+        public IActionResult InsertUpdateTicketType()
+        {
+            return View();
+        }
+
+
+
+
+
     }
 
 }

@@ -211,20 +211,27 @@ namespace iWasHere.Domain.Service
             return dictionaryPeriods;
         }
 
-        public List<TicketTypeModel> GetDictionaryTicketType(int pgNo, int pgSize, out int totalCount)
+
+        public IEnumerable<DictionaryTicketTypeModel> GetDictionaryTicketType(int pgNo, int pgSize, out int countRows, string FilterTicketType)
         {
-           
-            totalCount = _dbContext.DictionaryTicketType.Count();
+            countRows = _dbContext.DictionaryTicketType.Count();
             int toSkip = (pgNo - 1) * pgSize;
+            if (FilterTicketType == null)
+                return _dbContext.DictionaryTicketType.Skip(toSkip).Take(pgSize).Select(a => new DictionaryTicketTypeModel
+                {
+                    TicketTypeName = a.TicketTypeName
 
-            List<TicketTypeModel> dictionaryTicketTypes = _dbContext.DictionaryTicketType.Select(x => new TicketTypeModel()
-            {
-                TicketTypeName = x.TicketTypeName
-            }).Skip(toSkip).Take(pgSize).ToList();
-
-            return dictionaryTicketTypes;
-
+                });
+            else
+                return _dbContext.DictionaryTicketType.Where(a => a.TicketTypeName.Contains(FilterTicketType)).Skip(toSkip).Take(pgSize).Select(a => new DictionaryTicketTypeModel
+                {
+                    TicketTypeName = a.TicketTypeName
+                });
         }
+
+ 
+
+
 
 
 
