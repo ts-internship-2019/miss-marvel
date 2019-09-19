@@ -200,6 +200,14 @@ namespace iWasHere.Domain.Service
             }
 
         }
+        public void DeleteCity(int id)
+        {
+            DictionaryCity language = new DictionaryCity() { CityId = id };
+
+            _dbContext.DictionaryCity.Remove(language);
+            _dbContext.SaveChanges();
+
+        }
 
         public List<DictionaryCounty> GetComboCounty(string text)
         {
@@ -301,21 +309,56 @@ namespace iWasHere.Domain.Service
             return dictionaryCounty;
         }
 
-        public List<LandmarkPeriodModel> GetDictionaryLandmarkPeriods(int pageNo, int pageSize, out int totalcount)
+        //LandmarkPeriods
+
+        public IEnumerable<LandmarkPeriodModel> GetDictionaryLandmarkPeriods(int pageNo, int pageSize, out int totalcount, string search)
         {
             int toskip;
+            totalcount = 0;
             totalcount = _dbContext.DictionaryLandmarkPeriod.Count();
             toskip = (pageNo - 1) * pageSize;
-
-            List<LandmarkPeriodModel> dictionaryPeriods = _dbContext.DictionaryLandmarkPeriod.Select(a => new LandmarkPeriodModel()
+            if (string.IsNullOrEmpty(search))
             {
-                LandmarkPeriodId = a.LandmarkPeriodId,
-                LandmarkPeriodName = a.LandmarkPeriodName
-            }
-            ).Skip(toskip).Take(pageSize).ToList();
 
-            return dictionaryPeriods;
+                return _dbContext.DictionaryLandmarkPeriod.Skip((pageNo - 1) * pageSize).Take(pageSize).Select(landmarkPeriod => new LandmarkPeriodModel
+                {
+                    LandmarkPeriodId = landmarkPeriod.LandmarkPeriodId,
+                    LandmarkPeriodName = landmarkPeriod.LandmarkPeriodName,
+                });
+            }
+            else
+            {
+                return _dbContext.DictionaryLandmarkPeriod.Where(a => a.LandmarkPeriodName.Contains(search)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(landmarkPeriod => new LandmarkPeriodModel
+                {
+                    LandmarkPeriodId = landmarkPeriod.LandmarkPeriodId,
+                    LandmarkPeriodName = landmarkPeriod.LandmarkPeriodName,
+                });
+            }
         }
+        //public IEnumerable<LandmarkPeriodModel> EditLandmarkPeriods()
+        //{
+        //    int toskip;
+        //    totalcount = 0;
+        //    totalcount = _dbContext.DictionaryLandmarkPeriod.Count();
+        //    toskip = (pageNo - 1) * pageSize;
+        //    if (string.IsNullOrEmpty(search))
+        //    {
+
+        //        return _dbContext.DictionaryLandmarkPeriod.Skip((pageNo - 1) * pageSize).Take(pageSize).Select(landmarkPeriod => new LandmarkPeriodModel
+        //        {
+        //            LandmarkPeriodId = landmarkPeriod.LandmarkPeriodId,
+        //            LandmarkPeriodName = landmarkPeriod.LandmarkPeriodName,
+        //        });
+        //    }
+        //    else
+        //    {
+        //        return _dbContext.DictionaryLandmarkPeriod.Where(a => a.LandmarkPeriodName.Contains(search)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(landmarkPeriod => new LandmarkPeriodModel
+        //        {
+        //            LandmarkPeriodId = landmarkPeriod.LandmarkPeriodId,
+        //            LandmarkPeriodName = landmarkPeriod.LandmarkPeriodName,
+        //        });
+        //    }
+        //}
 
 
         public IEnumerable<DictionaryTicketTypeModel> GetDictionaryTicketType(int pgNo, int pgSize, out int countRows, string FilterTicketType)

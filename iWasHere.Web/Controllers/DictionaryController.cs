@@ -86,7 +86,7 @@ namespace iWasHere.Web.Controllers
             dataSource.Data = x;
             dataSource.Total = rowsNo;
             return Json(dataSource);
-            
+
         }
         [HttpPost]
         public JsonResult GetAjax(String filter)
@@ -97,7 +97,7 @@ namespace iWasHere.Web.Controllers
         }
         public IActionResult Cities()
         {
-          
+
 
             return View();
         }
@@ -122,6 +122,7 @@ namespace iWasHere.Web.Controllers
         //    return View();
         //}
 
+        public IActionResult AddEditCity([Bind("CityId,CityName,CityCode")] DictionaryCityModel cityModel, DictionaryCityModel dt)
 
         /*
 
@@ -150,18 +151,37 @@ namespace iWasHere.Web.Controllers
 
     */
 
-        public ActionResult GetCities([DataSourceRequest]DataSourceRequest request, String lFilter,String text)
+        public ActionResult GetCities([DataSourceRequest]DataSourceRequest request, String lFilter, String text)
         {
             int rowsNo = 0;
-            var x = _dictionaryService.GetCities(request.Page, request.PageSize, out rowsNo, lFilter,Convert.ToInt32(text));
+            var x = _dictionaryService.GetCities(request.Page, request.PageSize, out rowsNo, lFilter, Convert.ToInt32(text));
             DataSourceResult dataSource = new DataSourceResult();
             dataSource.Data = x;
             dataSource.Total = rowsNo;
             return Json(dataSource);
-            
+
         }
-        [HttpPost]
-       
+        public ActionResult DeleteCity([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            if (id != -1)
+            {
+                _dictionaryService.DeleteCity(id);
+            }
+
+            return Json(ModelState.ToDataSourceResult());
+        }
+
+
+
+        public JsonResult GetComboCounty(string text)
+        {
+            if (String.IsNullOrEmpty(text))
+            {
+                text = "";
+            }
+            List<DictionaryCounty> result = GetComboCounties(text);
+            return Json(result);
+        }
 
         public List<DictionaryCounty> GetComboCounties(string filterCounty)
         {
@@ -180,10 +200,10 @@ namespace iWasHere.Web.Controllers
 
         public partial class TextBox : Controller
         {
-    
+
             public ActionResult Index()
             {
-                
+
                 return View();
             }
         }
@@ -194,13 +214,13 @@ namespace iWasHere.Web.Controllers
             public IActionResult Events()
             {
                 // Actiune pe add
-                
+
                 return View();
             }
         }
 
         // ------------------- Currency
-         public IActionResult Currency()
+        public IActionResult Currency()
         {
             return View();
         }
@@ -312,7 +332,7 @@ namespace iWasHere.Web.Controllers
             DataSourceResult dataSource = new DataSourceResult();
             dataSource.Data = y;
             dataSource.Total = totalCount;
-           
+
             return Json(dataSource);
         }
 
@@ -324,21 +344,22 @@ namespace iWasHere.Web.Controllers
                 {
                     CountryCode = country.CountryCode,
                     CountryName = country.CountryName
-                   
+
                 }).ToList();
             }
         }
 
         // ------------------- LandmarkPeriod
+        
 
         public IActionResult LandmarkPeriod()
         {
             return View();
         }
-        public IActionResult LandmarkPeriod_Read([DataSourceRequest] DataSourceRequest request)
+        public IActionResult LandmarkPeriod_Read([DataSourceRequest] DataSourceRequest request, string search)
         {
             int totalCount = 0;
-            var data = _dictionaryService.GetDictionaryLandmarkPeriods(request.Page, request.PageSize, out totalCount);
+            var data = _dictionaryService.GetDictionaryLandmarkPeriods(request.Page, request.PageSize, out totalCount, search);
             DataSourceResult dataSourceResult = new DataSourceResult();
             dataSourceResult.Data = data;
             dataSourceResult.Total = totalCount;
