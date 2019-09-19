@@ -1,24 +1,40 @@
 ﻿
-<h1>Perioada de vizita</h1>
+@model IEnumerable<iWasHere.Domain.DTOs.LandmarkPeriodModel>
+
+@{
+    ViewData["Title"] = "LandmarkPeriod";
+}
+
+<h1>Perioada pentru vizita</h1>
 <body>
-    @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryLandmarkPeriod>()
-  .Name("grid")
-  .Columns(columns =>
-  {
-      columns.Bound(c => c.LandmarkPeriodName).Width(140);
-  })
-  .HtmlAttributes(new { style = "height: 380px;" })
-  .Scrollable()
-  .Groupable()
-  .Sortable()
-  .Pageable(pageable => pageable
-      .Refresh(true)
-      .PageSizes(true)
-      .ButtonCount(5))
-  .DataSource(dataSource => dataSource
-      .Ajax()
-      .Read(read => read.Action("Period_Read", "Grid"))
-  )
-)
+    <p>
+        @(Html.Kendo().Button()
+                       .Name("textButton")
+                       .HtmlAttributes(new { type = "button" })
+                       .Content("Button"))
+    </p>
+    @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryLandmarkPeriod>
+    ()
+    .Name("grid")
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.LandmarkPeriodName);
+    })
+    .HtmlAttributes(new { style = "height: 380px;" })
+    .Scrollable()
+    .Groupable()
+    .Sortable()
+    .Pageable(pageable => pageable
+    .Refresh(true)
+    .PageSizes(true)
+    .ButtonCount(5))
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .Read(read => read.Action("LandmarkPeriod_Read", "Dictionary"))
+    )
+    )
+
 
 </body>
+
+

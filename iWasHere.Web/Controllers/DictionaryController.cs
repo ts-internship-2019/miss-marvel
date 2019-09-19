@@ -7,6 +7,7 @@ using iWasHere.Domain.DTOs;
 using iWasHere.Domain.Models;
 using iWasHere.Domain.Service;
 using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using iWasHere.Web;
 using iWasHere.Domain;
@@ -27,17 +28,50 @@ namespace iWasHere.Web.Controllers
         {
             List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dictionaryService.GetDictionaryLandmarkTypeModels();
 
-            return View(dictionaryLandmarkTypeModels);
+            return View();
         }
 
-        public IActionResult LandmarkType(String searchString)
+        public IActionResult LandmarkType()
         {
 
-            List<DictionaryLandmarkType> dictionaryLandmarkType = _dictionaryService.GetDictionaryLandmarkType(searchString);
 
-            return View(dictionaryLandmarkType);
+            return View();
         }
 
+        public ActionResult AddEditLandmarkType(DictionaryLandmarkTypeModel dt)
+        {
+            if (ModelState.IsValid && dt != null)
+            {
+                _dictionaryService.AddDictionaryLandmarkType(dt);
+            }
+            return View();
+        }
+        public ActionResult GetLT([DataSourceRequest] DataSourceRequest request, String LandmarkTypeId)
+        {
+            int rowsNo = 0;
+            var x = _dictionaryService.LoadLandmarkType(Convert.ToInt32(LandmarkTypeId));
+            return Json(x);
+
+        }
+
+
+        public ActionResult GetLandmarkType([DataSourceRequest]DataSourceRequest request, String lFilter)
+        {
+            int rowsNo = 0;
+            var x = _dictionaryService.GetLandmarkType(request.Page, request.PageSize, out rowsNo, lFilter);
+            DataSourceResult dataSource = new DataSourceResult();
+            dataSource.Data = x;
+            dataSource.Total = rowsNo;
+            return Json(dataSource);
+            
+        }
+        [HttpPost]
+        public JsonResult GetAjax(String filter)
+        {
+            String s = filter;
+            //return Json(_dictionaryService.GetLandmarkType(request.Page, request.PageSize).ToDataSourceResult(request));
+            return null;
+        }
         public IActionResult Cities()
         {
           
@@ -45,16 +79,63 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
-        public IActionResult Cities_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            int totalCount = 0;
-            var X = _dictionaryService.GetDictionaryCities(request.Page, request.PageSize, out totalCount);
-            DataSourceResult dataSourceResult = new DataSourceResult();
-            dataSourceResult.Data = X;
-            dataSourceResult.Total = totalCount;
+        //public IActionResult Cities_Read([DataSourceRequest] DataSourceRequest request)
+        //{
+        //    int totalCount = 0;
+        //    var X = _dictionaryService.GetDictionaryCities(request.Page, request.PageSize, out totalCount);
+        //    DataSourceResult dataSourceResult = new DataSourceResult();
+        //    dataSourceResult.Data = X;
+        //    dataSourceResult.Total = totalCount;
 
-            return Json(dataSourceResult);
+        //    return Json(dataSourceResult);
+        //}
+
+          public IActionResult AddEditCity([Bind("CityId,CityName,CityCode")] DictionaryCityModel cityModel, DictionaryCityModel dt)
+        {
+            if (ModelState.IsValid && dt != null)
+            {
+                _dictionaryService.AddDictionaryLandmarkType(cityModel);
+            }
+            return View();
         }
+
+
+
+        public ActionResult GetCities([DataSourceRequest]DataSourceRequest request, String lFilter)
+        {
+            int rowsNo = 0;
+            var x = _dictionaryService.GetCities(request.Page, request.PageSize, out rowsNo, lFilter);
+            DataSourceResult dataSource = new DataSourceResult();
+            dataSource.Data = x;
+            dataSource.Total = rowsNo;
+            return Json(dataSource);
+            
+        }
+
+        public ActionResult GetComboCountyyy()
+        {
+            List<DictionaryCountyModel> comboCounty = _dictionaryService.GetComboCounty();
+            
+            
+            return Json(comboCounty);
+        }
+        public ActionResult GetComboCounty(string text)
+        {
+
+            List<DictionaryCountyModel> result = _dictionaryService.GetComboCounty(text);
+
+            return Json(result);
+        }
+     
+        [HttpPost]
+        public JsonResult GetAjax(String filter)
+        {
+            String s = filter;
+            
+            return null;
+        }
+
+
         public partial class TextBox : Controller
         {
     
@@ -77,16 +158,20 @@ namespace iWasHere.Web.Controllers
         }
 
         // ------------------- Currency
-
-        public IActionResult Currency()
+         public IActionResult Currency()
         {
-            List<DictionaryCurrencyType> dictionaryCurrencies = _dictionaryService.GetDictionaryCurrencyType();
-            return View(dictionaryCurrencies);
+            return View();
         }
 
-            public IActionResult Currency_Read([DataSourceRequest] DataSourceRequest request)
+            public IActionResult Currency_Read([DataSourceRequest] DataSourceRequest request)  //paginare
             {
-                return Json(GetCurrency().ToDataSourceResult(request));
+            int totalCount = 0;
+            var y = _dictionaryService.GetDictionaryCurrencyType(request.Page, request.PageSize, out totalCount);
+            DataSourceResult dataSource = new DataSourceResult();
+            dataSource.Data = y;
+            dataSource.Total = totalCount;
+
+                return Json(dataSource);
             }
 
             private static IEnumerable<DictionaryCurrencyType> GetCurrency()
@@ -199,27 +284,41 @@ namespace iWasHere.Web.Controllers
                    
                 }).ToList();
             }
-        }  
-    }
-
-
-    public partial class GridController : Controller
-    {
-
-        public IActionResult Period_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            return Json(GetPeriod().ToDataSourceResult(request));
         }
 
-        private static IEnumerable<DictionaryLandmarkPeriod> GetPeriod()
+        // ------------------- LandmarkPeriod
+
+        public IActionResult LandmarkPeriod()
         {
-            using (var landperiod = new MissMarvelContext())
-            {
-                return landperiod.DictionaryLandmarkPeriod.Select(period => new DictionaryLandmarkPeriod
-                {
-                    LandmarkPeriodName = period.LandmarkPeriodName
-                }).ToList();
-            }
+            return View();
+        }
+        public IActionResult LandmarkPeriod_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            int totalCount = 0;
+            var data = _dictionaryService.GetDictionaryLandmarkPeriods(request.Page, request.PageSize, out totalCount);
+            DataSourceResult dataSourceResult = new DataSourceResult();
+            dataSourceResult.Data = data;
+            dataSourceResult.Total = totalCount;
+
+            return Json(dataSourceResult);
+        }
+
+        // ------------------- TicketType
+
+        public IActionResult TicketType()
+        {
+            return View();
+        }
+
+        public IActionResult TicketType_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            int totalCount = 0;
+            var data = _dictionaryService.GetDictionaryTicketType(request.Page, request.PageSize, out totalCount);
+            DataSourceResult dataSourceResult = new DataSourceResult();
+            dataSourceResult.Data = data;
+            dataSourceResult.Total = totalCount;
+
+            return Json(dataSourceResult);
         }
     }
 

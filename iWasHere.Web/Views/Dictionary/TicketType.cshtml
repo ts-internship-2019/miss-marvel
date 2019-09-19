@@ -1,0 +1,51 @@
+﻿@model IEnumerable<iWasHere.Domain.Models.DictionaryTicketType>
+
+@{
+    ViewData["Title"] = "TicketType";
+}
+
+<h3>Categorii bilete disponibile</h3>
+
+<body>
+    @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryTicketType>
+    ()
+    .Name("grid")
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.TicketTypeName);
+        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(250);
+    })
+    .Editable(editable => editable.Mode(GridEditMode.PopUp))
+    .HtmlAttributes(new { style = "height: 380px;" })
+    .Scrollable()
+    .Sortable()
+    .Pageable(pageable => pageable
+    .Refresh(true)
+    .PageSizes(true)
+    .ButtonCount(5))
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .Read(read => read.Action("TicketType_Read", "Dictionary"))
+    .Update(update => update.Action("EditingPopup_Update", "Grid"))
+    .Destroy(update => update.Action("EditingPopup_Destroy", "Grid"))
+    )
+    )
+
+    <script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+    </script>
+
+
+</body>

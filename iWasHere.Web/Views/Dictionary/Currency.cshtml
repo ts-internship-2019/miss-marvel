@@ -22,7 +22,7 @@
                 @(Html.Kendo().Button()
                         .Name("textButton")
                         .HtmlAttributes(new { type = "button" })
-                        .Content("Adauga")
+                        .Content("Filter")
                         .Events(ev => ev.Click("onClick"))
                         )
 
@@ -57,6 +57,8 @@
     <script>
         function onClick(e) {
             $(e.event.target).closest(".k-button").attr("id");
+            console.log("apasat");
+
         }
 
     </script>
