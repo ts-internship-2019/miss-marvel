@@ -23,7 +23,7 @@
     <p>
         <a asp-action="AddEditCity">Create New</a>
     </p>
- 
+
     <div class="row">
         @(Html.Kendo().TextBox()
            .Name("custom")
@@ -35,41 +35,41 @@
                         .Content("Filter")
                         .Events(e => e.Click("DisplayData"))
         )
-       </div>
-    <div>
-        <td>
-            <label for="countiesCB">Nume Judet:</label>
-        </td>
-        <td>
-            @(Html.Kendo().ComboBox()
-             .Name("countiesCB")
-             .Placeholder("Judet..")
-             .DataTextField("CountyName")
-             .DataValueField("CountyId")
-             .HtmlAttributes(new { style = "width:100%;" })
-             .Filter(FilterType.Contains)
-             .AutoBind(false)
-             .MinLength(3)
-             .DataSource(source =>
-             {
-                 source.Read(read =>
-                 {
-                     read.Action("GetComboCounty", "Dictionary");
-                 })
-                 .ServerFiltering(true);
-             })
-            )
-        </td>
-        <td>
-            @(Html.Kendo().Button()
-                .Name("clearFilter")
-                .Icon("clear-filter")
-                .Content("Sterge Filtru")
-                .HtmlAttributes(new { type = "button" })
-                .Events(e => e.Click("delFilters"))
-                )
-        </td>
     </div>
+
+    <td>
+        <label for="countiesCB">Nume Judet:</label>
+    </td>
+
+    @(Html.Kendo().ComboBox()
+     .Name("countiesCB")
+     .Placeholder("Judet..")
+     .DataTextField("CountyName")
+     .DataValueField("CountyId")
+     .HtmlAttributes(new { style = "width:100%;" })
+     .Filter(FilterType.Contains)
+     .AutoBind(false)
+     .MinLength(3)
+     .DataSource(source =>
+     {
+         source.Read(read =>
+         {
+             read.Action("GetComboCounty", "Dictionary");
+         })
+         .ServerFiltering(true);
+     })
+    )
+
+
+    @(Html.Kendo().Button()
+        .Name("clearFilter")
+        .Icon("clear-filter")
+        .Content("Sterge Filtru")
+        .HtmlAttributes(new { type = "button" })
+        .Events(e => e.Click("delFilters"))
+    )
+
+
     @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCityModel>()
           .Name("grid")
           .HtmlAttributes(new { style = "height: 500px", id = "grdCities" })
@@ -80,10 +80,10 @@
               columns.Bound(p => p.CityCode);
               columns.Command(c =>
               {
-                  c.Custom("EditRecord").Text("Edit").Click("dgChange");
-                  c.Custom("Delete").Text("Detele").Click("gridDelete");
-
+                  c.Custom("Delete").Text("Delete").Click("getCityId");
               });
+
+
           })
           .Scrollable()
           // .Groupable()
@@ -96,69 +96,88 @@
           .DataSource(dataSource => dataSource
               .Ajax()
               .Read(read => read.Action("GetCities", "Dictionary").Data("myFunction"))
-              .Update(update => update.Action("AddEditCity", "Grid"))
+              .Destroy(d => d.Action("DeleteCity", "Dictionary"))
+
           )
     )
 
+    <script>
+        function myFunction() {
+            var filter = $("#txtFilter").val();
+            var countyFilter = $("#countiesCB").val();
+            var obj = {};
+            obj["lFilter"] = filter;
+            obj["text"] = countyFilter;
+            return obj;
+        }
+    </script>
+    <script>
+        function DisplayData() {
+            $("#grdCities").data("kendoGrid").dataSource.read()
 
 
+
+
+
+        }
+    </script>
+    <script>
+        function dgChange(e) {
+
+            var row = e.currentTarget.closest("tr").cells[0].outerText;
+
+            grid = $("#grdCities").data("kendoGrid");
+            var row = e.currentTarget.closest("tr").cells[0].outerText;
+            window.location = '/Dictionary/AddEditCity?id=' + row
+
+
+        }
+    </script>
+    <script>
+
+        function getCityId(e) {
+
+
+            grid = $("#grdCities").data("kendoGrid");
+            var id = e.currentTarget.closest("tr").cells[0].outerText;
+            deleteRowCity(id);
+        }
+    </script>
+    <script>
+        function deleteRowCity(id) {
+            $.ajax({
+                type: 'DELETE',
+                url: '@Url.Action("DeleteCity", "Dictionary")',
+                data: { id: id },
+                success: function (response) {
+                    alert("Element sters cu success");
+                    alert(id);
+                    $("#grdCities").data("kendoGrid").dataSource.read();
+                },
+                error: function (response) {
+                    alert("Not good");
+                }
+
+
+            })
+        }
+
+                function delFilters() {
+
+                    $("#txtFilter").val(null);
+                    $("#countiesCB").data("kendoComboBox").value("");
+                    $("#grdCities").data("kendoGrid").dataSource.read();
+                    $("#grdCities").data("kendoGrid").dataSource.page(1);
+                }
+    </script>
 
 
 </body>
-<script>
 
-
-
-    function DisplayData() {
-        $("#grdCities").data("kendoGrid").dataSource.read()
-
-
-
-
-        
-    }
-    function dgChange(e) {
-      
-        var row = e.currentTarget.closest("tr").cells[0].outerText;
-
-         grid = $("#grdCities").data("kendoGrid");
-        var row = e.currentTarget.closest("tr").cells[0].outerText;
-        window.location = '/Dictionary/AddEditCity?id=' + row
-
-
-    }
-
-        function deleteRowLang(id) {
-            $.ajax({
-                type: 'DELETE',
-                url: '@Url.Action("DeleteLanguage", "DictionaryLanguage")',
-                data: { id: id },
-                success: function (response) {
-                    alert("hai ca merge");
-                    alert(id);
-                    $("#languageGrid").data("kendoGrid").dataSource.read();
-                },
-                error: function (response) {
-                    alert("hai ca nu merge");
-                }
-            }
-
-    function delFilters() {
-        $("#txtFilter").val(null);
-        $("#countiesCB").data("kendoComboBox").value("");
-        $('#grdCities').data("kendoGrid").dataSource.read();
-        $('#grdCities').data("kendoGrid").dataSource.page(1);
-    }
-
-    function myFunction() {
-        var filter = $("#txtFilter").val();
-        var countyFilter = $("#countiesCB").val();
-        var obj = {};
-        obj["lFilter"] = filter;
-        obj["text"] = countyFilter;
-        return obj;
-    }
-
-    
-</script>
 </html>
+
+
+
+
+
+

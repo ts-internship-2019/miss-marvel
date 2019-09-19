@@ -148,6 +148,14 @@ namespace iWasHere.Domain.Service
             }
 
         }
+        public void DeleteCity(int id)
+        {
+            DictionaryCity language = new DictionaryCity() { CityId = id };
+
+            _dbContext.DictionaryCity.Remove(language);
+            _dbContext.SaveChanges();
+
+        }
 
         public List<DictionaryCounty> GetComboCounty(string text)
         {
