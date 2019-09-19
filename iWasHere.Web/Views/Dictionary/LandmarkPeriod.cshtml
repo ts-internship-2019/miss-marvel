@@ -3,24 +3,42 @@
 
 @{
     ViewData["Title"] = "LandmarkPeriod";
-}
 
+}
+<!DOCTYPE html>
 <h1>Perioada pentru vizita</h1>
+<html>
 <body>
     <p>
+
+        @(Html.Kendo().TextBox()
+          .Name("SearchBox")
+          .HtmlAttributes(new { style = "width: 20%", title = "custom", id = "txtSearchString" }))
+
         @(Html.Kendo().Button()
-                       .Name("textButton")
-                       .HtmlAttributes(new { type = "button" })
-                       .Content("Button"))
+          .Name("textButton")
+          .HtmlAttributes(new { type = "button" })
+          .Content("Cauta")
+          .Events(ev => ev.Click("DisplayData")))
+
+        @(Html.Kendo().Button()
+          .Name("Add")
+          .HtmlAttributes(new { type = "button", title = "custom", id = "AddLandmarkPeriod" })
+          .Content("Adauga")
+        .Events(e => e.Click("redirectAddEditLMPeriod")))
     </p>
+
     @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryLandmarkPeriod>
-    ()
-    .Name("grid")
-    .Columns(columns =>
-    {
-        columns.Bound(c => c.LandmarkPeriodName);
-    })
-    .HtmlAttributes(new { style = "height: 380px;" })
+        ()
+        .Name("LandmarkPeriodGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.LandmarkPeriodId).Hidden();
+            columns.Bound(c => c.LandmarkPeriodName).Width(150);
+            ;
+        })
+
+    .HtmlAttributes(new { style = "height: 380px;", id = "LandmarkPeriodGrid" })
     .Scrollable()
     .Groupable()
     .Sortable()
@@ -30,11 +48,33 @@
     .ButtonCount(5))
     .DataSource(dataSource => dataSource
     .Ajax()
-    .Read(read => read.Action("LandmarkPeriod_Read", "Dictionary"))
+    .Read(read => read.Action("LandmarkPeriod_Read", "Dictionary").Data("GetSearchBoxText"))
     )
     )
 
 
 </body>
+</html>
+<script type="text/javascript">
+    function GetSearchBoxText() {
+        var text = $("#txtSearchString").val();
+        var obj = {};
+        obj["search"] = text;
+        return obj;
+    }
+
+
+    function DisplayData() {
+        $("#LandmarkPeriodGrid").data("kendoGrid").dataSource.read()
+    }
+
+    function redirectAddEditLMPeriod() {
+
+          location.href = '@Url.Content("/Dictionary/AddEditLandmarkPeriod")';
+      };
+    
+
+
+</script>
 
 

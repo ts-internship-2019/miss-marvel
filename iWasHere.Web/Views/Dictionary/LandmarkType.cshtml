@@ -17,16 +17,6 @@
         <a asp-action="AddEditLandmarkType">Create New</a>
     </p>
     <div class="row">
-        <div class="col-5">
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Item Name" aria-label="Recipient's username" aria-describedby="basic-addon2">
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button">Filter</button>
-            </div>
-        </div>
-        </div>
-    </div>
-    <div class="row">
         @(Html.Kendo().Button()
                         .Name("btnSubmit")
                         .HtmlAttributes(new { type = "button" })
@@ -36,7 +26,14 @@
         )
         @(Html.Kendo().TextBox()
             .Name("custom")
-            .HtmlAttributes(new { style = "width: 100%", title = "custom", id="txtFilter" })
+            .HtmlAttributes(new { style = "width: 100%", title = "custom", id = "txtFilter" })
+        )
+        @(Html.Kendo().Button()
+                       .Name("btnDeleteFilter")
+                       .HtmlAttributes(new { type = "button", id = "btnDeleteFilter" })
+                       .Content("Delete Filter")
+                       .Events(e => e.Click("deleteFilter"))
+
         )
     </div>
     @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryLandmarkType>()
@@ -48,6 +45,7 @@
                 columns.Bound(p => p.DictionaryItemCode);
                 columns.Bound(p => p.DictionaryItemName);
                 columns.Bound(p => p.Description);
+                columns.Template("<button id=\"btnDelete\" onclick=\"deleteLandmarkType(#=DictionaryItemId#)\">Delete</button>");
                 columns.Command(c => {
                 c.Custom("EditRecord").Text("Edit").Click("dgChange");
             });
@@ -96,6 +94,25 @@
        
         
  
+    }
+
+
+    function deleteFilter() {
+        $("#txtFilter").val("");
+         $("#grdLandmarkType").data("kendoGrid").dataSource.read()
+    }
+    function deleteLandmarkType(id) {
+             $.ajax({
+                    type: 'DELETE',
+                    url: '@Url.Action("DeleteLandmarkType", "Dictionary")',
+                    data: { id: id },
+                 success: function (response) {
+                        $("#grdLandmarkType").data("kendoGrid").dataSource.read();
+                    },
+                        error: function (response) {
+                       
+                    }
+                })
     }
 
     function filterFunction() {
