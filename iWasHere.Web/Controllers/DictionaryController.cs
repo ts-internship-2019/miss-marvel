@@ -7,7 +7,6 @@ using iWasHere.Domain.DTOs;
 using iWasHere.Domain.Models;
 using iWasHere.Domain.Service;
 using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using iWasHere.Web;
 using iWasHere.Domain;
@@ -39,13 +38,27 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
-        public ActionResult AddEditLandmarkType(DictionaryLandmarkTypeModel dt)
+        public ActionResult AddEditLandmarkType( [Bind("DictionaryItemId, DictionaryItemCode, DictionaryItemName, Description")]DictionaryLandmarkType dt, int id)
         {
-            if (ModelState.IsValid && dt != null)
+
+            String exMessage;
+            if (/*ModelState.IsValid &&*/ dt.DictionaryItemCode != null)
             {
-                _dictionaryService.AddDictionaryLandmarkType(dt);
+               var result = _dictionaryService.AddEditDictionaryLandmarkType(dt, out exMessage);
+                if(result == null)
+                {
+                    ModelState.AddModelError(string.Empty, exMessage);
+                    return View();
+                }
             }
-            return View();
+            if (id != 0)
+            {
+                return View(_dictionaryService.GetDictionaryLandmarkType(id));
+            }
+            else
+            {
+                return View();
+            }
         }
         public ActionResult GetLT([DataSourceRequest] DataSourceRequest request, String LandmarkTypeId)
         {
@@ -54,6 +67,17 @@ namespace iWasHere.Web.Controllers
             return Json(x);
 
         }
+
+        public ActionResult DeleteLandmarkType([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            if (id != -1)
+            {
+                _dictionaryService.DeleteLandmarkType(id);
+            }
+
+            return Json(ModelState.ToDataSourceResult());
+        }
+
 
 
         public ActionResult GetLandmarkType([DataSourceRequest]DataSourceRequest request, String lFilter)
@@ -102,10 +126,10 @@ namespace iWasHere.Web.Controllers
 
 
 
-        public ActionResult GetCities([DataSourceRequest]DataSourceRequest request, String lFilter)
+        public ActionResult GetCities([DataSourceRequest]DataSourceRequest request, String lFilter,String text)
         {
             int rowsNo = 0;
-            var x = _dictionaryService.GetCities(request.Page, request.PageSize, out rowsNo, lFilter);
+            var x = _dictionaryService.GetCities(request.Page, request.PageSize, out rowsNo, lFilter,Convert.ToInt32(text));
             DataSourceResult dataSource = new DataSourceResult();
             dataSource.Data = x;
             dataSource.Total = rowsNo;
@@ -119,6 +143,20 @@ namespace iWasHere.Web.Controllers
             //return Json(_dictionaryService.GetLandmarkType(request.Page, request.PageSize).ToDataSourceResult(request));
             return null;
         }
+
+        public List<DictionaryCounty> GetComboCounties(string filterCounty)
+        {
+            List<DictionaryCounty> countyModels = _dictionaryService.GetComboCounty(filterCounty);
+            return countyModels;
+        }
+
+        //[HttpPost]
+        //public JsonResult GetAjax(String filter)
+        //{
+        //    String s = filter;
+
+        //    return null;
+        //}
 
 
         public partial class TextBox : Controller
@@ -284,16 +322,26 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
-        public IActionResult TicketType_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            int totalCount = 0;
-            var data = _dictionaryService.GetDictionaryTicketType(request.Page, request.PageSize, out totalCount);
-            DataSourceResult dataSourceResult = new DataSourceResult();
-            dataSourceResult.Data = data;
-            dataSourceResult.Total = totalCount;
+        //public IActionResult TicketType_Read([DataSourceRequest] DataSourceRequest request,string FilterTicketType)
+        //{
+        //    int totalCount = 0;
+        //    var data = _dictionaryService.GetDictionaryTicketType(request.Page, request.PageSize, out totalCount, FilterTicketType);
+        //    DataSourceResult dataSourceResult = new DataSourceResult();
+        //    dataSourceResult.Data = data;
+        //    dataSourceResult.Total = totalCount;
 
-            return Json(dataSourceResult);
+        //    return Json(dataSourceResult);
+        //}
+
+        public IActionResult InsertUpdateTicketType()
+        {
+            return View();
         }
+
+
+
+
+
     }
 
 
