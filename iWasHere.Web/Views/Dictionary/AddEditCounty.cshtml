@@ -5,14 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-
-<html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Add County</title>
 </head>
-<body>
 
     <h4>DictionaryCounty</h4>
     <hr />
@@ -21,16 +17,10 @@
             <form asp-action="Add County">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="CountyId" />
-                <div class="form-group">
-                    <label asp-for="CountyName" class="control-label"></label>
-                    <input asp-for="CountyName" id="txtName" class="form-control" />
-                    <span asp-validation-for="CountyName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="CountyCode" class="control-label"></label>
-                    <input asp-for="CountyCode" id="txtCode" class="form-control" />
-                    <span asp-validation-for="CountyCode" class="text-danger"></span>
-                </div>
+                @(Html.Kendo().TextBox()
+                    .Name("custom")
+                    .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCountyName" })
+                )
                 <div class="form-group">
                     @(Html.Kendo().ComboBox()
                         .Name("countriesCB")
@@ -51,10 +41,17 @@
                         })
                     )
                 </div>
-                <input type="hidden" asp-for="CountryId" />>
-                <div class="form-group">
-                    <button id="btnAddModify" onclick="SaveChanges" class="btn btn-primary"> Add/Modify </button>
-                </div>
+                @(Html.Kendo().TextBox()
+                .Name("custom")
+                .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCountyCode" })
+                )
+
+                @(Html.Kendo().Button()
+                                .Name("btnSubmit")
+                                .HtmlAttributes(new { type = "button" })
+                                .Content("Save")
+                                .Events(e => e.Click("addCounty"))
+                )
             </form>
         </div>
     </div>
@@ -67,10 +64,30 @@
         @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     }
     <script>
-        $(document).ready(function () {
 
-        })
+       function addCounty() {
+        var countyName = $("#txtCountyName").val();
+        var countryId = $("#countriesCB").val();
+        var countyCode = $("#txtCountyCode").val();
+
+        AddCounties(countyName, countryId, countyCode);
+    }
+
+      function AddCounties(countyName,countryId,countyCode) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddCounty", "Dictionary")',
+                data: { countyName: countyName, countyCode: countyCode, countryId: countryId },
+                success: function (response) {
+                    alert("Element adaugat cu succes");
+                  
+                },
+                error: function (response) {
+                    alert("Eroare la adaugare);
+                }
+
+            })
+        }
 
     </script>
-</body>
-</html>
+
