@@ -81,12 +81,13 @@ namespace iWasHere.Web.Controllers
 
         public ActionResult AddCity (string cityName,string cityCode,string countyId)
         {
-            if(cityName !=null && cityCode != null && countyId != null)
+            var x = new DictionaryCity();
+            if (cityName !=null && cityCode != null && countyId != null)
             {
-                _dictionaryService.AddDictionaryCity(cityName,cityCode,Convert.ToInt32(countyId));
+                 x= _dictionaryService.AddDictionaryCity(cityName,cityCode,Convert.ToInt32(countyId));
             }
 
-            return View();
+            return Json(x);
         }
 
         #endregion
