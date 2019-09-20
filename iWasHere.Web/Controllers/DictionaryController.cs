@@ -259,11 +259,11 @@ namespace iWasHere.Web.Controllers
         }
         [HttpPost]
        
-        public List<DictionaryCounty> GetComboCounties(string filterCounty)
-        {
-            List<DictionaryCounty> countyModels = _dictionaryService.GetComboCounty(filterCounty);
-            return countyModels;
-        }
+        //public List<DictionaryCounty> GetComboCounties(string filterCounty)
+        //{
+        //    List<DictionaryCounty> countyModels = _dictionaryService.GetComboCounty(filterCounty);
+        //    return countyModels;
+        //}
         public JsonResult GetJsonResult(String filter)
         {
             String s = filter;
@@ -409,7 +409,7 @@ namespace iWasHere.Web.Controllers
             _dictionaryService.DeletePeriod(id);
             return Json(ModelState.ToDataSourceResult());
         }
-
+        #endregion
         #region Dorin
         public IActionResult LandmarkPeriod()
         {
