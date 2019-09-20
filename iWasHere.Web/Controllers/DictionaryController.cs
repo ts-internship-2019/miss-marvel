@@ -273,11 +273,11 @@ namespace iWasHere.Web.Controllers
 
         public ActionResult AddEditCounty([Bind("CountyId, CountyCode, CountyName, CountryId")]DictionaryCounty dt, int id)
         {
-
+            int k;
             String exMessage;
             if (/*ModelState.IsValid &&*/ dt.CountyCode != null)
             {
-                _dictionaryService.AddDictionaryCounty(dt);
+                 _dictionaryService.AddDictionaryCounty(dt);
             }
             return View();
         }
@@ -290,7 +290,6 @@ namespace iWasHere.Web.Controllers
             dataSource.Data = x;
             dataSource.Total = rowsNo;
             return Json(dataSource);
-
         }
 
         public JsonResult GetComboCountry(string text)
