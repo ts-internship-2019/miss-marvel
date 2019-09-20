@@ -90,6 +90,7 @@
     function dgChange(e) {
         grid = $("#grdLandmarkType").data("kendoGrid");
         var row = e.currentTarget.closest("tr").cells[0].outerText;
+
         window.location = '/Dictionary/AddEditLandmarkType?id=' + row
        
         

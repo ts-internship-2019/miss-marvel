@@ -1,0 +1,93 @@
+﻿@model iWasHere.Domain.Models.DictionaryCounty
+
+@{
+    ViewData["Title"] = "Adauga Judet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add County</title>
+</head>
+
+    <h4>DictionaryCounty</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Add County">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="CountyId" />
+                @(Html.Kendo().TextBox()
+                    .Name("custom")
+                    .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCountyName" })
+                )
+                <div class="form-group">
+                    @(Html.Kendo().ComboBox()
+                        .Name("countriesCB")
+                        .Placeholder("Tara")
+                        .DataTextField("CountryName")
+                        .DataValueField("CountryId")
+                        .HtmlAttributes(new { style = "width:100%;" })
+                        .Filter(FilterType.Contains)
+                        .AutoBind(false)
+                        .MinLength(1)
+                        .DataSource(source =>
+                        {
+                            source.Read(read =>
+                            {
+                                read.Action("GetComboCountry", "Dictionary");
+                            })
+                            .ServerFiltering(true);
+                        })
+                    )
+                </div>
+                @(Html.Kendo().TextBox()
+                .Name("custom")
+                .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCountyCode" })
+                )
+
+                @(Html.Kendo().Button()
+                                .Name("btnSubmit")
+                                .HtmlAttributes(new { type = "button" })
+                                .Content("Save")
+                                .Events(e => e.Click("addCounty"))
+                )
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="County">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+    <script>
+
+       function addCounty() {
+        var countyName = $("#txtCountyName").val();
+        var countryId = $("#countriesCB").val();
+        var countyCode = $("#txtCountyCode").val();
+
+        AddCounties(countyName, countryId, countyCode);
+    }
+
+      function AddCounties(countyName,countryId,countyCode) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddCounty", "Dictionary")',
+                data: { countyName: countyName, countyCode: countyCode, countryId: countryId },
+                success: function (response) {
+                    alert("Element adaugat cu succes");
+                  
+                },
+                error: function (response) {
+                    alert("Eroare la adaugarea elementului");
+                }
+
+            })
+        }
+
+    </script>
+

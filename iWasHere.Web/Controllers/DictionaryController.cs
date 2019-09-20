@@ -12,7 +12,6 @@ using iWasHere.Web;
 using iWasHere.Domain;
 
 
-
 namespace iWasHere.Web.Controllers
 {
     public class DictionaryController : Controller
@@ -36,6 +35,10 @@ namespace iWasHere.Web.Controllers
         {
 
 
+            return View();
+        }
+        public IActionResult AddEditCity()
+        {
             return View();
         }
         public ActionResult GetCities([DataSourceRequest]DataSourceRequest request, String lFilter, String text)
@@ -74,6 +77,17 @@ namespace iWasHere.Web.Controllers
         {
             List<DictionaryCounty> countyModels = _dictionaryService.GetComboCounty(filterCounty);
             return countyModels;
+        }
+
+        public ActionResult AddCity (string cityName,string cityCode,string countyId)
+        {
+            var x = new DictionaryCity();
+            if (cityName !=null && cityCode != null && countyId != null)
+            {
+                 x= _dictionaryService.AddDictionaryCity(cityName,cityCode,Convert.ToInt32(countyId));
+            }
+
+            return Json(x);
         }
 
         #endregion
@@ -253,13 +267,7 @@ namespace iWasHere.Web.Controllers
 
 
 
-        
 
-        public IActionResult County()
-        {
-
-            return View();
-        }
 
         public IActionResult Country()
         {
@@ -308,24 +316,68 @@ namespace iWasHere.Web.Controllers
         #endregion
 
         #region Victor
-        public IActionResult County_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            int totalCount = 0;
-            var x = _dictionaryService.GetDictionaryCounty(request.Page, request.PageSize, out totalCount);
-            DataSourceResult dataSourceResult = new DataSourceResult();
-            dataSourceResult.Data = x;
-            dataSourceResult.Total = totalCount;
 
-            return Json(dataSourceResult);
+        public IActionResult County()
+        {
+
+            return View();
         }
-        public ActionResult DeleteCountry([DataSourceRequest] DataSourceRequest request, int id)
+
+        public ActionResult AddEditCounty([Bind("CountyId, CountyCode, CountyName, CountryId")]DictionaryCounty dt, int id)
+        {
+            int k;
+            String exMessage;
+            if (/*ModelState.IsValid &&*/ dt.CountyCode != null)
+            {
+                 _dictionaryService.AddDictionaryCounty(dt);
+            }
+            return View();
+        }
+
+        public ActionResult GetCounty([DataSourceRequest]DataSourceRequest request, String lFilter, String text)
+        {
+            int rowsNo = 0;
+            var x = _dictionaryService.GetCounty(request.Page, request.PageSize, out rowsNo, lFilter, Convert.ToInt32(text));
+            DataSourceResult dataSource = new DataSourceResult();
+            dataSource.Data = x;
+            dataSource.Total = rowsNo;
+            return Json(dataSource);
+        }
+
+        public JsonResult GetComboCountry(string text)
+        {
+            if (String.IsNullOrEmpty(text))
+            {
+                text = "";
+            }
+            List<DictionaryCountry> result = GetComboCountries(text);
+            return Json(result);
+        }
+
+        public List<DictionaryCountry> GetComboCountries(string filterCountry)
+        {
+            List<DictionaryCountry> countyModels = _dictionaryService.GetComboCountry(filterCountry);
+            return countyModels;
+        }
+
+        public ActionResult GetCO([DataSourceRequest] DataSourceRequest request, String CountyId)
+        {
+            int rowsNo = 0;
+            var x = _dictionaryService.LoadCounty(Convert.ToInt32(CountyId));
+            return Json(x);
+
+        }
+
+        public ActionResult DeleteCounty([DataSourceRequest] DataSourceRequest request, int id)
         {
             if (id != -1)
             {
-                _dictionaryService.DeleteCountry(id);
+                _dictionaryService.DeleteCounty(id);
             }
+
             return Json(ModelState.ToDataSourceResult());
         }
+
         #endregion
 
         #region Dorin
@@ -479,11 +531,5 @@ namespace iWasHere.Web.Controllers
 
     }
 
-
-
 }
-
-
-   
-
 
