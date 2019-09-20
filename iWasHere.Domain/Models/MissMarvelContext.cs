@@ -8,6 +8,7 @@ namespace iWasHere.Domain.Models
     {
         public MissMarvelContext()
         {
+
         }
 
         public MissMarvelContext(DbContextOptions<MissMarvelContext> options)

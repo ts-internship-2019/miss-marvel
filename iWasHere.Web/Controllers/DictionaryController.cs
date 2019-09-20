@@ -122,7 +122,6 @@ namespace iWasHere.Web.Controllers
 
         public ActionResult GetLT([DataSourceRequest] DataSourceRequest request, String LandmarkTypeId)
         {
-            int rowsNo = 0;
             var x = _dictionaryService.LoadLandmarkType(Convert.ToInt32(LandmarkTypeId));
             return Json(x);
 
@@ -384,7 +383,32 @@ namespace iWasHere.Web.Controllers
             return Json(ModelState.ToDataSourceResult());
         }
 
-        #endregion
+        // ------------------- LandmarkPeriod
+        public IActionResult AddEditLandmarkperiod(int id=0)
+        {
+            return View(new DictionaryLandmarkPeriod());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddEditLandmarkPeriod([Bind("LandmarkPeriodId, LandmarkPeriodName")] DictionaryLandmarkPeriod landmarkPeriod, int id)
+        {
+            if (ModelState.IsValid)
+            {
+                if (id == 0)
+                {
+                    _dictionaryService.AddEditLandmarkPeriods(landmarkPeriod);
+                }
+                
+            }
+            return View();
+
+        }
+        public ActionResult DeletePeriod( int id)
+        {
+            _dictionaryService.DeletePeriod(id);
+            return Json(ModelState.ToDataSourceResult());
+        }
 
         #region Dorin
         public IActionResult LandmarkPeriod()

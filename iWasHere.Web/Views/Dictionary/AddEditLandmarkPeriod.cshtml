@@ -17,36 +17,46 @@
 <h4>DictionaryLandmarkPeriod</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="AddEditLandmarkPeriod">
+    <div class="col-md-6">
+        <form asp-action="AddEditLandmarkperiod">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <input type="hidden" asp-for="LandmarkPeriodId"/>
-                <label asp-for="LandmarkPeriodName" class="control-label"></label>
-                <input asp-for="LandmarkPeriodName" class="form-control" />
-                <span asp-validation-for="LandmarkPeriodName" class="text-danger"></span>
+                
+                    <input type="hidden" asp-for="LandmarkPeriodId" />
+                    <label asp-for="LandmarkPeriodName" class="control-label" ></label>
+                    <input asp-for="LandmarkPeriodName" class="form-control" />
+                    <span asp-validation-for="LandmarkPeriodName" class="text-danger"  ></span>
+                
+               
             </div>
-            <div class="form-group">
-                <input type="submit" value="Salveaza" class="btn btn-primary" />
-                <input type="submit" value="Salveaza si nou" class="btn btn-primary" />
-                <input type="submit" value="Renunta" class="btn btn-primary" />
+                 
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <input type="submit" value="Salveaza" class="btn btn-primary btn-block" id="Save"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <a asp-action="LandmarkPeriod" class="btn btn-secondary btn-block">Renunta</a>
+                </div>
             </div>
+               
+                
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="LandmarkPeriod">Inapoi la lista</a>
-</div>
-
 </body>
 </html>
-@*<script type="text/javascript">
-    function GetSearchBoxText()
-    {
-        var newPeriod = $("#txtSearchString").val();
-        var obj = {};
-        obj["search"] = text;
-        return obj;
-    }
-</script>*@
+<script>
+    function redirect() {
+
+          location.href = '@Url.Content("/Dictionary/LandmarkPeriod")';
+    };
+
+    function clearText()  
+{
+    document.getElementById('landPeriodlbl').value = "";
+} 
+</script>
+@section Scripts
+{ 
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");};
+}
