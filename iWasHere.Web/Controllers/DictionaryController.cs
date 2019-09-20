@@ -103,14 +103,24 @@ namespace iWasHere.Web.Controllers
         {
 
             String exMessage;
-            if (/*ModelState.IsValid &&*/ dt.DictionaryItemCode != null)
+            if (ModelState.IsValid && dt.DictionaryItemCode != null)
             {
-                _dictionaryService.AddDictionaryLandmarkType(dt);
+                var result = _dictionaryService.AddEditDictionaryLandmarkType(dt, out exMessage);
+                if (result == null)
+                {
+                    ModelState.AddModelError(string.Empty, exMessage);
+                    return View();
+                }
             }
-            return View();
+            if (id != 0)
+            {
+                return View(_dictionaryService.GetDictionaryLandmarkType(id));
+            }
+            else
+            {
+                return View();
+            }
         }
-        //----------------------------------------
-
         public ActionResult AddDictionaryCountry(DictionaryCountryModel country)
         {
             if (ModelState.IsValid && country != null)
