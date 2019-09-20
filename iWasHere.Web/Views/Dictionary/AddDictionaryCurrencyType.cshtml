@@ -1,0 +1,51 @@
+﻿@model iWasHere.Domain.Models.DictionaryCurrencyType
+
+@{
+    ViewData["Title"] = "AddDictionaryCurrencyType";
+}
+
+
+
+<h4>Currency Form</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="AddOrEdit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CurrencyCode" class="control-label"></label>
+                <input asp-for="CurrencyCode" class="form-control" />
+                <span asp-validation-for="CurrencyCode" class="text-danger"></span>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="CurrencyName" class="control-label"></label>
+                    <input asp-for="CurrencyName" class="form-control" />
+                    <span asp-validation-for="CurrencyName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="CurrencyExRate" class="control-label"></label>
+                    <input asp-for="CurrencyExRate" class="form-control" />
+                    <span asp-validation-for="CurrencyExRate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add" class="btn btn-primary" />
+                <input type="submit" value="Add & New" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Currency">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+
+
+
+</script>
