@@ -9,7 +9,7 @@ namespace iWasHere.Domain.Models
         {
             LandmarkPicture = new HashSet<LandmarkPicture>();
             LandmarkReview = new HashSet<LandmarkReview>();
-            TicketXlandmark = new HashSet<TicketXlandmark>();
+            TicketXLandmark = new HashSet<TicketXlandmark>();
         }
 
         public int LandmarkId { get; set; }
@@ -18,7 +18,6 @@ namespace iWasHere.Domain.Models
         public bool? LandmarkTicket { get; set; }
         public int? LandmarkTypeId { get; set; }
         public int? LandmarkPeriodId { get; set; }
-        public int? LandmarkAddressId { get; set; }
         public string LandmarkCode { get; set; }
         public int? CityId { get; set; }
         public string Latitude { get; set; }
@@ -29,6 +28,6 @@ namespace iWasHere.Domain.Models
         public virtual DictionaryLandmarkType LandmarkType { get; set; }
         public virtual ICollection<LandmarkPicture> LandmarkPicture { get; set; }
         public virtual ICollection<LandmarkReview> LandmarkReview { get; set; }
-        public virtual ICollection<TicketXlandmark> TicketXlandmark { get; set; }
+        public virtual ICollection<TicketXlandmark> TicketXLandmark { get; set; }
     }
 }

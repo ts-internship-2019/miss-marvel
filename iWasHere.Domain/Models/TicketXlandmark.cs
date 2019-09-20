@@ -14,5 +14,18 @@ namespace iWasHere.Domain.Models
         public virtual DictionaryCurrencyType CurrencyType { get; set; }
         public virtual Landmark Landmark { get; set; }
         public virtual DictionaryTicketType TicketType { get; set; }
+
+        public TicketXlandmark(int ticketXlandmarkId, int? landmarkId, int? ticketTypeId, int? currencyTypeId, decimal? ticketValue)
+        {
+            TicketXlandmarkId = ticketXlandmarkId;
+            LandmarkId = landmarkId;
+            TicketTypeId = ticketTypeId;
+            CurrencyTypeId = currencyTypeId;
+            TicketValue = ticketValue;
+        }
+
+        public TicketXlandmark()
+        {
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model iWasHere.Domain.Models.Landmark
+﻿@model iWasHere.Domain.DTOs.LandmarkModel
 
 @{
     ViewData["Title"] = "Adauga Landmrk";
@@ -31,19 +31,15 @@
                 <span asp-validation-for="LandmarkDescription" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <div class="form-group">
-                    <div class="form-group">
-                        <label class="control-label">Ticket Type:</label>
-
-                    </div>
-                </div>
+                <label asp-for="LandmarkCode" class="control-label"></label>
+                <input asp-for="LandmarkCode" class="form-control" />
+                <span asp-validation-for="LandmarkCode" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label">Landmark Type:</label>
-                @(Html.Kendo().ComboBox()
-                .Name("DictionaryLandmarkType")
+                @(Html.Kendo().ComboBoxFor(model => model.LandmarkType)
                 .Placeholder("Landmark Type")
-                .DataTextField("DictionaryItemName")
+                 .DataTextField("DictionaryItemName")
                 .DataValueField("DictionaryItemId")
                 .HtmlAttributes(new { style = "width:100%;", id = "cboLandmarkType" })
                 .Filter(FilterType.Contains)
@@ -60,8 +56,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Landmark Period:</label>
-                @(Html.Kendo().ComboBox()
-                .Name("DictionaryLandmarkPeriod")
+                @(Html.Kendo().ComboBoxFor(model => model.LandmarkPeriod)
                 .Placeholder("Landmark Period")
                 .DataTextField("LandmarkPeriodName")
                 .DataValueField("LandmarkPeriodId")
@@ -79,41 +74,10 @@
                 }))
             </div>
             <div class="form-group">
-                <label class="control-label">Currency:</label>
-                @(Html.Kendo().ComboBox()
-                .Name("Currency")
-                .Placeholder("Currency")
-                .DataTextField("CurrencyName")
-                .DataValueField("CurrencyTypeId")
-                .HtmlAttributes(new { style = "width:100%;", id = "cboLandmarkType" })
-                .Filter(FilterType.Contains)
-                .AutoBind(false)
-                .MinLength(1)
-                .DataSource(source =>
-                {
-                    source.Read(read =>
-                    {
-                        read.Action("GetCurrencyType", "Home");
-                    })
-                    .ServerFiltering(true);
-                }))
-            </div>
-            <div class="form-group">
-                <label asp-for="LandmarkAddressId" class="control-label"></label>
-                <input asp-for="LandmarkAddressId" class="form-control" />
-                <span asp-validation-for="LandmarkAddressId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LandmarkCode" class="control-label"></label>
-                <input asp-for="LandmarkCode" class="form-control" />
-                <span asp-validation-for="LandmarkCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <div class="form-group">
                     <label class="control-label">City:</label>
-                    @(Html.Kendo().ComboBox()
-                    .Name("DictionaryCity")
-                    .Placeholder("Landmark Period")
+                    @(Html.Kendo().ComboBoxFor(model => model.City)
+                    .Placeholder("City")
                     .DataTextField("CityName")
                     .DataValueField("CityId")
                     .HtmlAttributes(new { style = "width:100%;", id = "cboCity" })
@@ -131,17 +95,44 @@
                 </div>
             </div>
             <div class="form-group">
-                <label asp-for="Latitude" class="control-label"></label>
-                <input asp-for="Latitude" class="form-control" />
-                <span asp-validation-for="Latitude" class="text-danger"></span>
+                <div class="form-group">
+                    <label class="control-label">Currency:</label>
+                    @(Html.Kendo().ComboBox()
+                    .Placeholder("Currency")
+                    .Name("Currency")
+                    .DataTextField("CurrencyName")
+                    .DataValueField("CurrencyTypeId")
+                    .HtmlAttributes(new { style = "width:100%;", id = "cboCurrency" })
+                    .Filter(FilterType.Contains)
+                    .AutoBind(false)
+                    .MinLength(1)
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetCurrencyType", "Home");
+                        })
+                        .ServerFiltering(true);
+                    }))
+                </div>
             </div>
             <div class="form-group">
-                <label asp-for="Longitude" class="control-label"></label>
-                <input asp-for="Longitude" class="form-control" />
-                <span asp-validation-for="Longitude" class="text-danger"></span>
+                <label class="control-label">Student</label>
+                <input asp-for="StudentPrice" class="form-control" />
+                <span asp-validation-for="StudentPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <label class="control-label">Adult</label>
+                <input asp-for="AdultPrice" class="form-control" />
+                <span asp-validation-for="AdultPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Retired</label>
+                <input asp-for="RetiredPrice" class="form-control" />
+                <span asp-validation-for="RetiredPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button id="btnAddModify" type="submit"  class="btn btn-primary"> Add </button>
             </div>
         </form>
     </div>

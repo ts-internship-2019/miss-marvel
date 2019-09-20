@@ -12,5 +12,15 @@ namespace iWasHere.Domain.DTOs
         public string DictionaryItemName { get; set; }
 
         public string Description { get; set; }
+
+        public DictionaryLandmarkTypeModel(int dictionaryItemId, string dictionaryItemName)
+        {
+            DictionaryItemId = dictionaryItemId;
+            DictionaryItemName = dictionaryItemName;
+        }
+
+        public DictionaryLandmarkTypeModel()
+        {
+        }
     }
 }

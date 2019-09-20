@@ -123,6 +123,57 @@ namespace iWasHere.Domain.Service
                 }).ToList();
 
         }
+
+        public Models.Landmark AddEditLandmark(Models.Landmark landmark, List<Models.TicketXlandmark> priceList, out String errMsg)
+        {
+            errMsg = null;
+            try
+            {
+
+                if (landmark.LandmarkId == 0)
+                {
+                    _dbContext.Add(landmark);
+                    _dbContext.SaveChanges();
+                    Models.Landmark lastInserted = _dbContext.Landmark.Last();
+                    foreach(Models.TicketXlandmark price in priceList)
+                    {
+                        price.LandmarkId = lastInserted.LandmarkId;
+                        _dbContext.TicketXlandmark.Add(price);
+                        _dbContext.SaveChanges();
+                    }
+                }
+                else
+                {
+                    _dbContext.Update(landmark);
+                    _dbContext.SaveChanges();
+                }
+
+                return landmark;
+            }
+            catch (Exception ex)
+            {
+                errMsg = ex.Message.ToString();
+                return null;
+            }
+        }
+
+        public Models.Landmark GetLandmark(int landmarkId, out List<Models.TicketXlandmark> priceList)
+        {
+            priceList = _dbContext.TicketXlandmark.Where((a => Convert.ToInt32(a.LandmarkId) == landmarkId)).Select(
+                price => new TicketXlandmark
+            {
+                TicketXlandmarkId = price.TicketXlandmarkId,
+                LandmarkId = price.LandmarkId,
+                TicketTypeId = price.TicketTypeId,
+                CurrencyTypeId = price.CurrencyTypeId,
+                TicketValue = price.TicketValue
+            })
+            .ToList();
+               
+                
+            Models.Landmark landmark = _dbContext.Landmark.Find(landmarkId);
+            return landmark;
+        }
         //pana aici
 
         public Models.DictionaryLandmarkType AddEditDictionaryLandmarkType(Models.DictionaryLandmarkType landmarkType, out String errMsg)

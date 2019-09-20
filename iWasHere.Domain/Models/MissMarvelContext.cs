@@ -398,7 +398,7 @@ namespace iWasHere.Domain.Models
                     .HasConstraintName("FK__TicketXLa__Curre__06CD04F7");
 
                 entity.HasOne(d => d.Landmark)
-                    .WithMany(p => p.TicketXlandmark)
+                    .WithMany(p => p.TicketXLandmark)
                     .HasForeignKey(d => d.LandmarkId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__TicketXLa__Landm__04E4BC85");
