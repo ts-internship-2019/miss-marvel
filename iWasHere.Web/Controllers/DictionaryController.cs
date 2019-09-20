@@ -37,6 +37,10 @@ namespace iWasHere.Web.Controllers
 
             return View();
         }
+        public IActionResult AddEditCity()
+        {
+            return View();
+        }
         public ActionResult GetCities([DataSourceRequest]DataSourceRequest request, String lFilter, String text)
         {
             int rowsNo = 0;
@@ -73,6 +77,16 @@ namespace iWasHere.Web.Controllers
         {
             List<DictionaryCounty> countyModels = _dictionaryService.GetComboCounty(filterCounty);
             return countyModels;
+        }
+
+        public ActionResult AddCity (string cityName,string cityCode,string countyId)
+        {
+            if(cityName !=null && cityCode != null && countyId != null)
+            {
+                _dictionaryService.AddDictionaryCity(cityName,cityCode,Convert.ToInt32(countyId));
+            }
+
+            return View();
         }
 
         #endregion

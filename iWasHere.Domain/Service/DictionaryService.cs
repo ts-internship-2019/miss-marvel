@@ -90,6 +90,22 @@ namespace iWasHere.Domain.Service
             }).Where(a => a.CountyName.Contains(text)).Take(10).ToList();
             return comboCounty;
         }
+       
+        public Models.DictionaryCity AddDictionaryCity(string cityName,string cityCode,int countyId)
+        {
+            DictionaryCity dictionaryCity = new DictionaryCity();
+            dictionaryCity.CityName = cityName;
+            dictionaryCity.CityCode = cityCode;
+            dictionaryCity.CountyId = countyId;
+            
+
+            if (!String.IsNullOrWhiteSpace(dictionaryCity.CityName))
+            {
+                _dbContext.DictionaryCity.Add(dictionaryCity);
+                _dbContext.SaveChanges();
+            }
+            return dictionaryCity;
+        }
 
         #endregion
 
