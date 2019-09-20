@@ -49,11 +49,43 @@ namespace iWasHere.Web.Controllers
         public JsonResult GetLandmarkType(string text)
         {
             int rowsNo = 0;
-            var x = _LandmarkService.GetLandmarkType(out rowsNo);
-            DataSourceResult dataSource = new DataSourceResult();
-            dataSource.Data = x;
-            dataSource.Total = rowsNo;
-            return Json(dataSource);
+            if (text == null)
+                text = "";
+            var x = _LandmarkService.GetLandmarkType(text);
+            
+            return Json(x);
+
+        }
+        public JsonResult GetLandmarkPeriod(string text)
+        {
+            int rowsNo = 0;
+            if (text == null)
+                text = "";
+            var x = _LandmarkService.GetLandmarkPeriod(text);
+
+            return Json(x);
+
+        }
+
+        public JsonResult GetCities(string text)
+        {
+            int rowsNo = 0;
+            if (text == null)
+                text = "";
+            var x = _LandmarkService.GetCities(text);
+
+            return Json(x);
+
+        }
+
+        public JsonResult GetCurrencyType(string text)
+        {
+            int rowsNo = 0;
+            if (text == null)
+                text = "";
+            var x = _LandmarkService.GetCurrencyType(text);
+
+            return Json(x);
 
         }
     }

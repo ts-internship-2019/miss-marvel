@@ -41,7 +41,7 @@ namespace iWasHere.Web.Controllers
         {
 
             String exMessage;
-            if (/*ModelState.IsValid &&*/ dt.DictionaryItemCode != null)
+            if (ModelState.IsValid && dt.DictionaryItemCode != null)
             {
                var result = _dictionaryService.AddEditDictionaryLandmarkType(dt, out exMessage);
                 if(result == null)
@@ -136,13 +136,7 @@ namespace iWasHere.Web.Controllers
             
         }
         [HttpPost]
-        public JsonResult GetAjax(String filter)
-        {
-            String s = filter;
-            //return Json(_dictionaryService.GetLandmarkType(request.Page, request.PageSize).ToDataSourceResult(request));
-            return null;
-        }
-
+       
         public List<DictionaryCounty> GetComboCounties(string filterCounty)
         {
             List<DictionaryCounty> countyModels = _dictionaryService.GetComboCounty(filterCounty);

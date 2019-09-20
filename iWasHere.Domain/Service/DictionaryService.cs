@@ -71,21 +71,61 @@ namespace iWasHere.Domain.Service
             });
 
         }
-
-        public IEnumerable<DictionaryLandmarkTypeModel> GetLandmarkType(out int totalRows)
+        // trebuie mutat in Landmark service dupa ce invat dependency inversion
+        public List<DictionaryLandmarkTypeModel> GetLandmarkType(String filter)
         {
-            totalRows = _dbContext.DictionaryLandmarkType.Count();
-            return _dbContext.DictionaryLandmarkType.Select(LandmarkType => new DictionaryLandmarkTypeModel
-            {
-                DictionaryItemId = LandmarkType.DictionaryItemId,
-                DictionaryItemName = LandmarkType.DictionaryItemName,
-                DictionaryItemCode = LandmarkType.DictionaryItemCode,
-                Description = LandmarkType.Description
-            });
+            
+           
+                return _dbContext.DictionaryLandmarkType.Where((a => a.DictionaryItemName.Contains(filter))).Take(10).Select(LandmarkType => new DictionaryLandmarkTypeModel
+                {
+                    DictionaryItemId = LandmarkType.DictionaryItemId,
+                    DictionaryItemName = LandmarkType.DictionaryItemName,
+                    DictionaryItemCode = LandmarkType.DictionaryItemCode,
+                    Description = LandmarkType.Description
+                }).ToList();
+           
         }
-    
 
-    public Models.DictionaryLandmarkType AddEditDictionaryLandmarkType(Models.DictionaryLandmarkType landmarkType, out String errMsg)
+        public List<LandmarkPeriodModel> GetLandmarkPeriod(String filter)
+        {
+
+            return _dbContext.DictionaryLandmarkPeriod.Where((a => a.LandmarkPeriodName.Contains(filter))).Take(10).Select(LandmarkPeriod => new LandmarkPeriodModel
+            {
+                LandmarkPeriodId = LandmarkPeriod.LandmarkPeriodId,
+                LandmarkPeriodName = LandmarkPeriod.LandmarkPeriodName
+            }).ToList();
+
+        }
+
+        public List<DictionaryCityModel> GetCities(String filter)
+        {
+
+            return _dbContext.DictionaryCity.Where((a => a.CityName.Contains(filter))).Take(10).Select(
+                city => new DictionaryCityModel
+                {
+                    CityId = city.CityId,
+                    CityName = city.CityName,
+                    CountyId = Convert.ToInt32(city.CountyId)
+                }).ToList();
+
+        }
+
+        public List<DictionaryCurrencyTypeModel> GetCurrencyType(String filter)
+        {
+
+            return _dbContext.DictionaryCurrencyType.Where((a => a.CurrencyName.Contains(filter))).Take(10).Select(
+                currency => new DictionaryCurrencyTypeModel
+                {
+                    CurrencyTypeId = currency.CurrencyTypeId,
+                    CurrencyCode = currency.CurrencyCode,
+                    CurrencyName = currency.CurrencyName,
+                    CurrencyExRate = currency.CurrencyExRate
+                }).ToList();
+
+        }
+        //pana aici
+
+        public Models.DictionaryLandmarkType AddEditDictionaryLandmarkType(Models.DictionaryLandmarkType landmarkType, out String errMsg)
         {
             errMsg = null;
             try
