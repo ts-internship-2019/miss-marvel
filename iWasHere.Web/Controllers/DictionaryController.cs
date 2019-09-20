@@ -202,13 +202,7 @@ namespace iWasHere.Web.Controllers
 
 
 
-        
 
-        public IActionResult County()
-        {
-
-            return View();
-        }
 
         public IActionResult Country()
         {
@@ -257,24 +251,50 @@ namespace iWasHere.Web.Controllers
         #endregion
 
         #region Victor
-        public IActionResult County_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            int totalCount = 0;
-            var x = _dictionaryService.GetDictionaryCounty(request.Page, request.PageSize, out totalCount);
-            DataSourceResult dataSourceResult = new DataSourceResult();
-            dataSourceResult.Data = x;
-            dataSourceResult.Total = totalCount;
 
-            return Json(dataSourceResult);
-        }
-        public ActionResult DeleteCountry([DataSourceRequest] DataSourceRequest request, int id)
+        public IActionResult County()
         {
-            if (id != -1)
-            {
-                _dictionaryService.DeleteCountry(id);
-            }
-            return Json(ModelState.ToDataSourceResult());
+
+            return View();
         }
+
+        public IActionResult AddEditCounty([Bind("CountyId,CountyName,CountyCode")] DictionaryCountyModel county, DictionaryCountyModel c)
+        {
+            if (ModelState.IsValid && c != null)
+            {
+                _dictionaryService.AddDictionaryCounty(county);
+            }
+            return View();
+        }
+
+        public ActionResult GetCounty([DataSourceRequest]DataSourceRequest request, String lFilter, String text)
+        {
+            int rowsNo = 0;
+            var x = _dictionaryService.GetCounty(request.Page, request.PageSize, out rowsNo, lFilter, Convert.ToInt32(text));
+            DataSourceResult dataSource = new DataSourceResult();
+            dataSource.Data = x;
+            dataSource.Total = rowsNo;
+            return Json(dataSource);
+
+        }
+
+        public JsonResult GetComboCountry(string text)
+        {
+            if (String.IsNullOrEmpty(text))
+            {
+                text = "";
+            }
+            List<DictionaryCountry> result = GetComboCountries(text);
+            return Json(result);
+        }
+
+        public List<DictionaryCountry> GetComboCountries(string filterCountry)
+        {
+            List<DictionaryCountry> countyModels = _dictionaryService.GetComboCountry(filterCountry);
+            return countyModels;
+        }
+
+
         #endregion
 
         #region Dorin
