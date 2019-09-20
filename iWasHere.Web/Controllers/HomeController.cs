@@ -59,9 +59,10 @@ namespace iWasHere.Web.Controllers
                     CityId = Convert.ToInt32(loadedLandmark.CityId),
                     LandmarkTypeId = Convert.ToInt32(loadedLandmark.LandmarkTypeId),
                     LandmarkPeriodId = Convert.ToInt32(loadedLandmark.LandmarkPeriodId),
-                    StudentPrice = Convert.ToDecimal(pricesList[0].TicketValue),
-                    AdultPrice = Convert.ToDecimal(pricesList[1].TicketValue),
-                    RetiredPrice = Convert.ToDecimal(pricesList[2].TicketValue)
+                    LandmarkPeriodName = loadedLandmark.LandmarkPeriod.LandmarkPeriodName
+                    //StudentPrice = Convert.ToDecimal(pricesList[0].TicketValue),
+                    //AdultPrice = Convert.ToDecimal(pricesList[1].TicketValue),
+                    //RetiredPrice = Convert.ToDecimal(pricesList[2].TicketValue)
 
 
                 };

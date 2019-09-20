@@ -37,14 +37,15 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Landmark Type:</label>
-                @(Html.Kendo().ComboBoxFor(model => model.LandmarkType)
+                @(Html.Kendo().ComboBoxFor(model => model.LandmarkTypeId)
                 .Placeholder("Landmark Type")
                  .DataTextField("DictionaryItemName")
                 .DataValueField("DictionaryItemId")
-                .HtmlAttributes(new { style = "width:100%;", id = "cboLandmarkType" })
+                .HtmlAttributes(new { style = "width:100%;" })
                 .Filter(FilterType.Contains)
-                .AutoBind(false)
+                .AutoBind(true)
                 .MinLength(1)
+                
                 .DataSource(source =>
                 {
                     source.Read(read =>
@@ -56,14 +57,15 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Landmark Period:</label>
-                @(Html.Kendo().ComboBoxFor(model => model.LandmarkPeriod)
+                @(Html.Kendo().ComboBoxFor(model => model.LandmarkPeriodId)
                 .Placeholder("Landmark Period")
                 .DataTextField("LandmarkPeriodName")
                 .DataValueField("LandmarkPeriodId")
-                .HtmlAttributes(new { style = "width:100%;", id = "cboLandmarkPeriod" })
+                .HtmlAttributes(new { style = "width:100%;" })
                 .Filter(FilterType.Contains)
                 .AutoBind(false)
                 .MinLength(1)
+                .Text(Model.LandmarkPeriodName)
                 .DataSource(source =>
                 {
                     source.Read(read =>

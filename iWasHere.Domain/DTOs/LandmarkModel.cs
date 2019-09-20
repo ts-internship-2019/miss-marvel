@@ -18,6 +18,7 @@ namespace iWasHere.Domain.DTOs
         public int CityId { get; set; }
         public int LandmarkTypeId { get; set; }
         public int LandmarkPeriodId { get; set; }
+        public string LandmarkPeriodName { get; set; }
         public virtual DictionaryCityModel City { get; set; }
         public virtual LandmarkPeriodModel LandmarkPeriod { get; set; }
         public virtual DictionaryLandmarkTypeModel LandmarkType { get; set; }

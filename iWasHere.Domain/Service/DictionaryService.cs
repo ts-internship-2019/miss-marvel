@@ -257,11 +257,12 @@ namespace iWasHere.Domain.Service
                 TicketTypeId = price.TicketTypeId,
                 CurrencyTypeId = price.CurrencyTypeId,
                 TicketValue = price.TicketValue
+                
             })
             .ToList();
                
                 
-            Models.Landmark landmark = _dbContext.Landmark.Find(landmarkId);
+            Models.Landmark landmark = _dbContext.Landmark.Include(a => a.LandmarkPeriod).FirstOrDefault(a => a.LandmarkId == landmarkId);
             return landmark;
         }
         //pana aici
