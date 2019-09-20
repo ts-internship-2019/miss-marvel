@@ -386,21 +386,75 @@ namespace iWasHere.Domain.Service
         #endregion
 
         #region Victor
-        public List<DictionaryCountyModel> GetDictionaryCounty(int skip, int take, out int totalCount)
+
+        public IEnumerable<DictionaryCountyModel> GetCounty(int pageNo, int pageSize, out int rowsNo, string lFilter, int text)
         {
-            totalCount = _dbContext.DictionaryCounty.Count();
-            int toSkip = (skip - 1) * take;
-
-            List<DictionaryCountyModel> dictionaryCounty = _dbContext.DictionaryCounty.Select(a => new DictionaryCountyModel()
+            rowsNo = 0;
+            rowsNo = _dbContext.DictionaryCounty.Count();
+            if (lFilter == null && text < 1)
+                return _dbContext.DictionaryCounty.Skip((pageNo - 1) * pageSize).Take(pageSize).Select(County => new DictionaryCountyModel
+                {
+                    CountyId = County.CountyId,
+                    CountyName = County.CountyName,
+                    CountryId = Convert.ToInt32(County.CountryId),
+                    CountyCode = County.CountyCode
+                });
+            else if (lFilter != null && text < 1)
             {
-                CountyId = a.CountyId,
-                CountyName = a.CountyName,
-                //CountryId = a.CountryId, //doar daca ne trebuie legatura
-                CountyCode = a.CountyCode
-            }).Skip(toSkip).Take(take).ToList();
-
-            return dictionaryCounty;
+                rowsNo = _dbContext.DictionaryCounty.Where(a => a.CountyName.Contains(lFilter)).Count();
+                return _dbContext.DictionaryCounty.Where(a => a.CountyName.Contains(lFilter)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(County => new DictionaryCountyModel
+                {
+                    CountyId = County.CountyId,
+                    CountyName = County.CountyName,
+                    CountryId = Convert.ToInt32(County.CountryId),
+                    CountyCode = County.CountyCode
+                });
+            }
+            else if (lFilter == null && text > 0)
+            {
+                rowsNo = _dbContext.DictionaryCounty.Where(a => a.CountryId.Equals(text)).Count();
+                return _dbContext.DictionaryCounty.Where(a => a.CountryId.Equals(text)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(County => new DictionaryCountyModel
+                {
+                    CountyId = County.CountyId,
+                    CountyName = County.CountyName,
+                    CountryId = Convert.ToInt32(County.CountryId),
+                    CountyCode = County.CountyCode
+                });
+            }
+            else
+            {
+                rowsNo = _dbContext.DictionaryCounty.Where(a => a.CountyName.Contains(lFilter) && a.CountyId.Equals(text)).Count();
+                return _dbContext.DictionaryCounty.Where(a => a.CountyName.Contains(lFilter) && a.CountyId.Equals(text)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(County => new DictionaryCountyModel
+                {
+                    CountyId = County.CountyId,
+                    CountyName = County.CountyName,
+                    CountryId = Convert.ToInt32(County.CountryId),
+                    CountyCode = County.CountyCode
+                });
+            }
         }
+
+        public List<DictionaryCountry> GetComboCountry(string text)
+        {
+            List<DictionaryCountry> comboCountry = _dbContext.DictionaryCountry.Select(a => new DictionaryCountry()
+            {
+                CountryId = a.CountryId,
+                CountryName = a.CountryName
+
+            }).Where(a => a.CountryName.Contains(text)).Take(10).ToList();
+            return comboCountry;
+        }
+
+        public DictionaryCountyModel AddDictionaryCounty(DictionaryCountyModel county)
+        {
+            if (!String.IsNullOrWhiteSpace(county.CountyName))
+            {
+                _dbContext.Add(county);
+                _dbContext.SaveChanges();
+            }
+            return county;
+        }
+
 
         #endregion
 
