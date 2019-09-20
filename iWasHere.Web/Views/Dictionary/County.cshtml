@@ -27,13 +27,6 @@
              .HtmlAttributes(new { style = "width: 100%", title = "custom", id = "txtFilter" })
         )
 
-        @*@(Html.Kendo().Button()
-                            .Name("btnSubmit")
-                            .HtmlAttributes(new { type = "button" })
-                            .Content("Filter")
-                            .Events(e => e.Click("DisplayData"))
-            )*@
-
     </div>
 
     <div>
@@ -86,10 +79,11 @@
               columns.Bound(p => p.CountyId).Hidden();
               columns.Bound(p => p.CountyName);
               columns.Bound(p => p.CountyCode);
-
+              columns.Bound(p => p.CountryId).Hidden();
               columns.Command(c =>
               {
                   c.Custom("EditRecord").Text("Edit").Click("dgChange");
+                  c.Custom("DeleteRecord").Text("Delete").Click("getCountyId");
               });
           })
           .Scrollable()
@@ -115,7 +109,6 @@
     }
 
     function dgChange(e) {
-        var row = e.currentTarget.closest("tr").cells[0].outerText;
         grid = $("#grdCounty").data("kendoGrid");
         var row = e.currentTarget.closest("tr").cells[0].outerText;
         window.location = '/Dictionary/AddEditCounty?id=' + row
@@ -127,6 +120,26 @@
         $('#grdCounty').data("kendoGrid").dataSource.read();
         $('#grdCounty').data("kendoGrid").dataSource.page(1);
     }
+
+    function deleteCounty(id) {
+        $.ajax({
+            type: 'DELETE',
+            url: '@Url.Action("DeleteCounty", "Dictionary")',
+            data: { id: id },
+            success: function (response) {
+                $("#grdCounty").data("kendoGrid").dataSource.read();
+            },
+                error: function (response) {
+                    alert("Ceva nu merge...");
+            }
+        })
+    }
+
+    function getCountyId(e) {
+            grid = $("#grdCounty").data("kendoGrid");
+            var id = e.currentTarget.closest("tr").cells[0].outerText;
+            deleteCounty(id);
+        }
 
     function myFunction() {
         var filter = $("#txtFilter").val();

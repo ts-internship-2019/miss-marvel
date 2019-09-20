@@ -12,7 +12,6 @@ using iWasHere.Web;
 using iWasHere.Domain;
 
 
-
 namespace iWasHere.Web.Controllers
 {
     public class DictionaryController : Controller
@@ -258,11 +257,13 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
-        public IActionResult AddEditCounty([Bind("CountyId,CountyName,CountyCode")] DictionaryCountyModel county, DictionaryCountyModel c)
+        public ActionResult AddEditCounty([Bind("CountyId, CountyCode, CountyName, CountryId")]DictionaryCounty dt, int id)
         {
-            if (ModelState.IsValid && c != null)
+
+            String exMessage;
+            if (/*ModelState.IsValid &&*/ dt.CountyCode != null)
             {
-                _dictionaryService.AddDictionaryCounty(county);
+                _dictionaryService.AddDictionaryCounty(dt);
             }
             return View();
         }
@@ -294,6 +295,23 @@ namespace iWasHere.Web.Controllers
             return countyModels;
         }
 
+        public ActionResult GetCO([DataSourceRequest] DataSourceRequest request, String CountyId)
+        {
+            int rowsNo = 0;
+            var x = _dictionaryService.LoadCounty(Convert.ToInt32(CountyId));
+            return Json(x);
+
+        }
+
+        public ActionResult DeleteCounty([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            if (id != -1)
+            {
+                _dictionaryService.DeleteCounty(id);
+            }
+
+            return Json(ModelState.ToDataSourceResult());
+        }
 
         #endregion
 
@@ -448,11 +466,5 @@ namespace iWasHere.Web.Controllers
 
     }
 
-
-
 }
-
-
-   
-
 

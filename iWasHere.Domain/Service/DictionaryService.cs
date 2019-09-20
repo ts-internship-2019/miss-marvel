@@ -418,6 +418,65 @@ namespace iWasHere.Domain.Service
             }
         }
 
+        public IEnumerable<DictionaryCountyModel> LoadCounty(int CountyId)
+        {
+            return _dbContext.DictionaryCounty.Where(a => a.CountyId == CountyId).Select(County => new DictionaryCountyModel
+            {
+                CountyId = County.CountyId,
+                CountyName = County.CountyName,
+                CountyCode = County.CountyCode,
+                CountryId = Convert.ToInt32(County.CountryId)
+            });
+        }
+
+        public IEnumerable<DictionaryCountyModel> GetCounty(out int totalRows)
+        {
+            totalRows = _dbContext.DictionaryCounty.Count();
+            return _dbContext.DictionaryCounty.Select(County => new DictionaryCountyModel
+            {
+                CountyId = County.CountyId,
+                CountyName = County.CountyName,
+                CountyCode = County.CountyCode,
+                CountryId = Convert.ToInt32(County.CountryId)
+            });
+        }
+
+        public Models.DictionaryCounty AddEditDictionaryCounty(Models.DictionaryCounty county, out String errMsg)
+        {
+            errMsg = null;
+            try
+            {
+
+                if (county.CountyId == 0)
+                {
+                    _dbContext.Add(county);
+                    _dbContext.SaveChanges();
+                }
+                else
+                {
+                    _dbContext.Update(county);
+                    _dbContext.SaveChanges();
+                }
+
+                return county;
+            }
+            catch (Exception ex)
+            {
+                errMsg = ex.Message.ToString();
+                return null;
+            }
+        }
+
+        public void DeleteCounty(int id)
+        {
+            Models.DictionaryCounty county = new Models.DictionaryCounty() { CountyId = id };
+
+            _dbContext.DictionaryCounty.Remove(county);
+            _dbContext.SaveChanges();
+
+        }
+
+
         public List<DictionaryCountry> GetComboCountry(string text)
         {
             List<DictionaryCountry> comboCountry = _dbContext.DictionaryCountry.Select(a => new DictionaryCountry()
@@ -429,6 +488,23 @@ namespace iWasHere.Domain.Service
             return comboCountry;
         }
 
+        public Models.DictionaryCounty GetDictionaryCounty(int countyId)
+        {
+            Models.DictionaryCounty county = _dbContext.DictionaryCounty.Find(countyId);
+            return county;
+        }
+
+        public Models.DictionaryCounty AddDictionaryCounty(Models.DictionaryCounty countyModel)
+        {
+            if (!String.IsNullOrWhiteSpace(countyModel.CountyName))
+            {
+                _dbContext.Add(countyModel);
+                _dbContext.SaveChanges();
+            }
+            return countyModel;
+        }
+
+
         public DictionaryCountyModel AddDictionaryCounty(DictionaryCountyModel county)
         {
             if (!String.IsNullOrWhiteSpace(county.CountyName))
@@ -438,7 +514,6 @@ namespace iWasHere.Domain.Service
             }
             return county;
         }
-
 
         #endregion
 
