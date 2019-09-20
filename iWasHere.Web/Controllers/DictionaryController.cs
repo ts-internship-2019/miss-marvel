@@ -27,7 +27,7 @@ namespace iWasHere.Web.Controllers
         {
             List<DictionaryLandmarkTypeModel> dictionaryLandmarkTypeModels = _dictionaryService.GetDictionaryLandmarkTypeModels();
 
-            return View();
+            return View(dictionaryLandmarkTypeModels);
         }
 
         public IActionResult LandmarkType()
@@ -61,7 +61,6 @@ namespace iWasHere.Web.Controllers
         }
         public ActionResult GetLT([DataSourceRequest] DataSourceRequest request, String LandmarkTypeId)
         {
-            int rowsNo = 0;
             var x = _dictionaryService.LoadLandmarkType(Convert.ToInt32(LandmarkTypeId));
             return Json(x);
 
@@ -136,12 +135,7 @@ namespace iWasHere.Web.Controllers
             
         }
         [HttpPost]
-        public JsonResult GetAjax(String filter)
-        {
-            String s = filter;
-            //return Json(_dictionaryService.GetLandmarkType(request.Page, request.PageSize).ToDataSourceResult(request));
-            return null;
-        }
+        
 
         public List<DictionaryCounty> GetComboCounties(string filterCounty)
         {
@@ -278,7 +272,31 @@ namespace iWasHere.Web.Controllers
         }
 
         // ------------------- LandmarkPeriod
-        
+        public IActionResult AddEditLandmarkperiod(int id=0)
+        {
+            return View(new DictionaryLandmarkPeriod());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddEditLandmarkPeriod([Bind("LandmarkPeriodId, LandmarkPeriodName")] DictionaryLandmarkPeriod landmarkPeriod, int id)
+        {
+            if (ModelState.IsValid)
+            {
+                if (id == 0)
+                {
+                    _dictionaryService.AddEditLandmarkPeriods(landmarkPeriod);
+                }
+                
+            }
+            return View();
+
+        }
+        public ActionResult DeletePeriod( int id)
+        {
+            _dictionaryService.DeletePeriod(id);
+            return Json(ModelState.ToDataSourceResult());
+        }
 
         public IActionResult LandmarkPeriod()
         {

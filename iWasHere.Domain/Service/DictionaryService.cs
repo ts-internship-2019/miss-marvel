@@ -290,6 +290,22 @@ namespace iWasHere.Domain.Service
                 });
             }
         }
+        public DictionaryLandmarkPeriod AddEditLandmarkPeriods(DictionaryLandmarkPeriod landmarkPeriod)
+        {
+            if (!String.IsNullOrWhiteSpace(landmarkPeriod.LandmarkPeriodName))
+            {
+                _dbContext.Add(landmarkPeriod);
+                _dbContext.SaveChanges();
+            }
+            return landmarkPeriod;
+        }
+        public void DeletePeriod(int id )
+        {
+            var landmarkPeriod = _dbContext.DictionaryLandmarkPeriod.Find(id);
+            _dbContext.Remove(landmarkPeriod);
+            _dbContext.SaveChanges();
+
+        }
         //public IEnumerable<LandmarkPeriodModel> EditLandmarkPeriods()
         //{
         //    int toskip;
