@@ -161,9 +161,30 @@ namespace iWasHere.Web.Controllers
             return Json(dataSource);
 
         }
+         public JsonResult GetAjax(String filter)
+        {
+            String s = filter;
+            return null;
+        }
         public IActionResult Currency()
         {
             return View();
+        }
+
+        public ActionResult AddEditCurrency([Bind("CurrencyTypeId, CurrencyName, CurrencyCode, CurrencyExRate")] DictionaryCurrencyType dc, int id)
+        {
+            DictionaryCurrencyType currency = new DictionaryCurrencyType();
+
+
+
+            String exMessage;
+            if (dc.CurrencyTypeId != null)
+            {
+                // _dictionaryService.AddDictionaryCountry(dc);
+                //_dictionaryService.GetDictionaryCountry(dc.CountryId);
+                currency = _dictionaryService.AddEditDictionaryCurrencyType(dc);
+            }
+            return View(currency);
         }
 
         private static IEnumerable<DictionaryCurrencyType> GetCurrency()
@@ -180,6 +201,36 @@ namespace iWasHere.Web.Controllers
                 }).ToList();
             }
         }
+
+
+         public IActionResult AddDictionaryCurrencyType([Bind("CurrencyTypeId,CurrencyName,CurrencyCode, CurrencyExRate")] DictionaryCurrencyTypeModel currencyModel, DictionaryCurrencyTypeModel dt)
+        {
+            if (ModelState.IsValid && dt != null)
+            {
+                _dictionaryService.AddDictionaryCurrencyType(currencyModel);
+            }
+            return View();
+        }
+
+        public ActionResult AddEditCurrencyType(DictionaryCurrencyTypeModel dt)
+        {
+            if (ModelState.IsValid && dt != null)
+            {
+                _dictionaryService.AddDictionaryCurrencyType(dt);
+            }
+            return View();
+        }
+
+        public ActionResult DeleteCurrencyType([DataSourceRequest]DataSourceRequest request, int id)
+        {
+            if(id != -1)
+            {
+                _dictionaryService.DeleteCurrencyType(id);
+            }
+            return Json(ModelState.ToDataSourceResult());
+        }
+
+
         #endregion
 
         #region Iuliana
@@ -212,7 +263,7 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult Country()
         {
-            //List<DictionaryCountry> dictionaryCountries = _dictionaryService.GetDictionaryCountries();
+         
             return View();
         }
 
@@ -295,13 +346,13 @@ namespace iWasHere.Web.Controllers
         #endregion
 
         #region SomethingWeird
-        [HttpPost]
-        public JsonResult GetAjax(String filter)
-        {
-            String s = filter;
-            //return Json(_dictionaryService.GetLandmarkType(request.Page, request.PageSize).ToDataSourceResult(request));
-            return null;
-        }
+        //[HttpPost]
+        //public JsonResult GetAjax(String filter)
+        //{
+        //    String s = filter;
+        //    //return Json(_dictionaryService.GetLandmarkType(request.Page, request.PageSize).ToDataSourceResult(request));
+        //    return null;
+        //}
 
 
 

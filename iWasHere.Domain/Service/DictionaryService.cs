@@ -229,6 +229,64 @@ namespace iWasHere.Domain.Service
             return dictionaryCurrencyType;
         }
 
+        public void DeleteCurrencyType(int id)
+        {
+            Models.DictionaryCurrencyType currency = new Models.DictionaryCurrencyType() { CurrencyTypeId = id };
+            _dbContext.DictionaryCurrencyType.Remove(currency);
+            _dbContext.SaveChanges();
+        }
+
+        public DictionaryCurrencyType AddEditDictionaryCurrencyType(DictionaryCurrencyType currencyType)
+        {
+           
+                if (currencyType.CurrencyTypeId == 0)
+                {
+                    _dbContext.Add(currencyType);
+                    _dbContext.SaveChanges();
+                }
+                else
+                {
+                    _dbContext.Update(currencyType);
+                    _dbContext.SaveChanges();
+                }
+
+
+
+                return currencyType;
+            
+        }
+
+
+        public IEnumerable<DictionaryCurrencyType> LoadCurrency(int CurrencyId)
+        {
+            return _dbContext.DictionaryCurrencyType.Where(a => a.CurrencyTypeId == CurrencyId).Select(a => new DictionaryCurrencyType
+            {
+                CurrencyTypeId = a.CurrencyTypeId,
+                CurrencyName = a.CurrencyName,
+                CurrencyExRate = a.CurrencyExRate
+            });
+
+
+
+        }
+        public DictionaryCurrencyTypeModel AddDictionaryCurrencyType(DictionaryCurrencyTypeModel id)
+        {
+            DictionaryCurrencyType currType = new DictionaryCurrencyType();
+            currType.CurrencyName = id.CurrencyName;
+            currType.CurrencyCode = id.CurrencyCode;
+            currType.CurrencyExRate = id.CurrencyExRate;
+
+
+            if (id.CurrencyTypeId != null)
+            if (!String.IsNullOrWhiteSpace(id.CurrencyName))
+            {
+                _dbContext.DictionaryCurrencyType.Add(currType);
+                _dbContext.SaveChanges();
+            }
+            return null;
+        }
+        
+
         public IEnumerable<DictionaryCurrencyTypeModel> GetDictionaryCurrencyTypes(int pageNo, int pageSize, out int rowsNo, string lFilter)
         {
             rowsNo = 0;
@@ -251,8 +309,11 @@ namespace iWasHere.Domain.Service
 
                 });
 
-
         }
+
+       
+       
+    
 
         #endregion
 
