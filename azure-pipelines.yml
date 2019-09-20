@@ -39,5 +39,5 @@ steps:
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'batmanWebApp'
+    ArtifactName: 'missMarvelWebApp'
     publishLocation: 'Container'
