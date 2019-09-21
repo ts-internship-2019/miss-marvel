@@ -2,50 +2,127 @@
 
 @{
     ViewData["Title"] = "AddDictionaryCurrencyType";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<!DOCTYPE html>
 
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add Currency Type</title>
+</head>
+<body>
 
-<h4>Currency Form</h4>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="AddOrEdit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CurrencyCode" class="control-label"></label>
-                <input asp-for="CurrencyCode" class="form-control" />
-                <span asp-validation-for="CurrencyCode" class="text-danger"></span>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label asp-for="CurrencyName" class="control-label"></label>
-                    <input asp-for="CurrencyName" class="form-control" />
-                    <span asp-validation-for="CurrencyName" class="text-danger"></span>
+    <h4>Currency Form</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+            <form asp-action="AddOrEdit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="CurrencyCode" class="control-label"></label>
+                    <input asp-for="CurrencyCode" class="form-control" id="currencyCode" />
+                    <span asp-validation-for="CurrencyCode" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="CurrencyExRate" class="control-label"></label>
-                    <input asp-for="CurrencyExRate" class="form-control" />
-                    <span asp-validation-for="CurrencyExRate" class="text-danger"></span>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="CurrencyName" class="control-label"></label>
+                        <input asp-for="CurrencyName" class="form-control" id="currencyName" />
+                        <span asp-validation-for="CurrencyName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="CurrencyExRate" class="control-label"></label>
+                        <input asp-for="CurrencyExRate" class="form-control" id="currencyRate" />
+                        <span asp-validation-for="CurrencyExRate" class="text-danger"></span>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Add" class="btn btn-primary" />
-                <input type="submit" value="Add & New" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Add / Edit" onclick="return goBack();" />
+                    <input type="submit" name="btnAddNew" id="btnAddNew_id" value="Add & New" class="btn btn-primary" onclick="return empty();" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Currency">Back to List</a>
-</div>
+    <div>
+        <a asp-action="Currency">Back to List</a>
+    </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-<script>
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+        <script>
+
+            var id = -1;
+            var code = "NaN";
+            var name = "NaN";
+            var rate = -1;
+
+               $(document).ready(function () {
+
+                    var url_string = window.location.href;
+                    var url = new URL(url_string);
+                   id = url.searchParams.get("id");
+                   code = url.searchParams.get("typeID");
+                   name = url.searchParams.get("name");
+                   rate = url.searchParams.get("code");
+
+                   document.getElementById("currencyCode").value = code ? code : "";
+                   document.getElementById("currencyName").value = name != "null" ? name : "";
+                   document.getElementById("currencyRate").value = rate ? rate : "";
+
+                   console.log(id, code, name, rate);
+
+               })
+
+            function changeGrid() {
+
+                console.log("changeGrid");
+                $.ajax({
+                        type: 'UPDATE',
+                        url: '@Url.Action("iEdit", "Dictionary")',
+                        data: {
+                            id: id,
+                            code: document.getElementById("currencyCode").value,
+                            name: document.getElementById("currencyName").value,
+                            rate: document.getElementById("currencyRate").value
+                        }
+                    })
+            }
+
+            function goBack() {
+                $(document).on('submit', 'form', function () {
+
+                    $.post('@Url.Content("/Dictionary/Currency")', function () { // urlPost, function
+                    
+                }).done(function () {
+                    if(name != "NaN")
+                        changeGrid();
+                   location.href = '@Url.Content("/Dictionary/Currency")';
+                    
+                });
 
 
+                });
+                return true;
+            }
 
-</script>
+            function empty() {
+                 $(document).on('submit', 'form', function () {
+                $.post('@Url.Content("/Dictionary/Currency")', function () { // urlPost, function
+                }).done(function () {
+                       location.href = '@Url.Content("/Dictionary/AddDictionaryCurrencyType")';
+                });
+
+
+                });
+                return true;
+            }
+        </script>
+    }
+
+
+</body>
+</html>

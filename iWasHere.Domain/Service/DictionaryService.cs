@@ -200,19 +200,6 @@ namespace iWasHere.Domain.Service
 
         }
 
-        public List<DictionaryCurrencyTypeModel> GetCurrencyType(String filter)
-        {
-
-            return _dbContext.DictionaryCurrencyType.Where((a => a.CurrencyName.Contains(filter))).Take(10).Select(
-                currency => new DictionaryCurrencyTypeModel
-                {
-                    CurrencyTypeId = currency.CurrencyTypeId,
-                    CurrencyCode = currency.CurrencyCode,
-                    CurrencyName = currency.CurrencyName,
-                    CurrencyExRate = currency.CurrencyExRate
-                }).ToList();
-
-        }
 
         public Models.Landmark AddEditLandmark(Models.Landmark landmark, List<Models.TicketXlandmark> priceList, out String errMsg)
         {
@@ -320,6 +307,22 @@ namespace iWasHere.Domain.Service
         #endregion
 
         #region Corina
+
+
+        public List<DictionaryCurrencyTypeModel> GetCurrencyType(String filter)
+        {
+
+            return _dbContext.DictionaryCurrencyType.Where((a => a.CurrencyName.Contains(filter))).Take(10).Select(
+                currency => new DictionaryCurrencyTypeModel
+                {
+                    CurrencyTypeId = currency.CurrencyTypeId,
+                    CurrencyCode = currency.CurrencyCode,
+                    CurrencyName = currency.CurrencyName,
+                    CurrencyExRate = currency.CurrencyExRate
+                }).ToList();
+
+        }
+
         public List<DictionaryCurrencyTypeModel> GetDictionaryCurrencyType(int pageNo, int pageSize, out int totalCount)
 
         {
@@ -344,9 +347,18 @@ namespace iWasHere.Domain.Service
             _dbContext.SaveChanges();
         }
 
-        public DictionaryCurrencyType AddEditDictionaryCurrencyType(DictionaryCurrencyType currencyType)
+        public Models.DictionaryCurrencyType GetDictionaryCurrencyType(int currencyTypeId)
         {
-           
+            Models.DictionaryCurrencyType currencyType = _dbContext.DictionaryCurrencyType.Find(currencyTypeId);
+            return currencyType;
+        }
+
+        public Models.DictionaryCurrencyType AddEditDictionaryCurrencyType(Models.DictionaryCurrencyType currencyType, out String errMsg)
+        {
+            errMsg = null;
+            try
+            {
+
                 if (currencyType.CurrencyTypeId == 0)
                 {
                     _dbContext.Add(currencyType);
@@ -358,10 +370,13 @@ namespace iWasHere.Domain.Service
                     _dbContext.SaveChanges();
                 }
 
-
-
                 return currencyType;
-            
+            }
+            catch (Exception ex)
+            {
+                errMsg = ex.Message.ToString();
+                return null;
+            }
         }
 
 
@@ -377,6 +392,7 @@ namespace iWasHere.Domain.Service
 
 
         }
+
         public DictionaryCurrencyTypeModel AddDictionaryCurrencyType(DictionaryCurrencyTypeModel id)
         {
             DictionaryCurrencyType currType = new DictionaryCurrencyType();
