@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace iWasHere.Domain.Models
 {
@@ -11,8 +14,12 @@ namespace iWasHere.Domain.Models
         }
 
         public int CityId { get; set; }
+       
+    
         public string CityName { get; set; }
+    
         public int? CountyId { get; set; }
+  
         public string CityCode { get; set; }
 
         public virtual DictionaryCounty County { get; set; }

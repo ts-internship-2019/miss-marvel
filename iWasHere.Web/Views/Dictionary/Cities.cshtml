@@ -20,58 +20,64 @@
     <title>Cities</title>
 </head>
 <body>
-    <p>
-        <a asp-action="AddEditCity">Create New</a>
-    </p>
-    <p>
+   
+    
         
-        <div class="form-row col-md-6">
-            @(Html.Kendo().TextBox()
-              .Name("custom")
-              .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtFilter" })
-            )
-            @(Html.Kendo().ComboBox()
-        .Name("countiesCB")
-        .Placeholder("Judet..")
-        .DataTextField("CountyName")
-        .DataValueField("CountyId")
-        .HtmlAttributes(new { style = "width:100%;" })
-        .Filter(FilterType.Contains)
-        .AutoBind(false)
-        .MinLength(3)
-        .DataSource(source =>
-        {
-            source.Read(read =>
-            {
-                read.Action("GetComboCounty", "Dictionary");
-            })
-            .ServerFiltering(true);
-        })
-            )
-
-
-
-            @(Html.Kendo().Button()
-                           .Name("btnSubmit")
-                           .HtmlAttributes(new { type = "button" ,@class = "k-primary"})
-                           .Content("Filter")
-                           .Events(e => e.Click("DisplayData"))
-            )
-
-            @(Html.Kendo().Button()
-               .Name("clearFilter")
-               .Icon("clear-filter")
-               .Content("Delete Filters")
-               .HtmlAttributes(new { type = "button", @class = "k-primary"})
-               .Events(e => e.Click("delFilters"))
-            )
-        </div>
-        <td>
-            <label for="countiesCB">Nume Judet:</label>
-        </td>
-
-       
+    <p>
+        <label>Nume Oras:</label>
+        @(Html.Kendo().TextBox()
+          .Name("custom")
+          .HtmlAttributes(new { style = "width: 31%", title = "custom", id = "txtFilter" })
+        )
     </p>
+    <p>
+        <label>Judet:</label>
+        @(Html.Kendo().ComboBox()
+    .Name("countiesCB")
+    .Placeholder("Judet..")
+    .DataTextField("CountyName")
+    .DataValueField("CountyId")
+    .HtmlAttributes(new { style = "width:35%;" })
+    .Filter(FilterType.Contains)
+    .AutoBind(false)
+    .MinLength(3)
+    .DataSource(source =>
+    {
+        source.Read(read =>
+        {
+            read.Action("GetComboCounty", "Dictionary");
+        })
+        .ServerFiltering(true);
+    })
+        )
+    </p>
+
+    <p>
+
+        @(Html.Kendo().Button()
+                       .Name("btnSubmit")
+                       .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                       .Content("Filter")
+                       .Events(e => e.Click("DisplayData"))
+        )
+
+        @(Html.Kendo().Button()
+           .Name("clearFilter")
+           .Icon("clear-filter")
+           .Content("Delete Filters")
+           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .Events(e => e.Click("delFilters"))
+        )
+
+        @(Html.Kendo().Button()
+   .Name("createButton")
+   .Content("Create New")
+   .HtmlAttributes(new { type = "button", @class = "k-primary" })
+   .Events(ev => ev.Click("createNew")))
+
+    </p>
+ 
+    
 
     @(Html.Kendo().Grid<iWasHere.Domain.DTOs.DictionaryCityModel>()
           .Name("grid")
@@ -106,6 +112,9 @@
     )
 
     <script>
+        function createNew() {
+            window.location = '/Dictionary/AddDictionaryCity'
+        }
         function myFunction() {
             var filter = $("#txtFilter").val();
             var countyFilter = $("#countiesCB").val();
@@ -118,7 +127,7 @@
     <script>
         function DisplayData() {
             $("#grdCities").data("kendoGrid").dataSource.read()
-
+            $("#grdCities").data("kendoGrid").dataSource.page(1);
         }
     </script>
     <script>
@@ -128,7 +137,7 @@
 
             grid = $("#grdCities").data("kendoGrid");
             var row = e.currentTarget.closest("tr").cells[0].outerText;
-            window.location = '/Dictionary/AddEditCity?id=' + row
+            window.location = '/Dictionary/EditDictionaryCity?id=' + row
 
 
         }
@@ -151,7 +160,7 @@
                 data: { id: id },
                 success: function (response) {
                     alert("Element sters cu success");
-                    alert(id);
+                    
                     $("#grdCities").data("kendoGrid").dataSource.read();
                 },
                 error: function (response) {

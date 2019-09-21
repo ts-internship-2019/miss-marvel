@@ -71,6 +71,12 @@ namespace iWasHere.Domain.Service
             }
 
         }
+
+        public Models.DictionaryCity GetDictionaryCity(int cityId)
+        {
+            Models.DictionaryCity dictionaryCity = _dbContext.DictionaryCity.Find(cityId);
+            return dictionaryCity;
+        }
         public void DeleteCity(int id)
         {
             DictionaryCity language = new DictionaryCity() { CityId = id };
@@ -105,6 +111,26 @@ namespace iWasHere.Domain.Service
                 _dbContext.SaveChanges();
             }
             return dictionaryCity;
+        }
+
+        public Models.DictionaryCity EditDictionaryCity(Models.DictionaryCity dicionaryCity, out String errMsg)
+        {
+            errMsg = null;
+            try
+            {
+
+              
+                    _dbContext.Update(dicionaryCity);
+                    _dbContext.SaveChanges();
+                
+
+                return dicionaryCity;
+            }
+            catch (Exception ex)
+            {
+                errMsg = ex.Message.ToString();
+                return null;
+            }
         }
 
         #endregion
