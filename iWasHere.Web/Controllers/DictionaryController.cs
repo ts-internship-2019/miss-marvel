@@ -241,6 +241,10 @@ namespace iWasHere.Web.Controllers
         
             String err;
             DictionaryCurrencyType ct = _dictionaryService.GetDictionaryCurrencyType(id);
+            if(ct == null)
+            {
+                return View();
+            }
             ct.CurrencyCode = code;
             ct.CurrencyExRate = rate;
             ct.CurrencyName = name;
