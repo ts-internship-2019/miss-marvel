@@ -30,6 +30,7 @@ namespace iWasHere.Web.Controllers
             return View(dictionaryLandmarkTypeModels);
         }
 
+      
         #region Cata
         public IActionResult Cities()
         {
@@ -37,9 +38,28 @@ namespace iWasHere.Web.Controllers
 
             return View();
         }
-        public IActionResult AddEditCity()
+        public IActionResult AddDictionaryCity()
         {
             return View();
+        }
+        public IActionResult EditDictionaryCity([Bind("CityId, CityCode, CityName, CuntyId")]DictionaryCity dt,int id)
+        {
+            String exMessage;
+            if (ModelState.IsValid && dt.CityName != null)
+            {
+                var result = _dictionaryService.EditDictionaryCity(dt, out exMessage);
+                if (result == null)
+                {
+                    ModelState.AddModelError(string.Empty, exMessage);
+                    return View();
+                }
+            }
+            if (id != 0)
+            {
+                return View(_dictionaryService.GetDictionaryCity(id));
+            }
+            else
+                return View();
         }
         public ActionResult GetCities([DataSourceRequest]DataSourceRequest request, String lFilter, String text)
         {
