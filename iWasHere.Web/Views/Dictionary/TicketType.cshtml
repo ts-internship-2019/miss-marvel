@@ -15,28 +15,43 @@
             )
 
             @(Html.Kendo().Button()
-                    .Name("btnFilter")
-                    .Icon("filter")
-                    .HtmlAttributes(new { type = "button" })
-                    .Content("Filtreaza datele")
-                    .Events(e => e.Click("DisplayData"))
+                        .Name("btnFilter")
+                        .Icon("filter")
+                        .HtmlAttributes(new { type = "button" })
+                        .Content("Filter data")
+                        .Events(e => e.Click("DisplayData"))
+                        .HtmlAttributes(new { style = "background-color:rgb(40, 167, 69); color:white" })
 
             )
 
             @(Html.Kendo().Button()
-                   .Name("kendoIconTextButton")
+                   .Name("btnDeleteFilter")
                    .Tag("a")
                    .Icon("filter-clear")
-                   .Content("Sterge filtre")
+                   .Content("Clear Filter")
                    .Events(e => e.Click("ClearFilter"))
-                   .HtmlAttributes(new { style = "background-color:orange;color:white;width:150px" }))
+                   .HtmlAttributes(new { style = "background-color:rgb(220, 53, 69); color:white" })
+            )
 
-            @*@(Html.Kendo().Button()
-                .Name("iconButton")
-                .Tag("em")
-                .Icon("refresh")
-                .Events(e => e.Click("DisplayData"))
-                .Content("<span class='k-icon' title='Refresh'></span>"))*@
+            @(Html.Kendo().Button()
+        .Name("iconButton")
+        .Tag("em")
+        .Icon("refresh")
+        .Events(e => e.Click("DisplayData"))
+        .Content("<span class='k-icon' title='Refresh'></span>"))
+
+            @(Html.Kendo().Button()
+              .Name("btnAdd")
+              .Tag("a")
+              .Icon("k-icon k-i-plus-circle")
+              .Content("Add new ticket type")
+              .Events(e => e.Click("ClearFilter"))
+              .HtmlAttributes(new { style = "background-color:rgb(40, 167, 69); color:white " })
+            )
+
+
+
+            @*test ca mor*@
 
 
         </p>

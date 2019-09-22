@@ -752,14 +752,25 @@ namespace iWasHere.Domain.Service
             if (FilterTicketType == null)
                 return _dbContext.DictionaryTicketType.Skip(toSkip).Take(pgSize).Select(a => new DictionaryTicketTypeModel
                 {
+                    TicketTypeId = a.TicketTypeId,
                     TicketTypeName = a.TicketTypeName
 
                 });
             else
                 return _dbContext.DictionaryTicketType.Where(a => a.TicketTypeName.Contains(FilterTicketType)).Skip(toSkip).Take(pgSize).Select(a => new DictionaryTicketTypeModel
                 {
+                    TicketTypeId = a.TicketTypeId,
                     TicketTypeName = a.TicketTypeName
                 });
+        }
+
+
+        public void DeleteTicket(int id)
+        {
+            DictionaryTicketType ticketType = new DictionaryTicketType() { TicketTypeId = id };
+
+            _dbContext.DictionaryTicketType.Remove(ticketType);
+            _dbContext.SaveChanges();
         }
 
 

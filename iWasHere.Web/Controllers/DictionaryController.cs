@@ -366,13 +366,30 @@ namespace iWasHere.Web.Controllers
         #endregion
 
         #region Gabi
+        public IActionResult TicketType_Read([DataSourceRequest] DataSourceRequest request, string FilterTicketType)
+        {
+            int totalCount = 0;
+            var data = _dictionaryService.GetDictionaryTicketType(request.Page, request.PageSize, out totalCount, FilterTicketType);
+            DataSourceResult dataSourceResult = new DataSourceResult();
+            dataSourceResult.Data = data;
+            dataSourceResult.Total = totalCount;
+
+            return Json(dataSourceResult);
+        }
+
         public IActionResult TicketType()
         {
             return View();
         }
-        public IActionResult InsertUpdateTicketType()
+
+        public IActionResult DeleteTicketType([DataSourceRequest] DataSourceRequest request, int id)
         {
-            return View();
+            if (id != -1)
+            {
+                _dictionaryService.DeleteTicket(id);
+            }
+            return Json(ModelState.ToDataSourceResult());
+
         }
 
 
@@ -601,20 +618,6 @@ namespace iWasHere.Web.Controllers
 
 
 
-        // ------------------- TicketType
-
-
-
-        //public IActionResult TicketType_Read([DataSourceRequest] DataSourceRequest request,string FilterTicketType)
-        //{
-        //    int totalCount = 0;
-        //    var data = _dictionaryService.GetDictionaryTicketType(request.Page, request.PageSize, out totalCount, FilterTicketType);
-        //    DataSourceResult dataSourceResult = new DataSourceResult();
-        //    dataSourceResult.Data = data;
-        //    dataSourceResult.Total = totalCount;
-
-        //    return Json(dataSourceResult);
-        //}
         #endregion
 
     }
