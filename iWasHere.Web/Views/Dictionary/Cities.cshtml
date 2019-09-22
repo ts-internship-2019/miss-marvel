@@ -4,7 +4,7 @@
 
 
 @{
-    ViewData["Title"] = "Ditctionar Orase";
+    ViewData["Title"] = "Dictionary City";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -24,14 +24,14 @@
     
         
     <p>
-        <label>Nume Oras:</label>
+        <label>City Name:</label>
         @(Html.Kendo().TextBox()
           .Name("custom")
           .HtmlAttributes(new { style = "width: 31%", title = "custom", id = "txtFilter" })
         )
     </p>
     <p>
-        <label>Judet:</label>
+        <label>County:</label>
         @(Html.Kendo().ComboBox()
     .Name("countiesCB")
     .Placeholder("Judet..")
