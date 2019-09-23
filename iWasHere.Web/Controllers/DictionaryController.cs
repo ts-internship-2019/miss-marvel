@@ -112,7 +112,7 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult LandmarkDetails(int landmarkId = 32)
         {
-            var landmarkDetails = _dictionaryService.GetLandmark(landmarkId, out List<TicketXlandmark> priceList);
+            var landmarkDetails = _dictionaryService.GetLandmark(landmarkId, out List<TicketXlandmark> priceList,out  DictionaryCurrencyType DCT );
             LandmarkModel landmarkModel = new LandmarkModel();
             landmarkModel.LandmarkName = landmarkDetails.LandmarkName;
             landmarkModel.LandmarkDescription = landmarkDetails.LandmarkDescription;

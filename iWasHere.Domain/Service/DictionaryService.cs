@@ -237,7 +237,8 @@ namespace iWasHere.Domain.Service
         }
 
 
-        public Models.Landmark AddEditLandmark(Models.Landmark landmark, List<Models.TicketXlandmark> priceList, out String errMsg)
+        public Models.Landmark AddEditLandmark(Models.Landmark landmark, List<Models.TicketXlandmark> priceList,
+            out String errMsg, List<LandmarkPicture> pictures)
         {
             errMsg = null;
             try
@@ -254,11 +255,35 @@ namespace iWasHere.Domain.Service
                         _dbContext.TicketXlandmark.Add(price);
                         _dbContext.SaveChanges();
                     }
+                    foreach (LandmarkPicture picture in pictures)
+                    {
+                        picture.LandmarkId = lastInserted.LandmarkId;
+                        _dbContext.LandmarkPicture.Add(picture);
+                        _dbContext.SaveChanges();
+                    }
                 }
                 else
                 {
+
                     _dbContext.Update(landmark);
                     _dbContext.SaveChanges();
+                    List<TicketXlandmark> oldPriceList = _dbContext.TicketXlandmark.Where((a => Convert.ToInt32(a.LandmarkId) == landmark.LandmarkId)).Select(
+                 price => new TicketXlandmark
+                 {
+                     TicketXlandmarkId = price.TicketXlandmarkId,
+                     LandmarkId = price.LandmarkId,
+                     TicketTypeId = price.TicketTypeId,
+                     CurrencyTypeId = price.CurrencyTypeId,
+                     TicketValue = price.TicketValue
+
+                 })
+             .ToList();
+                    for (int i = 0; i < priceList.Count; i++)
+                    {
+                        priceList[i].TicketXlandmarkId = oldPriceList[i].TicketXlandmarkId;
+                        _dbContext.TicketXlandmark.Update(priceList[i]);
+                        _dbContext.SaveChanges();
+                    }
                 }
 
                 return landmark;
@@ -272,7 +297,7 @@ namespace iWasHere.Domain.Service
 
 
 
-        public Models.Landmark GetLandmark(int landmarkId, out List<Models.TicketXlandmark> priceList)
+        public Models.Landmark GetLandmark(int landmarkId, out List<Models.TicketXlandmark> priceList, out DictionaryCurrencyType currency)
         {
             priceList = _dbContext.TicketXlandmark.Where((a => Convert.ToInt32(a.LandmarkId) == landmarkId)).Select(
                 price => new TicketXlandmark
@@ -285,16 +310,13 @@ namespace iWasHere.Domain.Service
 
                 })
             .ToList();
-
-
-            //Models.Landmark landmark = _dbContext.Landmark.Include(a => a.LandmarkPeriod).FirstOrDefault(a => a.LandmarkId == landmarkId);
+            int currencyId = Convert.ToInt32(priceList[0].CurrencyTypeId);
+            currency = _dbContext.DictionaryCurrencyType.FirstOrDefault(a => a.CurrencyTypeId == currencyId);
             Models.Landmark landmark = _dbContext.Landmark.Include(a => a.City)
-               .Include(a => a.LandmarkType)
-               .Include(a => a.LandmarkPeriod)
-               .FirstOrDefault(a => a.LandmarkId == landmarkId);
-
+                .Include(a => a.LandmarkType)
+                .Include(a => a.LandmarkPeriod)
+                .FirstOrDefault(a => a.LandmarkId == landmarkId);
             return landmark;
-
         }
         //pana aici
 
@@ -628,6 +650,21 @@ namespace iWasHere.Domain.Service
 
 
         }
+
+        public List<DictionaryCurrencyTypeModel> GetCurrencyTypeCombo(String filter)
+        {
+
+            return _dbContext.DictionaryCurrencyType.Where((a => a.CurrencyName.Contains(filter))).Take(10).Select(
+                currency => new DictionaryCurrencyTypeModel
+                {
+                    CurrencyTypeId = currency.CurrencyTypeId,
+                    CurrencyCode = currency.CurrencyCode,
+                    CurrencyName = currency.CurrencyName,
+                    CurrencyExRate = currency.CurrencyExRate
+                }).ToList();
+
+        }
+
         #endregion
 
         #region Victor
@@ -862,6 +899,20 @@ namespace iWasHere.Domain.Service
             }
         }
 
+        public List<LandmarkReview> GetDbCommentsAll()
+        {
+            List<LandmarkReview> landmarkReviews = _dbContext.LandmarkReview.Select(x => new LandmarkReview()
+            {
+                ReviewTitle = x.ReviewTitle,
+                ReviewComment = x.ReviewComment,
+                LandmarkId = x.LandmarkId,
+                UserId = x.UserId,
+                Rating = x.Rating
+
+            }).ToList();
+
+            return landmarkReviews;
+        }
 
         #endregion
 
