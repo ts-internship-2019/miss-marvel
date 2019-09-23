@@ -221,16 +221,7 @@ namespace iWasHere.Domain.Service
 
         }
 
-        public List<LandmarkPeriodModel> GetLandmarkPeriod(String filter)
-        {
-
-            return _dbContext.DictionaryLandmarkPeriod.Where((a => a.LandmarkPeriodName.Contains(filter))).Take(10).Select(LandmarkPeriod => new LandmarkPeriodModel
-            {
-                LandmarkPeriodId = LandmarkPeriod.LandmarkPeriodId,
-                LandmarkPeriodName = LandmarkPeriod.LandmarkPeriodName
-            }).ToList();
-
-        }
+       
 
         public List<DictionaryCityModel> GetCities(String filter)
         {
@@ -497,6 +488,21 @@ namespace iWasHere.Domain.Service
         #region Dorin
         //LandmarkPeriods
 
+        public List<LandmarkPeriodModel> GetLandmarkPeriod(String filter)
+        {
+
+            return _dbContext.DictionaryLandmarkPeriod.Where((a => a.LandmarkPeriodName.Contains(filter))).Take(10).Select(LandmarkPeriod => new LandmarkPeriodModel
+            {
+                LandmarkPeriodId = LandmarkPeriod.LandmarkPeriodId,
+                LandmarkPeriodName = LandmarkPeriod.LandmarkPeriodName
+            }).ToList();
+
+        }
+        public Models.DictionaryLandmarkPeriod GetDictionaryLandmarkPeriod(int id)
+        {
+            Models.DictionaryLandmarkPeriod landmarkPeriod = _dbContext.DictionaryLandmarkPeriod.Find(id);
+            return landmarkPeriod;
+        }
         public IEnumerable<LandmarkPeriodModel> GetDictionaryLandmarkPeriods(int pageNo, int pageSize, out int totalcount, string search)
         {
             int toskip;
@@ -523,44 +529,45 @@ namespace iWasHere.Domain.Service
         }
         public DictionaryLandmarkPeriod AddEditLandmarkPeriods(DictionaryLandmarkPeriod landmarkPeriod)
         {
-            if (!String.IsNullOrWhiteSpace(landmarkPeriod.LandmarkPeriodName))
+            try
             {
-                _dbContext.Add(landmarkPeriod);
-                _dbContext.SaveChanges();
+                if (!String.IsNullOrWhiteSpace(landmarkPeriod.LandmarkPeriodName))
+
+                    if (landmarkPeriod.LandmarkPeriodId == 0 || landmarkPeriod.LandmarkPeriodId == null)
+
+                    {
+                        _dbContext.Add(landmarkPeriod);
+                        _dbContext.SaveChanges();
+                    }
+                    else
+                    {
+                        _dbContext.Update(landmarkPeriod);
+                        _dbContext.SaveChanges();
+                    }
+
+                return landmarkPeriod;
             }
-            return landmarkPeriod;
+            catch (Exception ex)
+            {
+                return null;
+            }
+
         }
         public void DeletePeriod(int id)
         {
-            var landmarkPeriod = _dbContext.DictionaryLandmarkPeriod.Find(id);
-            _dbContext.Remove(landmarkPeriod);
-            _dbContext.SaveChanges();
+            try
+            {
+                var landmarkPeriod = _dbContext.DictionaryLandmarkPeriod.Find(id);
+                _dbContext.Remove(landmarkPeriod);
+                _dbContext.SaveChanges();
+            }
+            catch
+            {
+
+            }
 
         }
-        //public IEnumerable<LandmarkPeriodModel> EditLandmarkPeriods()
-        //{
-        //    int toskip;
-        //    totalcount = 0;
-        //    totalcount = _dbContext.DictionaryLandmarkPeriod.Count();
-        //    toskip = (pageNo - 1) * pageSize;
-        //    if (string.IsNullOrEmpty(search))
-        //    {
-
-        //        return _dbContext.DictionaryLandmarkPeriod.Skip((pageNo - 1) * pageSize).Take(pageSize).Select(landmarkPeriod => new LandmarkPeriodModel
-        //        {
-        //            LandmarkPeriodId = landmarkPeriod.LandmarkPeriodId,
-        //            LandmarkPeriodName = landmarkPeriod.LandmarkPeriodName,
-        //        });
-        //    }
-        //    else
-        //    {
-        //        return _dbContext.DictionaryLandmarkPeriod.Where(a => a.LandmarkPeriodName.Contains(search)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(landmarkPeriod => new LandmarkPeriodModel
-        //        {
-        //            LandmarkPeriodId = landmarkPeriod.LandmarkPeriodId,
-        //            LandmarkPeriodName = landmarkPeriod.LandmarkPeriodName,
-        //        });
-        //    }
-        //}
+      
 
         #endregion
 
