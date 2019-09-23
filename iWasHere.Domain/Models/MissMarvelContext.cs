@@ -1,4 +1,5 @@
 ﻿using System;
+using iWasHere.Domain.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -15,6 +16,8 @@ namespace iWasHere.Domain.Models
             : base(options)
         {
         }
+
+        public virtual DbSet<LandmarkModel> LandmarkModel { get; set; }
 
         public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }

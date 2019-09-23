@@ -133,6 +133,25 @@ namespace iWasHere.Domain.Service
             }
         }
 
+        //public DTOs.LandmarkModel GetLandmarkDetails (int landmarkId)
+        //{
+        //    LandmarkModel landmarkModel = _dbContext.Landmark.Select(a => new LandmarkModel()
+        //    {
+        //        LandmarkName = a.LandmarkName,
+        //        LandmarkPeriodName = a.LandmarkPeriod.LandmarkPeriodName,
+
+
+
+        //    }).Where 
+        //}
+        public string RCity(int cityId)
+        {
+            DictionaryCity dictionaryCity = _dbContext.DictionaryCity.Find(cityId);
+            string cityName = dictionaryCity.CityName;
+            return cityName;
+        }
+
+
         #endregion
 
         #region Mihnea
@@ -260,6 +279,8 @@ namespace iWasHere.Domain.Service
             }
         }
 
+    
+
         public Models.Landmark GetLandmark(int landmarkId, out List<Models.TicketXlandmark> priceList)
         {
             priceList = _dbContext.TicketXlandmark.Where((a => Convert.ToInt32(a.LandmarkId) == landmarkId)).Select(
@@ -273,10 +294,16 @@ namespace iWasHere.Domain.Service
                 
             })
             .ToList();
-               
-                
-            Models.Landmark landmark = _dbContext.Landmark.Include(a => a.LandmarkPeriod).FirstOrDefault(a => a.LandmarkId == landmarkId);
-            return landmark;
+
+
+            //Models.Landmark landmark = _dbContext.Landmark.Include(a => a.LandmarkPeriod).FirstOrDefault(a => a.LandmarkId == landmarkId);
+            Models.Landmark landmark = _dbContext.Landmark.Include(a => a.City)
+               .Include(a => a.LandmarkType)
+               .Include(a => a.LandmarkPeriod)
+               .FirstOrDefault(a => a.LandmarkId == landmarkId);
+
+                return landmark;
+            
         }
         //pana aici
 

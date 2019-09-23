@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace iWasHere.Domain.DTOs
 {
     public class LandmarkModel
     {
+        [Key]
         public int LandmarkId { get; set; }
         public string LandmarkName { get; set; }
         public string LandmarkDescription { get; set; }
@@ -16,6 +18,7 @@ namespace iWasHere.Domain.DTOs
         public decimal RetiredPrice { get; set; }
         
         public int CityId { get; set; }
+ 
         public int LandmarkTypeId { get; set; }
         public int LandmarkPeriodId { get; set; }
         public string LandmarkPeriodName { get; set; }

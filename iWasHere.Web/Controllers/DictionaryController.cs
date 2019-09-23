@@ -110,6 +110,97 @@ namespace iWasHere.Web.Controllers
             return Json(x);
         }
 
+        public IActionResult LandmarkDetails(int landmarkId = 32)
+        {
+            var landmarkDetails = _dictionaryService.GetLandmark(landmarkId, out List<TicketXlandmark> priceList);
+            LandmarkModel landmarkModel = new LandmarkModel();
+            landmarkModel.LandmarkName = landmarkDetails.LandmarkName;
+            landmarkModel.LandmarkDescription = landmarkDetails.LandmarkDescription;
+            landmarkModel.LandmarkTicket = landmarkDetails.LandmarkTicket;
+            landmarkModel.LandmarkCode = landmarkDetails.LandmarkCode;
+            landmarkModel.LandmarkPeriodName = landmarkDetails.LandmarkPeriod.LandmarkPeriodName;
+            landmarkModel.LandmarkType = new DictionaryLandmarkTypeModel();
+            landmarkModel.City = new DictionaryCityModel();
+            landmarkModel.City.CityName = landmarkDetails.City.CityName;
+            for(int i = 0;i< priceList.Count;i++)
+            {
+                if(priceList[i].TicketTypeId == 1)
+                landmarkModel.StudentPrice = Convert.ToDecimal(priceList[i].TicketValue);
+                if(priceList[i].TicketTypeId ==3)
+                landmarkModel.RetiredPrice = Convert.ToDecimal(priceList[i].TicketValue);
+                if(priceList[i].TicketTypeId ==137)
+                landmarkModel.AdultPrice = Convert.ToDecimal(priceList[i].TicketValue);
+            }
+            landmarkModel.LandmarkType.DictionaryItemName = landmarkDetails.LandmarkType.DictionaryItemName;
+            
+
+
+            return View(landmarkModel);
+        }
+        /*      <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LandmarkName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LandmarkName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LandmarkDescription)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LandmarkDescription)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LandmarkTicket)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LandmarkTicket)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LandmarkCode)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LandmarkCode)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentPrice)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StudentPrice)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AdultPrice)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AdultPrice)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RetiredPrice)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RetiredPrice)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LandmarkPeriodName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LandmarkPeriodName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.City.CityId)
+        </dd>
+       
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LandmarkPeriod.LandmarkPeriodName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LandmarkType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LandmarkType.DictionaryItemId) */
+
         #endregion
 
         #region Mihnea
