@@ -112,7 +112,7 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult LandmarkDetails(int landmarkId = 32)
         {
-            var landmarkDetails = _dictionaryService.GetLandmark(landmarkId, out List<TicketXlandmark> priceList);
+            var landmarkDetails = _dictionaryService.GetLandmark(landmarkId, out List<TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType);
             LandmarkModel landmarkModel = new LandmarkModel();
             landmarkModel.LandmarkName = landmarkDetails.LandmarkName;
             landmarkModel.LandmarkDescription = landmarkDetails.LandmarkDescription;
@@ -581,7 +581,7 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult IndexComments()
         {
-            List<LandmarkReview> landmarkReviews = _dictionaryService.GetDbCommentsAll();
+            List<LandmarkReview> landmarkReviews = null;// _dictionaryService.GetDbCommentsAll();
             return View(landmarkReviews);
         }
 
@@ -669,7 +669,7 @@ namespace iWasHere.Web.Controllers
             return Json(ModelState.ToDataSourceResult());
         }
 
-        public IActionResult onUpdate()
+        public IActionResult onUpdateCountry()
         {
             return Redirect("/Dictionary/Country");
         }

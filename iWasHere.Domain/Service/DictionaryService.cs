@@ -195,6 +195,11 @@ namespace iWasHere.Domain.Service
             }
         }
 
+        public object GetCurrencyTypeCombo(string text)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<DictionaryLandmarkTypeModel> LoadLandmarkType(int LandmarkTypeId)
         {
             return _dbContext.DictionaryLandmarkType.Where(a => a.DictionaryItemId == LandmarkTypeId).Select(LandmarkType => new DictionaryLandmarkTypeModel
@@ -237,7 +242,7 @@ namespace iWasHere.Domain.Service
         }
 
 
-        public Models.Landmark AddEditLandmark(Models.Landmark landmark, List<Models.TicketXlandmark> priceList, out String errMsg)
+        public Models.Landmark AddEditLandmark(Models.Landmark landmark, List<Models.TicketXlandmark> priceList, out String errMsg, List<LandmarkPicture> landmarkPictures)
         {
             errMsg = null;
             try
@@ -272,8 +277,10 @@ namespace iWasHere.Domain.Service
 
 
 
-        public Models.Landmark GetLandmark(int landmarkId, out List<Models.TicketXlandmark> priceList)
+        public Models.Landmark GetLandmark(int landmarkId, out List<Models.TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType)
         {
+            dictionaryCurrencyType = new DictionaryCurrencyType();
+
             priceList = _dbContext.TicketXlandmark.Where((a => Convert.ToInt32(a.LandmarkId) == landmarkId)).Select(
                 price => new TicketXlandmark
                 {
