@@ -14,10 +14,11 @@ namespace iWasHere.Domain.DTOs
 
         }
        
+        [Key]
         public int LandmarkPeriodId { get; set; }
         [Column(TypeName = "varchar(256)")]
         [Required]
-        [DisplayName("Interval")]
+        [DisplayName("Interval pentru vizite")]
         public string LandmarkPeriodName { get; set; }
     }
 }

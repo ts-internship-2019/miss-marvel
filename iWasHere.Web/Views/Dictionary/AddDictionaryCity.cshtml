@@ -106,7 +106,7 @@
         var cityName = $("#txtCityName").val();
         var countyId = $("#countiesCB").val();
         var cityCode = $("#txtCityCode").val();
-        if (cityName != null && countyId != null && cityCode != null)
+        if (cityName != "" && countyId != 0 && cityCode != "")
             AddCities(cityName, countyId, cityCode);
         else
             alert("Campuri necompletate");
