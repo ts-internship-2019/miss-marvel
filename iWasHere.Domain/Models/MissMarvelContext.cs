@@ -1,4 +1,5 @@
 ﻿using System;
+using iWasHere.Domain.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -8,12 +9,15 @@ namespace iWasHere.Domain.Models
     {
         public MissMarvelContext()
         {
+
         }
 
         public MissMarvelContext(DbContextOptions<MissMarvelContext> options)
             : base(options)
         {
         }
+
+        public virtual DbSet<LandmarkModel> LandmarkModel { get; set; }
 
         public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
@@ -398,7 +402,7 @@ namespace iWasHere.Domain.Models
                     .HasConstraintName("FK__TicketXLa__Curre__06CD04F7");
 
                 entity.HasOne(d => d.Landmark)
-                    .WithMany(p => p.TicketXlandmark)
+                    .WithMany(p => p.TicketXLandmark)
                     .HasForeignKey(d => d.LandmarkId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__TicketXLa__Landm__04E4BC85");

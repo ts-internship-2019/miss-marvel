@@ -6,6 +6,7 @@ namespace iWasHere.Domain.DTOs
 {
     public class DictionaryTicketTypeModel
     {
+        public int TicketTypeId { get; set; }
         public string TicketTypeName { get; set; }
 
     }

@@ -1,0 +1,140 @@
+﻿@model iWasHere.Domain.Models.DictionaryCity
+
+@{
+    ViewData["Title"] = "AddDictionaryCity";
+}
+
+<h1>Add Dictionary City</h1>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddEditCity">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CityId" />
+            <p>
+                <label>City Name:</label>
+                @(Html.Kendo().TextBox()
+                .Name("custom")
+                .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCityName" })
+                )
+            </p>
+            <p>
+                <label>City Code:</label>
+                @(Html.Kendo().TextBox()
+           .Name("custom")
+           .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCityCode" })
+                )
+
+
+            </p>
+            <p>
+
+                <label>County:</label>
+                @(Html.Kendo().ComboBox()
+         .Name("countiesCB")
+         .Placeholder("Judet..")
+         .DataTextField("CountyName")
+         .DataValueField("CountyId")
+         .HtmlAttributes(new { style = "width:55%;" })
+         .Filter(FilterType.Contains)
+         .AutoBind(false)
+         .MinLength(3)
+         .DataSource(source =>
+         {
+             source.Read(read =>
+             {
+                 read.Action("GetComboCounty", "Dictionary");
+             })
+             .ServerFiltering(true);
+         })
+                )
+            </p>
+            <p>
+                @(Html.Kendo().Button()
+                            .Name("btnSubmit")
+                            .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                            .Content("Save")
+                            .Events(e => e.Click("addCity"))
+                )
+            </p>
+            <p>
+                @(Html.Kendo().Button()
+                    .Name("btnNew")
+                    .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                    .Content("Save and New")
+                    .Events(e => e.Click("saveNew"))
+                )
+            </p>
+
+        </form>
+    </div>
+</div>
+<div>
+    <p>
+        @(Html.Kendo().Button()
+                    .Name("btnCancel")
+                    .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                    .Content("Cancel")
+                    .Events(e => e.Click("back"))
+                    )
+    </p>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script>
+
+    function back() {
+        window.location = '/Dictionary/Cities'
+    }
+
+    function saveNew() {
+        addCity();
+
+        $("#txtCityName").val(null);
+       
+        $("#txtCityCode").val(null);
+     
+       $("#countiesCB").data("kendoComboBox").value("");
+    }
+
+    function addCity() {
+        var cityName = $("#txtCityName").val();
+        var countyId = $("#countiesCB").val();
+        var cityCode = $("#txtCityCode").val();
+        if (cityName != "" && countyId != 0 && cityCode != "")
+            AddCities(cityName, countyId, cityCode);
+        else
+            alert("Campuri necompletate");
+    }
+
+      function AddCities(cityName,countyId,cityCode) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddCity", "Dictionary")',
+                data: { cityName: cityName, cityCode: cityCode, countyId: countyId },
+                success: function (response) {
+                    alert("Element adaugat");
+                  
+                },
+                error: function (response) {
+                    alert("Not good");
+                }
+
+
+            })
+        }
+    
+
+</script>
+<style>
+    .k-primary {
+        min-width: 200px;
+        color: black;
+        background-color: cadetblue;
+    }
+</style>

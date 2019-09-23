@@ -1,99 +1,140 @@
 ﻿@model IEnumerable<iWasHere.Domain.Models.DictionaryCurrencyType>
 
-@{
+    @{
     ViewData["Title"] = "Currency";
-}
+    }
 
-<h1 style="margin-left=90px">Currency Details</h1>
+    <h1 style="margin-left=90px">Currency Details</h1>
 
     <body>
         <p>
             <a asp-action="AddCurrency_Read">Filter</a>
         </p>
-       
-      
 
 
-            <div class="demo-section k-content">
-                <div>
 
-                    <p>
 
-                        @(Html.Kendo().TextBox()
-                      .Name("custom")
-                      .HtmlAttributes(new { style = "width: 30%", title = "custom", id = "txtFilter" })
-                        )
+        <div class="demo-section k-content">
+            <div>
 
-                        @(Html.Kendo().Button()
-                                .Name("btnSubmit")
-                                .HtmlAttributes(new { type = "button" })
-                                .Content("Filter")
-                                .Events(ev => ev.Click("DisplayData"))
-                        )
+                <p>
 
-                    </p>
-                </div>
+                    @(Html.Kendo().TextBox()
+                  .Name("custom")
+                  .HtmlAttributes(new { style = "width: 30%", title = "custom", id = "txtFilter" })
+                    )
+
+                    @(Html.Kendo().Button()
+                            .Name("btnSubmit")
+                            .HtmlAttributes(new { type = "button" })
+                            .Content("Filter")
+                            .Events(ev => ev.Click("DisplayData"))
+                    )
+
+                    @(Html.Kendo().Button()
+                        .Name("btnSubmit2")
+                        .HtmlAttributes(new { type = "button" })
+                        .Content("Delete Filter")
+                        .Events(ev => ev.Click("delFilters"))
+                    )
+
+                    @(Html.Kendo().Button()
+                           .Name("btnSubmit1")
+                           .HtmlAttributes(new { type = "button", title = "custom", id = "ADD" })
+                           .Content("Add Currency")
+                           .Events(e => e.Click("OpenNewWindow"))
+                    )
+
+                </p>
             </div>
+        </div>
 
-            @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryCurrencyType>()
-          .Name("grid")
-          .HtmlAttributes(new { style = "height: 500px", id = "grdCurrencyType" })
-          .Columns(columns =>
-          {
-              columns.Bound(c => c.CurrencyCode).Width(240);
-              columns.Bound(c => c.CurrencyName).Width(240);
-              columns.Bound(c => c.CurrencyExRate).Width(240);
-              columns.Command(c =>
-                        {
-                c.Custom("EditRecord").Text("Edit").Click("dgChange");
+        @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryCurrencyType>()
+      .Name("grid")
+      .HtmlAttributes(new { style = "height: 500px", id = "grdCurrencyType" })
+      .Columns(columns =>
+      {
+          columns.Bound(c => c.CurrencyTypeId).Hidden();
+          columns.Bound(c => c.CurrencyCode).Width(280);
+          columns.Bound(c => c.CurrencyName).Width(280);
+          columns.Bound(c => c.CurrencyExRate).Width(280);
+          columns.Template("<button id=btnDelete onclick=deleteCurrency(#=CurrencyTypeId#)>Delete</button>");
+           columns.Command(c => {
+                c.Custom("EditRecord").Text("Edit").Click("EditCurrencyType");
             });
-                   columns.Command(c =>
-                        {
-                c.Custom("DeleteRecord").Text("Delete").Click("dgChange");
-            });
+         // columns.Template("<button id=btnEdit onclick=EditCurrencyType(#=CurrencyTypeId#)>Edit</button>");
 
 
-          })
 
-          .Scrollable()
-          .Groupable()
-          .Sortable()
-          .Filterable()
-          .Pageable(pageable => pageable
-              .Refresh(true)
-              .PageSizes(true)
-              .ButtonCount(5))
-          .DataSource(dataSource => dataSource
-              .Ajax()
-              .Read(read => read.Action("GetCurrencies", "Dictionary").Data("myFunction"))
-              .Update(update => update.Action("GetCurrencies", "Grid"))
-          )
-            )
+      })
 
-            <script>
-                function onClick(e) {
-                    $(e.event.target).closest(".k-button").attr("id");
-                    console.log("apasat");
+      .Scrollable()
+      .Sortable()
+      .Filterable()
+      .Pageable(pageable => pageable
+          .Refresh(true)
+          .PageSizes(true)
+          .ButtonCount(5))
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Read(read => read.Action("GetCurrencies", "Dictionary").Data("myFunction"))
+          .Update(update => update.Action("GetCurrencies", "Grid"))
+      )
+        )
 
-                }
+        <script>
+            function onClick(e) {
+                console.log(e.event);
+                $(e.event.target).closest(".k-button").attr("id");
+                console.log("apasat");
 
-            </script>
+            }
+
+        </script>
 
 
 
     </body>
 
-<script>
+    <script>
+
+        
+    
+       function deleteCurrency(id) {
+             $.ajax({
+                    type: 'DELETE',
+                    url: '@Url.Action("DeleteCurrencyType", "Dictionary")',
+                    data: { id: id },
+                 success: function (response) {
+                        $("#grdCurrencyType").data("kendoGrid").dataSource.read();
+                    },
+                        error: function (response) {
+                       
+                    }
+                })
+    }
+
+
+
+
 
     function DisplayData() {
         $("#grdCurrencyType").data("kendoGrid").dataSource.read()
 
     }
-    function dgChange(e) {
+
+
+    function EditCurrencyType(e) {
         grid = $("#grdCurrencyType").data("kendoGrid");
+        
         var row = e.currentTarget.closest("tr").cells[0].outerText;
+        var currencytypeID = e.currentTarget.closest("tr").cells[1].outerText;
+        var currencyName = e.currentTarget.closest("tr").cells[2].outerText;
+        var currencyCode = e.currentTarget.closest("tr").cells[3].outerText;
 
+        window.location = '/Dictionary/AddDictionaryCurrencyType?id=' + row + '&typeID=' + currencytypeID + '&name=' + currencyName + '&code=' + currencyCode;
 
+      
 
     }
 
@@ -102,7 +143,23 @@
         var obj = {};
         obj["lFilter"] = filter;
         return obj;
-    }
-</script>
+        }
+
+        function delFilters() {
+
+                    $("#txtFilter").val(null);
+         
+                    $("#grdCurrencyType").data("kendoGrid").dataSource.read();
+                    $("#grdCurrencyType").data("kendoGrid").dataSource.page(1);
+                }
+    
+    function OpenNewWindow() {
+
+             location.href = '@Url.Content("/Dictionary/AddDictionaryCurrencyType")';
+
+               };
+
+                        
+    </script>
 
 

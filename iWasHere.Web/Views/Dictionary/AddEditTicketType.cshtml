@@ -1,0 +1,70 @@
+﻿@model iWasHere.Domain.Models.DictionaryTicketType
+
+@{
+    ViewData["Title"] = "AddEditTicketType";
+}
+
+
+@using (Html.BeginForm("Create", "TicketType", FormMethod.Post))
+{
+    <body onload="hideSaveNew()">
+        <br />
+        <h4>Add or edit a ticket type for team Marvel</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="AddEditTicketType">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="TicketTypeName" class="control-label"></label>
+                        <input asp-for="TicketTypeName" class="form-control" id="test" />
+                        <span asp-validation-for="TicketTypeName" class="text-danger"></span>
+                        <br />
+                        <button type="submit" class="btn btn-success" onclick="redirect()">Save</button>
+                        <button type="submit" class="btn btn-success" id="saveNew" onclick="saveNew()">Save and new</button>
+                        
+                    </div>
+                    <div class="form-group">
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-danger" onclick="redirect()">Cancel</button>
+        </div>
+    </body>
+
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script>
+
+
+    function hideSaveNew() {
+        var url = window.location.href
+        if (url.indexOf("id") > -1) {
+             document.getElementById("saveNew").style.display="none";
+        }
+    }
+
+    function redirect() {
+        window.location = '/Dictionary/TicketType';
+    }
+
+    function saveNew() {
+        function clear() {
+             $('#test').val(null);
+        }
+        setTimeout(clear, 50);
+    }
+
+   
+    
+</script>
+

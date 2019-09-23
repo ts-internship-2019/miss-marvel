@@ -7,8 +7,8 @@
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.common-nova.min.css" />
-        <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.nova.min.css" />
+        <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.common-fiori.min.css" />
+        <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.fiori.min.css" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -66,14 +66,109 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
+                        @*<li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Dictionary/LandmarkType">LandmarkType</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Dictionary/LandmarkPeriod">LandmarkPeriod</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Dictionary/Country">Country</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Dictionary/County">County</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Dictionary/Cities">Cities</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Dictionary/TicketType">TicketTypes</a>
+                            </li>*@
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <div class="dic">
+                                @(Html.Kendo().Menu()
+                                      .Name("Menu")
+                                      .Items(items =>
+                                              {
+                                                  items.Add().Text("Home").Url("/Home/Index");
+                                                  items.Add().Text("Privacy").Url("/Home/Privacy");
+                                                  items.Add()
+                                                      .Text("Dictionary").Url("/Dictionary/Index")
+                                                      .Items(children =>
+                                                      {
+                                                          children.Add().Text("Landmark").Url("/Dictionary/LandmarkType")
+                                                          .Items(innerChildren =>
+                                                          {
+                                                              innerChildren.Add().Text("Landmark Types").Url("/Dictionary/LandmarkType");
+                                                              innerChildren.Add().Text("Add Landmark Type ").Url("/Dictionary/AddEditLandmarkType");
+                                                              innerChildren.Add().Text("Add Landmark").Url("/Home/AddLandmark");
+                                                              innerChildren.Add().Text("Review Landmark").Url("/Dictionary/AddReview");
+
+                                                          });
+
+                                                  children.Add().Text("Landmark Period").Url("/Dictionary/LandmarkPeriod")
+                                                          .Items(innerChildren =>
+                                                          {
+                                                              innerChildren.Add().Text("Landmark Period").Url("/Dictionary/LandmarkPeriod");
+                                                              innerChildren.Add().Text("Add Landmark Period").Url("/Dictionary/AddEditLandmarkPeriod");
+
+                                                          });
+
+                                                  children.Add().Text("Country").Url("/Dictionary/Country")
+                                                          .Items(innerChildren =>
+                                                          {
+                                                              innerChildren.Add().Text("Country").Url("/Dictionary/Country");
+                                                              innerChildren.Add().Text("Add Country").Url("/Dictionary/AddDictionaryCountry");
+
+                                                          });
+
+                                                  children.Add().Text("County").Url("/Dictionary/County")
+                                                          .Items(innerChildren =>
+                                                          {
+                                                              innerChildren.Add().Text("County").Url("/Dictionary/County");
+                                                              innerChildren.Add().Text("Add County").Url("/Dictionary/AddEditCounty");
+
+                                                          });
+                                                 children.Add().Text("City").Url("/Dictionary/Cities")
+                                                          .Items(innerChildren =>
+                                                          {
+                                                              innerChildren.Add().Text("City").Url("/Dictionary/Cities");
+                                                              innerChildren.Add().Text("Add New City").Url("/Dictionary/AddDictionaryCity");
+
+                                                          });
+                                               children.Add().Text("Currency").Url("/Dictionary/Currency")
+                                                          .Items(innerChildren =>
+                                                          {
+                                                              innerChildren.Add().Text("Currency").Url("/Dictionary/Currency");
+                                                              innerChildren.Add().Text("Add Currency").Url("/Dictionary/AddDictionaryCurrencyType");
+
+                                                          });
+                                              children.Add().Text("TicketType").Url("/Dictionary/TicketType")
+                                                          .Items(innerChildren =>
+                                                          {
+                                                              innerChildren.Add().Text("TicketType").Url("/Dictionary/TicketType");
+                                                              innerChildren.Add().Text("Add TicketType").Url("/Dictionary/AddEditTicketType");
+
+                                                          });
+
+                                              });
+
+                                      })
+                                      .Direction(ViewBag.Direction)
+                                )
+                            </div>
+
                         </li>
                     </ul>
                 </div>
@@ -126,3 +221,5 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+
+

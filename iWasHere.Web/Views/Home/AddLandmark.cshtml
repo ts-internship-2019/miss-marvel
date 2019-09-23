@@ -1,4 +1,4 @@
-﻿@model iWasHere.Domain.Models.Landmark
+﻿@model iWasHere.Domain.DTOs.LandmarkModel
 
 @{
     ViewData["Title"] = "Adauga Landmrk";
@@ -12,84 +12,229 @@
     <meta name="viewport" content="width=device-width" />
     <title>AddLandmark</title>
 </head>
+<style>
+    .map-container {
+        position: absolute;
+        bottom: 20%;
+        right: 10%;
+    }
+</style>
 <body>
 
-<h4>Landmark</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="AddLandmark">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="LandmarkName" class="control-label"></label>
-                <input asp-for="LandmarkName" class="form-control" />
-                <span asp-validation-for="LandmarkName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LandmarkDescription" class="control-label"></label>
-                <input asp-for="LandmarkDescription" class="form-control" />
-                <span asp-validation-for="LandmarkDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LandmarkTicket" class="control-label"></label>
-                <input asp-for="LandmarkTicket" class="form-control" />
-                <span asp-validation-for="LandmarkTicket" class="text-danger"></span>
-            </div>
-                @(Html.Kendo().ComboBox()
-             .Name("DictionaryLandmarkType")
-             .Placeholder("Landmark Type")
-             .DataTextField("DictionaryItemName")
-             .DataValueField("DictionaryItemId")
-             .HtmlAttributes(new { style = "width:100%;" })
-             .Filter(FilterType.Contains)
-             .AutoBind(false)
-             .MinLength(3)
-             .DataSource(source =>
-             {
-                 source.Read(read =>
-                 {
-                     read.Action("GetLandmarkType", "Home");
-                 })
-                 .ServerFiltering(true);
-             }))
-            <div class="form-group">
-                <label asp-for="LandmarkPeriodId" class="control-label"></label>
-                <select asp-for="LandmarkPeriodId" class="form-control" asp-items="ViewBag.LandmarkPeriodId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="LandmarkAddressId" class="control-label"></label>
-                <input asp-for="LandmarkAddressId" class="form-control" />
-                <span asp-validation-for="LandmarkAddressId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LandmarkCode" class="control-label"></label>
-                <input asp-for="LandmarkCode" class="form-control" />
-                <span asp-validation-for="LandmarkCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CityId" class="control-label"></label>
-                <select asp-for="CityId" class="form-control" asp-items="ViewBag.CityId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Latitude" class="control-label"></label>
-                <input asp-for="Latitude" class="form-control" />
-                <span asp-validation-for="Latitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Longitude" class="control-label"></label>
-                <input asp-for="Longitude" class="form-control" />
-                <span asp-validation-for="Longitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <h4>Landmark</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form enctype="multipart/form-data" asp-action="AddLandmark">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="LandmarkId" />
+                    <label asp-for="LandmarkName" class="control-label"></label>
+                    <input asp-for="LandmarkName" class="form-control" />
+                    <span asp-validation-for="LandmarkName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LandmarkDescription" class="control-label"></label>
+                    <input asp-for="LandmarkDescription" class="form-control" />
+                    <span asp-validation-for="LandmarkDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LandmarkCode" class="control-label"></label>
+                    <input asp-for="LandmarkCode" class="form-control" />
+                    <span asp-validation-for="LandmarkCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Landmark Type:</label>
+                    @(Html.Kendo().ComboBoxFor(model => model.LandmarkTypeId)
+                    .Placeholder("Landmark Type")
+                    .DataTextField("DictionaryItemName")
+                    .DataValueField("DictionaryItemId")
+                    .HtmlAttributes(new { style = "width:100%;" })
+                    .Filter(FilterType.Contains)
+                    .AutoBind(false)
+                    .Text(Model.LandmarkTypeName)
+                    .MinLength(1)
+
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetLandmarkType", "Home");
+                        })
+                        .ServerFiltering(true);
+                    }))
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Landmark Period:</label>
+                    @(Html.Kendo().ComboBoxFor(model => model.LandmarkPeriodId)
+                    .Placeholder("Landmark Period")
+                    .DataTextField("LandmarkPeriodName")
+                    .DataValueField("LandmarkPeriodId")
+                    .HtmlAttributes(new { style = "width:100%;" })
+                    .Filter(FilterType.Contains)
+                    .AutoBind(false)
+                    .MinLength(1)
+                    .Text(Model.LandmarkPeriodName)
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetLandmarkPeriod", "Home");
+                        })
+                        .ServerFiltering(true);
+                    }))
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label class="control-label">City:</label>
+                        @(Html.Kendo().ComboBoxFor(model => model.CityId)
+                        .Placeholder("City")
+                        .DataTextField("CityName")
+                        .DataValueField("CityId")
+                        .HtmlAttributes(new { style = "width:100%;", id = "cboCity" })
+                        .Filter(FilterType.Contains)
+                        .AutoBind(false)
+                        .MinLength(1)
+                        .Text(Model.CityName)
+                        .DataSource(source =>
+                        {
+                            source.Read(read =>
+                            {
+                                read.Action("GetCities", "Home");
+                            })
+                            .ServerFiltering(true);
+                        }))
+                    </div>
+                </div>
+                <div class="form-check-inline">
+                    <label class="form-check-label">
+                        <input type="radio" id="chkFree" onclick="hide()" form-check-input" name="optradio">Free
+                    </label>
+                </div>
+                <div class="form-check-inline">
+                    <label class="form-check-label">
+                        <input type="radio" id="chkTax" onclick="show()" class="form-check-input" name="optradio">With taxes
+                    </label>
+                </div>
+                <div id="taxes">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label class="control-label">Currency:</label>
+                            @(Html.Kendo().ComboBoxFor(model => model.CurrencyId)
+                            .Placeholder("Currency")
+                            .DataTextField("CurrencyName")
+                            .DataValueField("CurrencyTypeId")
+                            .HtmlAttributes(new { style = "width:100%;", id = "cboCurrency" })
+                            .Filter(FilterType.Contains)
+                            .AutoBind(false)
+                            .MinLength(1)
+                            .Text(Model.CurrencyName)
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("GetCurrencyTypeCombo", "Home");
+                                })
+                                .ServerFiltering(true);
+                            }))
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Student</label>
+                        <input asp-for="StudentPrice" class="form-control" />
+                        <span asp-validation-for="StudentPrice" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Adult</label>
+                        <input asp-for="AdultPrice" class="form-control" />
+                        <span asp-validation-for="AdultPrice" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Retired</label>
+                        <input asp-for="RetiredPrice" class="form-control" />
+                        <span asp-validation-for="RetiredPrice" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Photo</label>
+                        <div class="custom-file">
+                            <input asp-for="Photos" class="form-control custom-file-input" multiple />
+                            <label class="custom-file-label">Choose File...</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div id="myMap"></div>
+                        <input id="address" type="text" style="width:600px;" /><br />
+                        <input type="text" id="latitude" placeholder="Latitude" />
+                        <input type="text" id="longitude" placeholder="Longitude" />
+                    </div>
+                    <div id="googleMap" style="width:50%;height:400px;" class="map-container"></div>
+
+                    <div class="form-group">
+                        <button id="btnAddModify" type="submit" class="btn btn-primary"> Add </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+    @section Scripts{
+        
+        <script>
+            var map;
+            var markers = [];
+            function myMap() {
+                var startLatLng = { lat: 44.4894, lng: 26.1267 };
+                map = new google.maps.Map(document.getElementById('googleMap'), {
+                    zoom: 12,
+                    center: startLatLng,
+                });
 
+                map.addListener('click', function (event) {
+                    clearMarkers();
+                    addMarker(event.latLng);
+                    document.getElementById("Latitude").value = event.latLng.lat();
+                    document.getElementById("Longitude").value = event.latLng.lng();
+                });
+
+                addMarker(startLatLng);
+            }
+
+            function addMarker(location) {
+                var marker = new google.maps.Marker({
+                    position: location,
+                    map: map
+                });
+                markers.push(marker);
+            }
+
+            function setMapOnAll(map) {
+                for (var i = 0; i < markers.length; i++) {
+                    markers[i].setMap(map);
+                }
+            }
+
+            function clearMarkers() {
+                setMapOnAll(null);
+            }
+
+            function showMarkers() {
+                setMapOnAll(map);
+            }
+
+            function deleteMarkers() {
+                clearMarkers();
+                markers = [];
+            }
+        </script>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB96GQdBEPcmWURd_56ln3yLHQGLoMPCfs&callback=myMap"></script>
+
+   
+
+
+    }
 </body>
 </html>
