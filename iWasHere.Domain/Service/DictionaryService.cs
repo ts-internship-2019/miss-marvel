@@ -334,16 +334,33 @@ namespace iWasHere.Domain.Service
             return dictionaryCountries;
         }
 
-        public DictionaryCountryModel AddDictionaryCountry(DictionaryCountryModel country)
+        public DictionaryCountryModel AddDictionaryCountry(DictionaryCountryModel id)
         {
-            if (country.CountryId != null)
-                if (!String.IsNullOrWhiteSpace(country.CountryName))
+            DictionaryCountry dictionaryCountry = new DictionaryCountry();
+            dictionaryCountry.CountryName = id.CountryName;
+            dictionaryCountry.CountryCode = id.CountryCode;
+
+            if (id.CountryId != null)
+                if (!String.IsNullOrWhiteSpace(id.CountryName))
                 {
-                    _dbContext.Add(country);
+                    _dbContext.DictionaryCountry.Add(dictionaryCountry);
                     _dbContext.SaveChanges();
                 }
             return null;
         }
+
+
+
+        public Models.DictionaryCountry AddDictionaryCountry(Models.DictionaryCountry dc)
+        {
+            if (!String.IsNullOrWhiteSpace(dc.CountryName))
+            {
+                _dbContext.Add(dc);
+                _dbContext.SaveChanges();
+            }
+            return dc;
+        }
+
 
         public IEnumerable<DictionaryCountryModel> GetCountry(int pageNo, int pageSize, out int rowsNo, string lFilter)
         {
@@ -367,6 +384,58 @@ namespace iWasHere.Domain.Service
 
 
         }
+
+        public Models.DictionaryCountry AddEditDictionaryCountry(Models.DictionaryCountry country, out String errMsg)
+        {
+            errMsg = null;
+            try
+            {
+
+                if (country.CountryId == 0)
+                {
+                    _dbContext.DictionaryCountry.Add(country);
+                    _dbContext.SaveChanges();
+                }
+                else
+                {
+                    _dbContext.DictionaryCountry.Update(country);
+                    _dbContext.SaveChanges();
+                }
+
+                return country;
+            }
+            catch (Exception ex)
+            {
+                errMsg = ex.Message.ToString();
+                return null;
+            }
+        }
+
+        public IEnumerable<DictionaryCountryModel> LoadCountry(int CountryId)
+        {
+            return _dbContext.DictionaryCountry.Where(a => a.CountryId == CountryId).Select(a => new DictionaryCountryModel
+            {
+                CountryId = a.CountryId,
+                CountryName = a.CountryName,
+                CountryCode = a.CountryCode
+            });
+
+        }
+
+        public Models.DictionaryCountry GetDictionaryCountry(int countryId)
+        {
+            Models.DictionaryCountry country = _dbContext.DictionaryCountry.Find(countryId);
+            return country;
+        }
+
+
+
+
+
+
+
+
+
         #endregion
 
         #region Victor
