@@ -133,23 +133,16 @@ namespace iWasHere.Domain.Service
             }
         }
 
-        //public DTOs.LandmarkModel GetLandmarkDetails (int landmarkId)
-        //{
-        //    LandmarkModel landmarkModel = _dbContext.Landmark.Select(a => new LandmarkModel()
-        //    {
-        //        LandmarkName = a.LandmarkName,
-        //        LandmarkPeriodName = a.LandmarkPeriod.LandmarkPeriodName,
-
-
-
-        //    }).Where 
-        //}
-        public string RCity(int cityId)
+       public List<LandmarkPicture> GetLandmarkPictures(int landmarkId)
         {
-            DictionaryCity dictionaryCity = _dbContext.DictionaryCity.Find(cityId);
-            string cityName = dictionaryCity.CityName;
-            return cityName;
+            List<LandmarkPicture> landmarkPictures = _dbContext.LandmarkPicture.Where(a=> a.LandmarkId == landmarkId).Select(a => new LandmarkPicture()
+            {
+                PictureName = a.PictureName
+            }).ToList();
+
+            return landmarkPictures;
         }
+    
 
 
         #endregion
@@ -326,6 +319,7 @@ namespace iWasHere.Domain.Service
 
                 })
             .ToList();
+
             int currencyId = Convert.ToInt32(priceList[0].CurrencyTypeId);
             currency = _dbContext.DictionaryCurrencyType.FirstOrDefault(a => a.CurrencyTypeId == currencyId);
             Models.Landmark landmark = _dbContext.Landmark.Include(a => a.City)
