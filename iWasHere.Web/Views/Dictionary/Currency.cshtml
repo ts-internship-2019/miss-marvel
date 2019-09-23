@@ -54,19 +54,21 @@
       .HtmlAttributes(new { style = "height: 500px", id = "grdCurrencyType" })
       .Columns(columns =>
       {
+          columns.Bound(c => c.CurrencyTypeId).Hidden();
           columns.Bound(c => c.CurrencyCode).Width(280);
           columns.Bound(c => c.CurrencyName).Width(280);
           columns.Bound(c => c.CurrencyExRate).Width(280);
-          columns.Template("<button id=btnEdit onclick=EditCurrencyType(#=CurrencyTypeId#)>Edit</button>");
-          columns.Template("<button id=btnDelete onclick=DeleteCurrencyType(#=CurrencyTypeId#)>Delete</button>");
-
+          columns.Template("<button id=btnDelete onclick=deleteCurrency(#=CurrencyTypeId#)>Delete</button>");
+           columns.Command(c => {
+                c.Custom("EditRecord").Text("Edit").Click("EditCurrencyType");
+            });
+         // columns.Template("<button id=btnEdit onclick=EditCurrencyType(#=CurrencyTypeId#)>Edit</button>");
 
 
 
       })
 
       .Scrollable()
-      //.Groupable()
       .Sortable()
       .Filterable()
       .Pageable(pageable => pageable
@@ -82,6 +84,7 @@
 
         <script>
             function onClick(e) {
+                console.log(e.event);
                 $(e.event.target).closest(".k-button").attr("id");
                 console.log("apasat");
 
@@ -98,19 +101,18 @@
         
     
        function deleteCurrency(id) {
-            $.ajax({
-                type: 'DELETE',
-                url: '@Url.Action("DeleteCurrency", "Dictionary")',
-                data: { id: id },
-                success: function (response) {
-                    $("#grdCurrency").data("kendoGrid").dataSource.read();
-                },
-                error: function (response) {
-
-
-                }
-            })
-        }
+             $.ajax({
+                    type: 'DELETE',
+                    url: '@Url.Action("DeleteCurrencyType", "Dictionary")',
+                    data: { id: id },
+                 success: function (response) {
+                        $("#grdCurrencyType").data("kendoGrid").dataSource.read();
+                    },
+                        error: function (response) {
+                       
+                    }
+                })
+    }
 
 
 
@@ -121,16 +123,18 @@
 
     }
 
-        function DisplayData1() {
-        $("#grdCurrencyType").data("kendoGrid").dataSource.read()
 
-    }
-
-    function dgChange(e) {
+    function EditCurrencyType(e) {
         grid = $("#grdCurrencyType").data("kendoGrid");
+        
         var row = e.currentTarget.closest("tr").cells[0].outerText;
+        var currencytypeID = e.currentTarget.closest("tr").cells[1].outerText;
+        var currencyName = e.currentTarget.closest("tr").cells[2].outerText;
+        var currencyCode = e.currentTarget.closest("tr").cells[3].outerText;
 
+        window.location = '/Dictionary/AddDictionaryCurrencyType?id=' + row + '&typeID=' + currencytypeID + '&name=' + currencyName + '&code=' + currencyCode;
 
+      
 
     }
 

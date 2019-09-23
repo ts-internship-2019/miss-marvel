@@ -29,16 +29,18 @@
     </p>
 
     @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryLandmarkPeriod>
-        ()
-        .Name("LandmarkPeriodGrid")
-        .Columns(columns =>
-        {
-            columns.Bound(c => c.LandmarkPeriodId).Hidden();
-            columns.Bound(c => c.LandmarkPeriodName).Width(150);
-            ;
-        })
+    ()
+    .Name("LandmarkPeriodGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.LandmarkPeriodId).Hidden();
+        columns.Bound(c => c.LandmarkPeriodName).Width(900);
+        columns.Template("<button id=\"btnDelete\" onclick=\"deleteLandmarkPeriod(#=LandmarkPeriodId#)\">Delete</button>");
+        columns.Template("<button id=\"btnDelete\" onclick=\"redirectAddEditLMPeriod(#=LandmarkPeriodId#)\" width:\"10\">Edit</button>");
+        
+    })
 
-    .HtmlAttributes(new { style = "height: 380px;", id = "LandmarkPeriodGrid" })
+    .HtmlAttributes(new { style = "height: 500px;", id = "LandmarkPeriodGrid" })
     .Scrollable()
     .Groupable()
     .Sortable()
@@ -72,7 +74,22 @@
 
           location.href = '@Url.Content("/Dictionary/AddEditLandmarkPeriod")';
       };
-    
+
+    function DeletePeriod () {
+       
+    }
+
+    function deleteLandmarkPeriod(id) {
+             $.ajax({
+                    type: 'DELETE',
+                    url: '@Url.Action("DeletePeriod", "Dictionary")',
+                    data: { id: id },
+                 success: function () {
+                        $("#LandmarkPeriodGrid").data("kendoGrid").dataSource.read();
+                    },
+                      
+                })
+    }
 
 
 </script>

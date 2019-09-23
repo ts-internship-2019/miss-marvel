@@ -1,0 +1,86 @@
+﻿@model iWasHere.Domain.Models.DictionaryCity
+
+@{
+    ViewData["Title"] = "EditDictionaryCity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit Dictionary City</h1>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditDictionaryCity">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CityId" />
+            <div class="form-group">
+                <label asp-for="CityName" class="control-label"></label>
+                <input asp-for="CityName" class="form-control" />
+                <span asp-validation-for="CityName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>County</label>
+                @(Html.Kendo().ComboBox()
+        .Name("countiesCB")
+        .Placeholder("Judet..")
+        .DataTextField("CountyName")
+        .DataValueField("CountyId")
+        .HtmlAttributes(new { style = "width:100%;" })
+        .Filter(FilterType.Contains)
+        .AutoBind(false)
+        .MinLength(3)
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetComboCounty", "Dictionary");
+            })
+            .ServerFiltering(true);
+        })
+                )
+            </div>
+            <div class="form-group">
+                <label asp-for="CityCode" class="control-label"></label>
+                <input asp-for="CityCode" class="form-control" />
+                <span asp-validation-for="CityCode" class="text-danger"></span>
+            </div>
+  
+            <div class="form-group">
+            <input type="submit"value="Save" id="btnSave" onClick="goBack();" class="k-primary" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    <form method="get" action="Cities">
+        <button type="submit" class="k-primary">Back To List</button>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    function goBack() {
+        $(document).on('submit', 'form', function () {
+            $.post('@Url.Content("/Dictionary/Cities")'function () {
+
+            }).done(function () {
+                location.href = '@Url.Content("/Dictionary/Cities")';
+            });
+
+        });
+        return true;
+        
+    }
+
+
+</script>
+<style>
+    k-primary{
+        width: 200px;
+    }
+</style>
