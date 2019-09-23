@@ -41,6 +41,7 @@
 
                 @(Html.Kendo().Button()
                         .Name("btnSubmit")
+                        .Icon("filter")
                         .HtmlAttributes(new { type = "button" })
                         .Content("Filter")
                         .Events(ev => ev.Click("DisplayData"))
@@ -48,13 +49,15 @@
 
                 @(Html.Kendo().Button()
                        .Name("btnSubmit1")
+                       .Icon("filter-clear")
                        .HtmlAttributes(new { type = "button" })
                        .Content("Delete Filter")
-                       .Events(ev => ev.Click("DisplayData1"))
+                       .Events(ev => ev.Click("deleteFilters"))
                 )
 
                 @(Html.Kendo().Button()
                       .Name("btnSubmit2")
+                      .Icon("k-icon k-i-plus-circle")
                       .HtmlAttributes(new { type = "button" })
                       .Content("Add Country")
                       .Events(e => e.Click("OpenNewWindow"))
@@ -80,7 +83,14 @@
               //            {
               //    c.Custom("DeleteRecord").Text("Delete").Click("dgChange");
               //});
-              columns.Template("<button id=buttonEdit onCLick= editCountry(#=CountryId#)>Edit</button>");
+              //columns.Template("<button id=buttonEdit onCLick= editCountry(#=CountryId#)>Edit</button>");
+
+
+              columns.Command(c =>
+              {
+                  c.Custom("EditRecord").Text("Edit").Click("dgChange");
+              });
+
               columns.Template("<button id=buttonDelete onCLick= deleteCountry(#=CountryId#)>Delete</button>");
           })
           .Scrollable()
@@ -156,6 +166,21 @@
 
             }
         })
+    }
+
+
+    function deleteFilters() {
+
+                    $("#txtFilter").val(null);
+                    $("#grdCountry").data("kendoGrid").dataSource.read();
+                    $("#grdCountry").data("kendoGrid").dataSource.page(1);
+                }
+
+     function dgChange(e) {
+        grid = $("#grdCountry").data("kendoGrid");
+        var row = e.currentTarget.closest("tr").cells[0].outerText;
+        window.location = '/Dictionary/AddDictionaryCountry?id=' + row
+ 
     }
 
 </script>
