@@ -17,7 +17,6 @@ namespace iWasHere.Domain.Models
         {
         }
 
-       
 
         public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }

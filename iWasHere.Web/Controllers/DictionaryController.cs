@@ -307,7 +307,7 @@ namespace iWasHere.Web.Controllers
         public ActionResult AddEditCurrency([Bind("CurrencyTypeId, CurrencyName, CurrencyCode, CurrencyExRate")] DictionaryCurrencyType dc, int id)
         {
             String exMessage;
-            if (ModelState.IsValid && dc.CurrencyTypeId != null)
+            if (dc.CurrencyCode != null)
             {
                 var result = _dictionaryService.AddEditDictionaryCurrencyType(dc, out exMessage);
                 if (result == null)
