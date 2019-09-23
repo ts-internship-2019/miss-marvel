@@ -1,3 +1,4 @@
+using iWasHere.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ namespace iWasHere.Domain.DTOs
         public string CurrencyName { get; set; }
 
         public List<IFormFile> Photos { get; set; }
+        public List<LandmarkPicture> Pictures { get; set; }
         public virtual DictionaryCityModel City { get; set; }
         public virtual LandmarkPeriodModel LandmarkPeriod { get; set; }
         public virtual DictionaryLandmarkTypeModel LandmarkType { get; set; }
