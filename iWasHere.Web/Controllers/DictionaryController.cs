@@ -503,7 +503,7 @@ namespace iWasHere.Web.Controllers
             if (id == 0)
             {
                 _dictionaryService.AddTicket(ticketType);
-                return View("TicketType");
+                return View();
             }
             else
             {
@@ -514,25 +514,34 @@ namespace iWasHere.Web.Controllers
 
         }
 
-        public IActionResult LandmarkReview()
+        public IActionResult IndexComments()
+        {
+            List<LandmarkReview> landmarkReviews = _dictionaryService.GetDbCommentsAll();
+            return View(landmarkReviews);
+        }
+
+        public IActionResult AddReview()
         {
             return View();
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddComment(LandmarkReview review, int id)
+        public IActionResult AddReview(LandmarkReview review, int id)
         {
-            if (id == 0)
+            //if (id == 0)
                 _dictionaryService.AddReview(review);
                 return View();
         }
 
+  
+
+
+
 
             #endregion
 
-            #region Victor
+        #region Victor
 
             public IActionResult County()
         {
@@ -622,6 +631,7 @@ namespace iWasHere.Web.Controllers
             return Json(ModelState.ToDataSourceResult());
         }
         #endregion
+
         #region Dorin
         public IActionResult LandmarkPeriod()
         {
