@@ -786,19 +786,19 @@ namespace iWasHere.Domain.Service
         #endregion
 
         #region Gabi
-        public IEnumerable<DictionaryTicketTypeModel> GetDictionaryTicketType(int pgNo, int pgSize, out int countRows, string FilterTicketType)
+        public IEnumerable<DictionaryTicketType> GetDictionaryTicketType(int pgNo, int pgSize, out int countRows, string FilterTicketType)
         {
             countRows = _dbContext.DictionaryTicketType.Count();
             int toSkip = (pgNo - 1) * pgSize;
             if (FilterTicketType == null)
-                return _dbContext.DictionaryTicketType.Skip(toSkip).Take(pgSize).Select(x => new DictionaryTicketTypeModel
+                return _dbContext.DictionaryTicketType.Skip(toSkip).Take(pgSize).Select(x => new DictionaryTicketType
                 {
                     TicketTypeId = x.TicketTypeId,
                     TicketTypeName = x.TicketTypeName
 
                 });
             else
-                return _dbContext.DictionaryTicketType.Where(x => x.TicketTypeName.Contains(FilterTicketType)).Skip(toSkip).Take(pgSize).Select(x => new DictionaryTicketTypeModel
+                return _dbContext.DictionaryTicketType.Where(x => x.TicketTypeName.Contains(FilterTicketType)).Skip(toSkip).Take(pgSize).Select(x => new DictionaryTicketType
                 {
                     TicketTypeId = x.TicketTypeId,
                     TicketTypeName = x.TicketTypeName
@@ -848,6 +848,21 @@ namespace iWasHere.Domain.Service
             _dbContext.SaveChanges();
         }
 
+        public List<LandmarkReview> GetDbCommentsAll()
+        {
+            List<LandmarkReview> landmarkReviews = _dbContext.LandmarkReview.Select(x => new LandmarkReview()
+            {
+                ReviewTitle = x.ReviewTitle,
+                ReviewComment = x.ReviewComment,
+                LandmarkId = x.LandmarkId,
+                UserId = x.UserId,
+                Rating = x.Rating
+
+            }).ToList();
+
+            return landmarkReviews;
+        }
+
         public string AddReview(LandmarkReview review)
         {
             try
@@ -868,6 +883,8 @@ namespace iWasHere.Domain.Service
                 return "Please fill the required fields";
             }
         }
+
+
 
 
         #endregion
