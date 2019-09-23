@@ -1,7 +1,8 @@
-﻿@model iWasHere.Domain.Models.DictionaryLandmarkPeriod
+﻿
+@model iWasHere.Domain.Models.DictionaryLandmarkPeriod
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Adauga Interval";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -14,35 +15,39 @@
 </head>
 <body>
 
-<h4>DictionaryLandmarkPeriod</h4>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="AddEditLandmarkperiod">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                
+    <h4>DictionaryLandmarkPeriod</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+
+            <form asp-action="AddEditLandmarkPeriod">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+
                     <input type="hidden" asp-for="LandmarkPeriodId" />
                     <label asp-for="LandmarkPeriodName" class="control-label" ></label>
-                    <input asp-for="LandmarkPeriodName" class="form-control" />
-                    <span asp-validation-for="LandmarkPeriodName" class="text-danger"  ></span>
-                
-               
-            </div>
-                 
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <input type="submit" value="Salveaza" class="btn btn-primary btn-block" id="Save"/>
+                    <input asp-for="LandmarkPeriodName" id="landPeriodlbl" class="form-control"  />
+                    <span asp-validation-for="LandmarkPeriodName" class="text-danger" ></span>
+
+
                 </div>
-                <div class="form-group col-md-6">
-                    <a asp-action="LandmarkPeriod" class="btn btn-secondary btn-block">Renunta</a>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <input type="submit" value="Salveaza" class="btn btn-primary btn-block" id="Save" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <a asp-action="LandmarkPeriod" class="btn btn-secondary btn-block">Renunta</a>
+                    </div>
                 </div>
-            </div>
-               
-                
-        </form>
+
+
+            </form>
+        </div>
     </div>
-</div>
+    <div>
+        <a asp-action="LandmarkPeriod">Inapoi la lista</a>
+    </div>
 </body>
 </html>
 <script>
@@ -51,12 +56,12 @@
           location.href = '@Url.Content("/Dictionary/LandmarkPeriod")';
     };
 
-    function clearText()  
+    function clearText()
 {
-    document.getElementById('landPeriodlbl').value = "";
-} 
+    document.getElementById('landPeriodlbl').val(null);
+}
 </script>
 @section Scripts
-{ 
+{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");};
 }

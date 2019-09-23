@@ -441,7 +441,7 @@ namespace iWasHere.Web.Controllers
 
             #endregion
 
-            #region Victor
+        #region Victor
 
             public IActionResult County()
         {
@@ -504,33 +504,9 @@ namespace iWasHere.Web.Controllers
             return Json(ModelState.ToDataSourceResult());
         }
 
-        // ------------------- LandmarkPeriod
-        public IActionResult AddEditLandmarkperiod(int id=0)
-        {
-            return View(new DictionaryLandmarkPeriod());
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddEditLandmarkPeriod([Bind("LandmarkPeriodId, LandmarkPeriodName")] DictionaryLandmarkPeriod landmarkPeriod, int id)
-        {
-            if (ModelState.IsValid)
-            {
-                if (id == 0)
-                {
-                    _dictionaryService.AddEditLandmarkPeriods(landmarkPeriod);
-                }
-                
-            }
-            return View();
-
-        }
-        public ActionResult DeletePeriod( int id)
-        {
-            _dictionaryService.DeletePeriod(id);
-            return Json(ModelState.ToDataSourceResult());
-        }
+       
         #endregion
+
         #region Dorin
         public IActionResult LandmarkPeriod()
         {
@@ -545,6 +521,33 @@ namespace iWasHere.Web.Controllers
             dataSourceResult.Total = totalCount;
 
             return Json(dataSourceResult);
+        }
+
+        public IActionResult AddEditLandmarkPeriod(int id)
+        {
+            return View(_dictionaryService.GetDictionaryLandmarkPeriod(id));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddEditLandmarkPeriod(DictionaryLandmarkPeriod landmarkPeriod)
+        {
+            if (landmarkPeriod.LandmarkPeriodId == 0 || landmarkPeriod.LandmarkPeriodId ==null)
+            {
+                _dictionaryService.AddEditLandmarkPeriods(landmarkPeriod);
+                ModelState.Clear();
+            }
+            else
+            {
+                _dictionaryService.AddEditLandmarkPeriods(landmarkPeriod);
+            }
+            return View();
+
+
+        }
+        public ActionResult DeletePeriod(int id)
+        {
+            _dictionaryService.DeletePeriod(id);
+            return Json(ModelState.ToDataSourceResult());
         }
         #endregion
 
