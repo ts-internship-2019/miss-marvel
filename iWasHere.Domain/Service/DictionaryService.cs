@@ -750,27 +750,82 @@ namespace iWasHere.Domain.Service
             countRows = _dbContext.DictionaryTicketType.Count();
             int toSkip = (pgNo - 1) * pgSize;
             if (FilterTicketType == null)
-                return _dbContext.DictionaryTicketType.Skip(toSkip).Take(pgSize).Select(a => new DictionaryTicketTypeModel
+                return _dbContext.DictionaryTicketType.Skip(toSkip).Take(pgSize).Select(x => new DictionaryTicketTypeModel
                 {
-                    TicketTypeId = a.TicketTypeId,
-                    TicketTypeName = a.TicketTypeName
+                    TicketTypeId = x.TicketTypeId,
+                    TicketTypeName = x.TicketTypeName
 
                 });
             else
-                return _dbContext.DictionaryTicketType.Where(a => a.TicketTypeName.Contains(FilterTicketType)).Skip(toSkip).Take(pgSize).Select(a => new DictionaryTicketTypeModel
+                return _dbContext.DictionaryTicketType.Where(x => x.TicketTypeName.Contains(FilterTicketType)).Skip(toSkip).Take(pgSize).Select(x => new DictionaryTicketTypeModel
                 {
-                    TicketTypeId = a.TicketTypeId,
-                    TicketTypeName = a.TicketTypeName
+                    TicketTypeId = x.TicketTypeId,
+                    TicketTypeName = x.TicketTypeName
                 });
         }
 
-
-        public void DeleteTicket(int id)
+        public DictionaryTicketType GetTicketTypeId(int ticketTypeId)
         {
-            DictionaryTicketType ticketType = new DictionaryTicketType() { TicketTypeId = id };
+            DictionaryTicketType ticketType = _dbContext.DictionaryTicketType.Where(x => x.TicketTypeId == ticketTypeId)
+                .Select(x => new DictionaryTicketType()
+                {
+                    TicketTypeId = x.TicketTypeId,
+                    TicketTypeName = x.TicketTypeName
+                }).First();
+
+            return ticketType;
+        }
+
+
+
+        public void AddTicket(DictionaryTicketType ticketType)
+        {
+            _dbContext.DictionaryTicketType.Add(new DictionaryTicketType
+            {
+                TicketTypeName = ticketType.TicketTypeName
+            });
+            _dbContext.SaveChanges();
+        }
+
+        public void EditTicket(DictionaryTicketType ticketType)
+        {
+            _dbContext.DictionaryTicketType.Update(new DictionaryTicketType
+            {
+                TicketTypeId = ticketType.TicketTypeId,
+                TicketTypeName = ticketType.TicketTypeName
+            });
+
+            _dbContext.SaveChanges();
+
+        }
+
+        public void DeleteTicket(int ticketTypeId)
+        {
+            DictionaryTicketType ticketType = new DictionaryTicketType() { TicketTypeId = ticketTypeId };
 
             _dbContext.DictionaryTicketType.Remove(ticketType);
             _dbContext.SaveChanges();
+        }
+
+        public string AddReview(LandmarkReview review)
+        {
+            try
+            {
+                _dbContext.LandmarkReview.Add(new LandmarkReview
+                {
+                    ReviewTitle = review.ReviewTitle,
+                    ReviewComment = review.ReviewComment,
+                    LandmarkId = review.LandmarkId,
+                    UserId = review.UserId,
+                    Rating = review.Rating
+                });
+                _dbContext.SaveChanges();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return "Please fill the required fields";
+            }
         }
 
 

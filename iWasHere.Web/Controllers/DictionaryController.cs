@@ -168,7 +168,6 @@ namespace iWasHere.Web.Controllers
         }
 
 
-
         public ActionResult GetLandmarkType([DataSourceRequest]DataSourceRequest request, String lFilter)
         {
             int rowsNo = 0;
@@ -382,6 +381,19 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
+        public IActionResult AddEditTicketType(string id)
+        {
+            if (Convert.ToInt32(id) == 0)
+            {
+                return View();
+            }
+            else
+            {
+                DictionaryTicketType ticketType = _dictionaryService.GetTicketTypeId(Convert.ToInt32(id));
+                return View(ticketType);
+            }
+        }
+
         public IActionResult DeleteTicketType([DataSourceRequest] DataSourceRequest request, int id)
         {
             if (id != -1)
@@ -393,11 +405,45 @@ namespace iWasHere.Web.Controllers
         }
 
 
-        #endregion
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddEditTicketType(DictionaryTicketType ticketType, int id)
+        {
+            if (id == 0)
+            {
+                _dictionaryService.AddTicket(ticketType);
+                return View("TicketType");
+            }
+            else
+            {
+                ticketType.TicketTypeId = id;
+                _dictionaryService.EditTicket(ticketType);
+                return View("TicketType");
+            }
 
-        #region Victor
+        }
 
-        public IActionResult County()
+        public IActionResult LandmarkReview()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddComment(LandmarkReview review, int id)
+        {
+            if (id == 0)
+                _dictionaryService.AddReview(review);
+                return View();
+        }
+
+
+            #endregion
+
+            #region Victor
+
+            public IActionResult County()
         {
 
             return View();
