@@ -9,6 +9,9 @@ using Kendo.Mvc.UI;
 using iWasHere.Domain.Service;
 using iWasHere.Domain.DTOs;
 using iWasHere.Domain.Models;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace iWasHere.Web.Controllers
 {
@@ -21,10 +24,13 @@ namespace iWasHere.Web.Controllers
         //    _LandmarkService = LandmarkService;
         //}
         private readonly DictionaryService _LandmarkService;
+        private readonly IHostingEnvironment hostingEnvironment;
 
-        public HomeController(DictionaryService LandmarkService)
+        public HomeController(DictionaryService LandmarkService,
+            IHostingEnvironment hostingEnvironment)
         {
             _LandmarkService = LandmarkService;
+            this.hostingEnvironment = hostingEnvironment;
         }
         public IActionResult Index()
         {
@@ -42,55 +48,74 @@ namespace iWasHere.Web.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult AddLandmark([Bind("LandmarkId, LandmarkName, LandmarkDescription, LandmarkCode")]LandmarkModel landmark, String LandmarkType,
-            String LandmarkType_input, String LandmarkPeriod, String LandmarkPeriod_input, String City, String City_input, 
-            String StudentPrice, String AdultPrice, String RetiredPrice, String Currency, int id)
+        public IActionResult AddLandmark([Bind("LandmarkId, LandmarkName, LandmarkDescription, LandmarkCode, Photos")]LandmarkModel landmark, String LandmarkTypeId,
+            String LandmarkTypeId_input, String LandmarkPeriodId, String LandmarkPeriodId_input, String CityId, String CityId_input,
+            String StudentPrice, String AdultPrice, String RetiredPrice, String CurrencyId, String CurrencyId_input, int id)
         {
-            if(id != 0)
+            if (id != 0)
             {
                 List<TicketXlandmark> pricesList = new List<TicketXlandmark>();
-                Landmark loadedLandmark = _LandmarkService.GetLandmark(id, out pricesList);
+                DictionaryCurrencyType currency = new DictionaryCurrencyType();
+                Landmark loadedLandmark = _LandmarkService.GetLandmark(id, out pricesList, out currency);
                 LandmarkModel modelToLoad = new LandmarkModel
                 {
                     LandmarkId = loadedLandmark.LandmarkId,
                     LandmarkCode = loadedLandmark.LandmarkCode,
                     LandmarkDescription = loadedLandmark.LandmarkDescription,
                     LandmarkName = loadedLandmark.LandmarkName,
-                    CityId = Convert.ToInt32(loadedLandmark.CityId),
+                    CityId = Convert.ToInt32(loadedLandmark.City.CityId),
+                    CityName = loadedLandmark.City.CityName,
                     LandmarkTypeId = Convert.ToInt32(loadedLandmark.LandmarkTypeId),
+                    LandmarkTypeName = loadedLandmark.LandmarkType.DictionaryItemName,
                     LandmarkPeriodId = Convert.ToInt32(loadedLandmark.LandmarkPeriodId),
-                    LandmarkPeriodName = loadedLandmark.LandmarkPeriod.LandmarkPeriodName
-                    //StudentPrice = Convert.ToDecimal(pricesList[0].TicketValue),
-                    //AdultPrice = Convert.ToDecimal(pricesList[1].TicketValue),
-                    //RetiredPrice = Convert.ToDecimal(pricesList[2].TicketValue)
+                    LandmarkPeriodName = loadedLandmark.LandmarkPeriod.LandmarkPeriodName,
+                    CurrencyId = currency.CurrencyTypeId,
+                    CurrencyName = currency.CurrencyName,
+                    StudentPrice = Convert.ToDecimal(pricesList[0].TicketValue),
+                    AdultPrice = Convert.ToDecimal(pricesList[1].TicketValue),
+                    RetiredPrice = Convert.ToDecimal(pricesList[2].TicketValue)
 
 
                 };
-                int a = 5;
+
                 return View(modelToLoad);
 
             }
 
-            if (ModelState.IsValid && landmark != null && LandmarkType != null)
+            if (ModelState.IsValid && landmark != null && LandmarkTypeId != null)
             {
                 Landmark l = new Landmark();
+                List<LandmarkPicture> pictures = new List<LandmarkPicture>();
                 String err;
-                l.LandmarkTypeId = Convert.ToInt32(LandmarkType);
-                l.CityId = Convert.ToInt32(City);
-                l.LandmarkPeriodId = Convert.ToInt32(LandmarkPeriod);
+                String uniqueFileName = null;
+                if (landmark.Photos != null && landmark.Photos.Count > 0)
+                {
+                    foreach (IFormFile photo in landmark.Photos)
+                    {
+                        String uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");
+                        uniqueFileName = Guid.NewGuid().ToString() + "_" + photo.FileName;
+                        String filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                        pictures.Add(new LandmarkPicture(0, uniqueFileName));
+                    }
+                }
+                l.LandmarkTypeId = Convert.ToInt32(LandmarkTypeId);
+                l.CityId = Convert.ToInt32(CityId);
+                l.LandmarkPeriodId = Convert.ToInt32(LandmarkPeriodId);
                 l.LandmarkName = landmark.LandmarkName;
                 l.LandmarkId = landmark.LandmarkId;
                 l.LandmarkDescription = landmark.LandmarkDescription;
                 l.LandmarkCode = landmark.LandmarkCode;
 
                 List<TicketXlandmark> pricesList = new List<TicketXlandmark>();
-                pricesList.Add(new TicketXlandmark(0, 0, 1, Convert.ToInt32(Currency), Convert.ToDecimal(StudentPrice)));
-                pricesList.Add(new TicketXlandmark(0, 0, 4, Convert.ToInt32(Currency), Convert.ToDecimal(AdultPrice)));
-                pricesList.Add(new TicketXlandmark(0, 0, 3, Convert.ToInt32(Currency), Convert.ToDecimal(RetiredPrice)));
-                _LandmarkService.AddEditLandmark(l, pricesList, out err);                
+                pricesList.Add(new TicketXlandmark(0, l.LandmarkId, 1, Convert.ToInt32(CurrencyId), Convert.ToDecimal(StudentPrice)));
+                pricesList.Add(new TicketXlandmark(0, l.LandmarkId, 137, Convert.ToInt32(CurrencyId), Convert.ToDecimal(AdultPrice)));
+                pricesList.Add(new TicketXlandmark(0, l.LandmarkId, 3, Convert.ToInt32(CurrencyId), Convert.ToDecimal(RetiredPrice)));
+                
+                _LandmarkService.AddEditLandmark(l, pricesList, out err, pictures);
             }
 
-             return View();
+            return View(new LandmarkModel());
         }
 
         public JsonResult GetLandmarkType(string text)
@@ -99,7 +124,7 @@ namespace iWasHere.Web.Controllers
             if (text == null)
                 text = "";
             var x = _LandmarkService.GetLandmarkType(text);
-            
+
             return Json(x);
 
         }
@@ -125,12 +150,12 @@ namespace iWasHere.Web.Controllers
 
         }
 
-        public JsonResult GetCurrencyType(string text)
+        public JsonResult GetCurrencyTypeCombo(string text)
         {
             int rowsNo = 0;
             if (text == null)
                 text = "";
-            var x = _LandmarkService.GetCurrencyType(text);
+            var x = _LandmarkService.GetCurrencyTypeCombo(text);
 
             return Json(x);
 

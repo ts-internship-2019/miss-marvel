@@ -190,16 +190,16 @@ namespace iWasHere.Domain.Service
         // trebuie mutat in Landmark service dupa ce invat dependency inversion
         public List<DictionaryLandmarkTypeModel> GetLandmarkType(String filter)
         {
-            
-           
-                return _dbContext.DictionaryLandmarkType.Where((a => a.DictionaryItemName.Contains(filter))).Take(10).Select(LandmarkType => new DictionaryLandmarkTypeModel
-                {
-                    DictionaryItemId = LandmarkType.DictionaryItemId,
-                    DictionaryItemName = LandmarkType.DictionaryItemName,
-                    DictionaryItemCode = LandmarkType.DictionaryItemCode,
-                    Description = LandmarkType.Description
-                }).ToList();
-           
+
+
+            return _dbContext.DictionaryLandmarkType.Where((a => a.DictionaryItemName.Contains(filter))).Take(10).Select(LandmarkType => new DictionaryLandmarkTypeModel
+            {
+                DictionaryItemId = LandmarkType.DictionaryItemId,
+                DictionaryItemName = LandmarkType.DictionaryItemName,
+                DictionaryItemCode = LandmarkType.DictionaryItemCode,
+                Description = LandmarkType.Description
+            }).ToList();
+
         }
 
         public List<LandmarkPeriodModel> GetLandmarkPeriod(String filter)
@@ -226,8 +226,22 @@ namespace iWasHere.Domain.Service
 
         }
 
+        public List<DictionaryCurrencyTypeModel> GetCurrencyTypeCombo(String filter)
+        {
 
-        public Models.Landmark AddEditLandmark(Models.Landmark landmark, List<Models.TicketXlandmark> priceList, out String errMsg)
+            return _dbContext.DictionaryCurrencyType.Where((a => a.CurrencyName.Contains(filter))).Take(10).Select(
+                currency => new DictionaryCurrencyTypeModel
+                {
+                    CurrencyTypeId = currency.CurrencyTypeId,
+                    CurrencyCode = currency.CurrencyCode,
+                    CurrencyName = currency.CurrencyName,
+                    CurrencyExRate = currency.CurrencyExRate
+                }).ToList();
+
+        }
+
+        public Models.Landmark AddEditLandmark(Models.Landmark landmark, List<Models.TicketXlandmark> priceList,
+            out String errMsg, List<LandmarkPicture> pictures)
         {
             errMsg = null;
             try
@@ -238,17 +252,41 @@ namespace iWasHere.Domain.Service
                     _dbContext.Add(landmark);
                     _dbContext.SaveChanges();
                     Models.Landmark lastInserted = _dbContext.Landmark.Last();
-                    foreach(Models.TicketXlandmark price in priceList)
+                    foreach (Models.TicketXlandmark price in priceList)
                     {
                         price.LandmarkId = lastInserted.LandmarkId;
                         _dbContext.TicketXlandmark.Add(price);
                         _dbContext.SaveChanges();
                     }
+                    foreach (LandmarkPicture picture in pictures)
+                    {
+                        picture.LandmarkId = lastInserted.LandmarkId;
+                        _dbContext.LandmarkPicture.Add(picture);
+                        _dbContext.SaveChanges();
+                    }
                 }
                 else
                 {
+
                     _dbContext.Update(landmark);
                     _dbContext.SaveChanges();
+                    List<TicketXlandmark> oldPriceList = _dbContext.TicketXlandmark.Where((a => Convert.ToInt32(a.LandmarkId) == landmark.LandmarkId)).Select(
+                 price => new TicketXlandmark
+                 {
+                     TicketXlandmarkId = price.TicketXlandmarkId,
+                     LandmarkId = price.LandmarkId,
+                     TicketTypeId = price.TicketTypeId,
+                     CurrencyTypeId = price.CurrencyTypeId,
+                     TicketValue = price.TicketValue
+
+                 })
+             .ToList();
+                    for (int i = 0; i < priceList.Count; i++)
+                    {
+                        priceList[i].TicketXlandmarkId = oldPriceList[i].TicketXlandmarkId;
+                        _dbContext.TicketXlandmark.Update(priceList[i]);
+                        _dbContext.SaveChanges();
+                    }
                 }
 
                 return landmark;
@@ -260,22 +298,25 @@ namespace iWasHere.Domain.Service
             }
         }
 
-        public Models.Landmark GetLandmark(int landmarkId, out List<Models.TicketXlandmark> priceList)
+        public Models.Landmark GetLandmark(int landmarkId, out List<Models.TicketXlandmark> priceList, out DictionaryCurrencyType currency)
         {
             priceList = _dbContext.TicketXlandmark.Where((a => Convert.ToInt32(a.LandmarkId) == landmarkId)).Select(
                 price => new TicketXlandmark
-            {
-                TicketXlandmarkId = price.TicketXlandmarkId,
-                LandmarkId = price.LandmarkId,
-                TicketTypeId = price.TicketTypeId,
-                CurrencyTypeId = price.CurrencyTypeId,
-                TicketValue = price.TicketValue
-                
-            })
+                {
+                    TicketXlandmarkId = price.TicketXlandmarkId,
+                    LandmarkId = price.LandmarkId,
+                    TicketTypeId = price.TicketTypeId,
+                    CurrencyTypeId = price.CurrencyTypeId,
+                    TicketValue = price.TicketValue
+
+                })
             .ToList();
-               
-                
-            Models.Landmark landmark = _dbContext.Landmark.Include(a => a.LandmarkPeriod).FirstOrDefault(a => a.LandmarkId == landmarkId);
+            int currencyId = Convert.ToInt32(priceList[0].CurrencyTypeId);
+            currency = _dbContext.DictionaryCurrencyType.FirstOrDefault(a => a.CurrencyTypeId == currencyId);
+            Models.Landmark landmark = _dbContext.Landmark.Include(a => a.City)
+                .Include(a => a.LandmarkType)
+                .Include(a => a.LandmarkPeriod)
+                .FirstOrDefault(a => a.LandmarkId == landmarkId);
             return landmark;
         }
         //pana aici
