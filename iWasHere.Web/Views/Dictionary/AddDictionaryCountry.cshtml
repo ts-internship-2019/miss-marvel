@@ -2,9 +2,10 @@
 
 @{
     ViewData["Title"] = "AddDictionaryCountry";
- //   Layout = "AddCountry";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<meta name="viewport" content="width=device-width" />
 <h1>Add a new Country</h1>
 
 <hr />
@@ -13,6 +14,7 @@
         <form asp-action="AddDictionaryCountry">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <input type="hidden" asp-for="CountryId" />
                 <label asp-for="CountryName" class="control-label"></label>
                 <input asp-for="CountryName" class="form-control" />
                 <span asp-validation-for="CountryName" class="text-danger"></span>
@@ -23,7 +25,17 @@
                 <span asp-validation-for="CountryCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" class="btn btn-primary" value="Salveaza" onclick="return goBack();" />
+                <input type="submit" name="btnAddNew" id="btnAddNew_id" value="Salveaza si nou" class="btn btn-primary" onclick="return empty();" />
+               
+                <input type="button" class="btn btn-primary" value="Anuleaza" onclick="return goBack1();" />
+
+
+
+
+
+
+
             </div>
         </form>
     </div>
@@ -36,3 +48,89 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+
+<script>
+
+        function GetSearchBoxText()
+    {
+        var newPeriod = $("#txtSearchString").val();
+        var obj = {};
+        obj["search"] = text;
+        return obj;
+    }
+
+        var id = -1;
+        var name = "NaN";
+        var code = "NaN";
+
+
+               $(document).ready(function () {
+
+                   var url_string = window.location.href;
+                   var url = new URL(url_string);
+                   id = url.searchParams.get("id");
+                   code = url.searchParams.get("code");
+                   name = url.searchParams.get("name");
+                   
+
+                  
+                   document.getElementById("countryName").value = name != "null" ? name : "";
+                   document.getElementById("countryCode").value = code ? code : "";
+                 
+
+                   console.log(id, name, code);
+
+               })
+
+            function changeGrid() {
+
+                console.log("changeGrid");
+                $.ajax({
+                        type: 'UPDATE',
+                        url: '@Url.Action("Edit", "Dictionary")',
+                        data: {
+                            id: id,
+                            name: document.getElementById("countryName").value,
+                            code: document.getElementById("countryCode").value
+
+                        }
+                    })
+            }
+
+            function goBack() {
+                $(document).on('submit', 'form', function () {
+
+                    $.post('@Url.Content("/Dictionary/Country")', function () { 
+
+                }).done(function () {
+                    //if(name != "NaN")
+                     //   changeGrid();
+                   location.href = '@Url.Content("/Dictionary/Country")';
+
+                });
+
+
+                });
+                return true;
+            }
+
+            function empty() {
+                 $(document).on('submit', 'form', function () {
+                $.post('@Url.Content("/Dictionary/Country")', function () { 
+                }).done(function () {
+                       location.href = '@Url.Content("/Dictionary/AddDictionaryCountry")';
+                });
+
+
+                });
+                return true;
+    }
+
+     function goBack1() {
+     
+      location.href = '@Url.Content("/Dictionary/Country")';
+    };
+
+
+</script>

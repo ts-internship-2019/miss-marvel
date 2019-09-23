@@ -13,7 +13,7 @@ namespace iWasHere.Domain.Models
         }
 
         public int CurrencyTypeId { get; set; }
-        [Required(ErrorMessage = "Error")]
+      
         [DisplayName("Currency Code")]
         public string CurrencyCode { get; set; }
         [DisplayName("Currency Name")]

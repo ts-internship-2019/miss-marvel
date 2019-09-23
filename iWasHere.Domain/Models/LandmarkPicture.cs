@@ -10,5 +10,23 @@ namespace iWasHere.Domain.Models
         public int? LandmarkId { get; set; }
 
         public virtual Landmark Landmark { get; set; }
+
+        public LandmarkPicture(int pictureId, string pictureName, int? landmarkId)
+        {
+            PictureId = pictureId;
+            PictureName = pictureName;
+            LandmarkId = landmarkId;
+        }
+
+        public LandmarkPicture()
+        {
+        }
+
+        public LandmarkPicture(int pictureId, string pictureName)
+        {
+            PictureId = pictureId;
+            PictureName = pictureName;
+        }
     }
+
 }
