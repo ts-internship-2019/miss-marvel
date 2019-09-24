@@ -122,7 +122,7 @@ namespace iWasHere.Web.Controllers
             return Json(msg);
         }
 
-        public IActionResult LandmarkDetails(int landmarkId = 35)
+        public IActionResult LandmarkDetails(int landmarkId = 41)
         {
             var landmarkDetails = _dictionaryService.GetLandmark(landmarkId, out List<TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType);
             LandmarkModel landmarkModel = new LandmarkModel();
@@ -135,6 +135,8 @@ namespace iWasHere.Web.Controllers
             landmarkModel.LandmarkType = new DictionaryLandmarkTypeModel();
             landmarkModel.City = new DictionaryCityModel();
             landmarkModel.City.CityName = landmarkDetails.City.CityName;
+            landmarkModel.Latitude = landmarkDetails.Latitude;
+            landmarkModel.Longitude = landmarkDetails.Longitude;
             for(int i = 0;i< priceList.Count;i++)
             {
                 if(priceList[i].TicketTypeId == 1)
@@ -516,12 +518,14 @@ namespace iWasHere.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddEditTicketType(DictionaryTicketType ticketType, int id)
+        public IActionResult AddEditTicketType(DictionaryTicketType ticketType, int id,string btn)
         {
             if (id == 0)
             {
                 _dictionaryService.AddTicket(ticketType);
+                ModelState.Clear();
                 return View();
+
             }
             else
             {
@@ -532,25 +536,26 @@ namespace iWasHere.Web.Controllers
 
         }
 
-        public IActionResult IndexComments()
-        {
-            List<LandmarkReview> landmarkReviews = null;// _dictionaryService.GetDbCommentsAll();
-            return View(landmarkReviews);
-        }
 
-        public IActionResult AddReview()
-        {
-            return View();
-        }
+        //public IActionResult IndexComments()
+        //{
+        //    List<LandmarkReview> landmarkReviews = null;// _dictionaryService.GetDbCommentsAll();
+        //    return View(landmarkReviews);
+        //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult AddReview(LandmarkReview review, int id)
-        {
-            //if (id == 0)
-                _dictionaryService.AddReview(review);
-                return View();
-        }
+        //public IActionResult AddReview()
+        //{
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult AddReview(LandmarkReview review, int id)
+        //{
+          
+        //        _dictionaryService.AddReview(review);
+        //        return View();
+        //}
 
   
 

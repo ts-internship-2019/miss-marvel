@@ -20,8 +20,8 @@
                         <input asp-for="TicketTypeName" class="form-control" id="test" />
                         <span asp-validation-for="TicketTypeName" class="text-danger"></span>
                         <br />
-                        <button type="submit" class="btn btn-warning" onclick="redirect()">Save</button>
-                        <button type="submit" class="btn btn-warning" id="saveNew" onclick="saveNew()">Save and new</button>
+                        <button type="submit" class="btn btn-success" onclick="redirect()">Save</button>
+                        <button type="submit" class="btn btn-success">Save and new</button>
                         
                     </div>
                     <div class="form-group">
@@ -56,13 +56,13 @@
     function redirect() {
         window.location = '/Dictionary/TicketType';
     }
-
-    function saveNew() {
-        function clear() {
-             $('#test').val(null);
-        }
-        setTimeout(clear, 50);
-    }
+     
+    //function saveNew() {
+    //    function clear() {
+    //         $('#test').val(null);
+    //    }
+    //    setTimeout(clear, 50);
+    //}
 
    
     

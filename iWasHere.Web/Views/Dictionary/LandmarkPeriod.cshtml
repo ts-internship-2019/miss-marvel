@@ -5,16 +5,25 @@
     ViewData["Title"] = "LandmarkPeriod";
 
 }
-<!DOCTYPE html>
-<h1>Perioada pentru vizita</h1>
+
+<h1 style="color:black; margin-top:50px;"><b style="font-family:'Comic Sans MS';">Landmark Period</b></h1>
+<div class="display-field">
+    <img src=@Url.Content("https://cdn3.iconfinder.com/data/icons/business-part-2-1/48/Deadline-Period-Limit-Event-Date-Calendar-512.png") alt="LandmarkPeriod" width=100 height=100 />
+</div>
+
+
+
+
+
+   
 <html>
-<body>
+  <body>
     <p>
 
         @(Html.Kendo().TextBox()
           .Name("SearchBox")
-          .HtmlAttributes(new { style = "width: 20%", title = "SearchBox", id = "txtSearchString" }))
-        
+          .HtmlAttributes(new { style = "width: 30%", title = "SearchBox", id = "txtSearchString" }))
+
 
         @(Html.Kendo().Button()
           .Name("textButton")
@@ -57,49 +66,50 @@
     )
 
 
-</body>
+
+
+    <script>
+
+        function GetSearchBoxText() {
+            var text = $("#txtSearchString").val();
+            var obj = {};
+            obj["search"] = text;
+            return obj;
+        }
+
+
+        function DisplayData() {
+            $("#LandmarkPeriodGrid").data("kendoGrid").dataSource.read()
+        }
+
+        function redirectAddEditLMPeriod() {
+
+              location.href = '@Url.Content("/Dictionary/AddEditLandmarkPeriod")';
+        };
+
+        function editLandmarkPeriod(id) {
+            grid = $("#grdLandmarkPeriodGrid").data("kendoGrid");
+            window.location = '/Dictionary/AddEditLandmarkPeriod?id=' + id
+
+
+
+        }
+
+
+        function deleteLandmarkPeriod(id) {
+                 $.ajax({
+                        type: 'DELETE',
+                        url: '@Url.Action("DeletePeriod", "Dictionary")',
+                        data: { id: id },
+                     success: function () {
+                            $("#LandmarkPeriodGrid").data("kendoGrid").dataSource.read();
+                     },
+
+                 })
+        }
+
+
+    </script>
+
+  </body>
 </html>
-<script>
-    
-    function GetSearchBoxText() {
-        var text = $("#txtSearchString").val();
-        var obj = {};
-        obj["search"] = text;
-        return obj;
-    }
-
-
-    function DisplayData() {
-        $("#LandmarkPeriodGrid").data("kendoGrid").dataSource.read()
-    }
-
-    function redirectAddEditLMPeriod() {
-
-          location.href = '@Url.Content("/Dictionary/AddEditLandmarkPeriod")';
-      };
-
-    function editLandmarkPeriod(id) {
-        grid = $("#grdLandmarkPeriodGrid").data("kendoGrid");
-        window.location = '/Dictionary/AddEditLandmarkPeriod?id=' + id
-       
-        
- 
-    }
-
-
-    function deleteLandmarkPeriod(id) {
-             $.ajax({
-                    type: 'DELETE',
-                    url: '@Url.Action("DeletePeriod", "Dictionary")',
-                    data: { id: id },
-                 success: function () {
-                        $("#LandmarkPeriodGrid").data("kendoGrid").dataSource.read();
-                    },
-                      
-                })
-    }
-
-
-</script>
-
-
