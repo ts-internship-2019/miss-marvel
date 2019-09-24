@@ -14,24 +14,20 @@
     <title>County</title>
 </head>
 <body>
-    <p>
+    @*<p>
         <a asp-action="AddEditCounty">Create New</a>
-    </p>
-
-    <div class="row">
-        <td>
-            <label for="filterTXT">Nume Judet:</label>
-        </td>
-        @(Html.Kendo().TextBox()
-             .Name("custom")
-             .HtmlAttributes(new { style = "width: 100%", title = "custom", id = "txtFilter" })
-        )
-
-    </div>
+    </p>*@
 
     <div>
         <td>
-            <label for="countriesCB">Nume Tara:</label>
+            <label for="filterTXT">County Name:</label>
+        </td>
+        @(Html.Kendo().TextBox()
+             .Name("CountyName")
+             .HtmlAttributes(new { style = "width: 100%", title = "custom", id = "txtFilter" })
+        )
+        <td>
+            <label for="countriesCB">Country Name:</label>
         </td>
         <td>
 
@@ -57,16 +53,22 @@
         <td>
             @(Html.Kendo().Button()
                        .Name("btnSubmit")
-                       .HtmlAttributes(new { type = "button" })
+                       .HtmlAttributes(new { type = "button", @class = "k-primary" })
                        .Content("Filter")
                        .Events(e => e.Click("DisplayData"))
             )
             @(Html.Kendo().Button()
                 .Name("clearFilter")
                 .Icon("clear-filter")
-                .Content("Sterge Filtru")
-                .HtmlAttributes(new { type = "button" })
+                .Content("Delete filter")
+                .HtmlAttributes(new { type = "button", @class = "k-primary" })
                 .Events(e => e.Click("delFilters"))
+            )
+            @(Html.Kendo().Button()
+                .Name("createButton")
+                .Content("Create New")
+                .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                .Events(e => e.Click("createNew"))
             )
         </td>
     </div>
@@ -104,6 +106,10 @@
 </body>
 <script>
 
+    function createNew() {
+        window.location = '/Dictionary/AddEditCounty'
+    }
+
     function DisplayData() {
         $("#grdCounty").data("kendoGrid").dataSource.read()
     }
@@ -139,7 +145,7 @@
             grid = $("#grdCounty").data("kendoGrid");
             var id = e.currentTarget.closest("tr").cells[0].outerText;
             deleteCounty(id);
-        }
+    }
 
     function myFunction() {
         var filter = $("#txtFilter").val();

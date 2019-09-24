@@ -17,31 +17,32 @@
             <form asp-action="Add County">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="CountyId" />
+                County Name
                 @(Html.Kendo().TextBox()
                     .Name("custom")
                     .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCountyName" })
                 )
-            <div class="form-group">
-                <label class="control-label">Country:</label>
-                @(Html.Kendo().ComboBoxFor(model => model.CountryId)
-                .Placeholder("Country")
-                .DataTextField("CountryName")
-                .DataValueField("CountryId")
-                .HtmlAttributes(new { style = "width:100%;" })
-                .Filter(FilterType.Contains)
-                .AutoBind(false)
-                .MinLength(1)
-                //.Text(Model.CountryName)
-                .DataSource(source =>
-                {
-                    source.Read(read =>
+                <div class="form-group">
+                    <label class="control-label">Country:</label>
+                    @(Html.Kendo().ComboBoxFor(model => model.CountryId)
+                    .Placeholder("Country")
+                    .DataTextField("CountryName")
+                    .DataValueField("CountryId")
+                    .HtmlAttributes(new { style = "width:100%;" })
+                    .Filter(FilterType.Contains)
+                    .AutoBind(false)
+                    .MinLength(1)
+                    //.Text(Model.CountryName)
+                    .DataSource(source =>
                     {
-                        read.Action("GetCountry", "Home");
-                    })
-                    .ServerFiltering(true);
-                }))
-            </div>
-
+                        source.Read(read =>
+                        {
+                            read.Action("GetComboCountry", "Dictionary");
+                        })
+                        .ServerFiltering(true);
+                    }))
+                </div>
+                County Code
                 @(Html.Kendo().TextBox()
                 .Name("custom")
                 .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCountyCode" })
@@ -53,18 +54,27 @@
                                 .Content("Save")
                                 .Events(e => e.Click("addCounty"))
                 )
+
+                <div class="form-row">
+                    @*<div class="form-group col-md-6">
+                        <input type="submit" value="Salveaza" class="btn btn-primary btn-block" id="Save" />
+                    </div>*@
+                    <div class="form-group col-md-6">
+                        <a asp-action="County" class="btn btn-secondary btn-block">Renunta/Inapoi</a>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
 
-    <div>
+    @*<div>
         <a asp-action="County">Back to List</a>
-    </div>
+    </div>*@
 
     @section Scripts {
         @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     }
-    <script>
+<script>
 
        function addCounty() {
         var countyName = $("#txtCountyName").val();
@@ -72,7 +82,7 @@
         var countyCode = $("#txtCountyCode").val();
 
         AddCounties(countyName, countryId, countyCode);
-    }
+        }
 
       function AddCounties(countyName,countryId,countyCode) {
             $.ajax({
@@ -81,14 +91,32 @@
                 data: { countyName: countyName, countyCode: countyCode, countryId: countryId },
                 success: function (response) {
                     alert("Element adaugat cu succes");
-                  
+
                 },
                 error: function (response) {
                     alert("Eroare la adaugarea elementului");
                 }
 
             })
-        }
+      }
 
-    </script>
+      @*function empty() {
+              $(document).on('submit', 'form', function () {
+          $.post('@Url.Content("/Dictionary/County")', function () { 
+          }).done(function () {
+                  location.href = '@Url.Content("/Dictionary/AddEditCounty")';
+          });
+  
+  
+          });
+          return true;
+      }*@
+
+     function redirect() {
+ 
+          location.href = '@Url.Content("/Dictionary/County")';
+     };
+
+     </script>
+     </script>
 

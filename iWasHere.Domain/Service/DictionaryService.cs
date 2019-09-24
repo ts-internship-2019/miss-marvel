@@ -744,7 +744,7 @@ namespace iWasHere.Domain.Service
 
             #endregion
 
-            #region Victor
+        #region Victor
 
             public IEnumerable<DictionaryCountyModel> GetCounty(int pageNo, int pageSize, out int rowsNo, string lFilter, int text)
             {
@@ -822,7 +822,7 @@ namespace iWasHere.Domain.Service
                 try
                 {
 
-                    if (county.CountyId == 0)
+                    if (county.CountyId == 0 /*|| county.CountyId == null*/)
                     {
                         _dbContext.Add(county);
                         _dbContext.SaveChanges();
@@ -892,7 +892,7 @@ namespace iWasHere.Domain.Service
 
             #endregion
 
-            #region Gabi
+        #region Gabi
             public IEnumerable<DictionaryTicketTypeModel> GetDictionaryTicketType(int pgNo, int pgSize, out int countRows, string FilterTicketType)
             {
                 countRows = _dbContext.DictionaryTicketType.Count();
@@ -993,7 +993,7 @@ namespace iWasHere.Domain.Service
 
             #endregion
 
-            #region Gunoi
+        #region Gunoi
             //public List<DictionaryCityModel> GetDictionaryCities(int skip, int take, out int totalCount)
             //{
             //    totalCount = _dbContext.DictionaryCity.Count();
