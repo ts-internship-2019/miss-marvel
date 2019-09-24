@@ -6,90 +6,127 @@
 }
 
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Add County</title>
+<meta name="viewport" content="width=device-width" />
+<title>Add County</title>
 </head>
-<div style="font-family: 'Source Sans Pro, sans-serif';">
-    <h2>DictionaryCounty</h2>
-</div>
+        <div style="font-family: 'Source Sans Pro, sans-serif';">
+            <h2>DictionaryCounty</h2>
+        </div>
 
-<hr />
-<div class="row" style="font-family: 'Source Sans Pro, sans-serif';">
-    <div class="col-md-4">
-        <form asp-action="Add County">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="CountyId" />
-            @(Html.Kendo().TextBox()
-                .Name("custom")
-                .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCountyName" })
-            )
-            <div class="form-group">
-                @(Html.Kendo().ComboBox()
-                    .Name("countriesCB")
-                    .Placeholder("Tara")
-                    .DataTextField("CountryName")
-                    .DataValueField("CountryId")
-                    .HtmlAttributes(new { style = "width:100%;" })
-                    .Filter(FilterType.Contains)
-                    .AutoBind(false)
-                    .MinLength(1)
-                    .DataSource(source =>
-                    {
-                        source.Read(read =>
-                        {
-                            read.Action("GetComboCountry", "Dictionary");
-                        })
-                        .ServerFiltering(true);
-                    })
-                )
+        
+        <body>
+            <div class="bg">
+                <center>
+                    <img src=@Url.Content("https://wallpaperplay.com/walls/full/c/3/0/320656.jpg") alt="Currency Imag" />
+                </center>
             </div>
-            @(Html.Kendo().TextBox()
-            .Name("custom")
-            .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCountyCode" })
-            )
+            <div class="row" style="font-family: 'Source Sans Pro, sans-serif';">
+                <div class="col-md-4">
+                    <form asp-action="Add County">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="CountyId" />
+                        @(Html.Kendo().TextBox()
+                            .Name("custom")
+                            .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCountyName" })
+                        )
+                        <div class="form-group">
+                            @(Html.Kendo().ComboBox()
+                                .Name("countriesCB")
+                                .Placeholder("Tara")
+                                .DataTextField("CountryName")
+                                .DataValueField("CountryId")
+                                .HtmlAttributes(new { style = "width:100%;" })
+                                .Filter(FilterType.Contains)
+                                .AutoBind(false)
+                                .MinLength(1)
+                                .DataSource(source =>
+                                {
+                                    source.Read(read =>
+                                    {
+                                        read.Action("GetComboCountry", "Dictionary");
+                                    })
+                                    .ServerFiltering(true);
+                                })
+                            )
+                        </div>
+                        @(Html.Kendo().TextBox()
+                        .Name("custom")
+                        .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCountyCode" })
+                        )
 
-            @(Html.Kendo().Button()
-                            .Name("btnSubmit")
-                            .HtmlAttributes(new { type = "button" })
-                            .Content("Save")
-                            .Events(e => e.Click("addCounty"))
-            )
-        </form>
-    </div>
-</div>
+                        @(Html.Kendo().Button()
+                                        .Name("btnSubmit")
+                                             .HtmlAttributes(new {style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
+                                        .Content("Save")
+                                        .Events(e => e.Click("addCounty"))
+                        )
+                    </form>
+                </div>
+            </div>
 
-<div>
-    <a asp-action="County">Back to List</a>
-</div>
+            <div>
+                <a asp-action="County">Back to List</a>
+            </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-<script>
+            @section Scripts {
+                @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+            }
+            <script>
 
-       function addCounty() {
-        var countyName = $("#txtCountyName").val();
-        var countryId = $("#countriesCB").val();
-        var countyCode = $("#txtCountyCode").val();
+               function addCounty() {
+                var countyName = $("#txtCountyName").val();
+                var countryId = $("#countriesCB").val();
+                var countyCode = $("#txtCountyCode").val();
 
-        AddCounties(countyName, countryId, countyCode);
-    }
+                AddCounties(countyName, countryId, countyCode);
+               }
 
-      function AddCounties(countyName,countryId,countyCode) {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("AddCounty", "Dictionary")',
-                data: { countyName: countyName, countyCode: countyCode, countryId: countryId },
-                success: function (response) {
-                    alert("Element adaugat cu succes");
+              function AddCounties(countyName,countryId,countyCode) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("AddCounty", "Dictionary")',
+                        data: { countyName: countyName, countyCode: countyCode, countryId: countryId },
+                        success: function (response) {
+                            alert("Element adaugat cu succes");
 
-                },
-                error: function (response) {
-                    alert("Eroare la adaugarea elementului");
+                        },
+                        error: function (response) {
+                            alert("Eroare la adaugarea elementului");
+                        }
+
+                    })
+              }
+
+            </script>
+            <style>
+                .k-primary {
+                    min-width: 200px;
+                    color: black;
+                    background-color: cadetblue;
                 }
 
-            })
-        }
+                .btn {
+                    background-color: #f4511e;
+                    border: none;
+                    color: white;
+                    padding: 10px 22px;
+                    text-align: center;
+                    font-size: 16px;
+                    opacity: 0.6;
+                    transition: 0.3s;
+                }
 
-</script>
+                    .btn:hover {
+                        opacity: 1;
+                    }
 
+                .bg {
+                    position: absolute;
+                    left: 0;
+                    top: 71px;
+                    width: 100%;
+                    height: auto;
+                    opacity: 0.4;
+                }
+            </style>
+        </body >

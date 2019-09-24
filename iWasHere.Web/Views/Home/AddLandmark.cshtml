@@ -20,6 +20,11 @@
     }
 </style>
 <body>
+    <div class="bg">
+        <center>
+            <img src=@Url.Content("https://wallpaperplay.com/walls/full/c/3/0/320656.jpg") alt="Currency Imag" />
+        </center>
+    </div>
 
     <h4>Landmark</h4>
     <hr />
@@ -189,7 +194,7 @@
                         fileLabel.html(files[0].name);
                     }
                 });
-                
+
                 var url_string = window.location.href;
                 var url = new URL(url_string);
 
@@ -198,25 +203,25 @@
                     document.getElementById("btnAddModify").innerText = "Update";
                 }
 
-                })
-        
+            })
+
             function saveLandmark() {
-           
-            var txtCode = document.getElementById("txtLandmarkCode").value;
-            var txtName = document.getElementById("txtLandmarkName").value;
 
-            if (txtCode == "" || txtCode.length == 0 || txtCode == null) {
-                alert("Please insert landmark code first!!");
-                return;
-            }
-            if (txtName == "" || txtName.length == 0 || txtName == null) {
-                alert("Please insert landmark name first!!");
-                return;
-            }
+                var txtCode = document.getElementById("txtLandmarkCode").value;
+                var txtName = document.getElementById("txtLandmarkName").value;
 
-            form = document.getElementById("addForm");
-            form.submit();
-        }
+                if (txtCode == "" || txtCode.length == 0 || txtCode == null) {
+                    alert("Please insert landmark code first!!");
+                    return;
+                }
+                if (txtName == "" || txtName.length == 0 || txtName == null) {
+                    alert("Please insert landmark name first!!");
+                    return;
+                }
+
+                form = document.getElementById("addForm");
+                form.submit();
+            }
 
             function hide() {
                 if ($('#chkFree').is(":checked"))
@@ -257,5 +262,27 @@
 
 
     }
+
+    <style>
+
+
+        .bg {
+
+        
+            position: absolute;
+            left: 0;
+            top: 70px;
+            right:0;
+            background-size:cover;
+            width: 100%;
+            opacity: 0.4;
+            height:800px;
+
+          
+          
+           
+ 
+        }
+    </style>
 </body>
 </html>
