@@ -18,13 +18,15 @@
 
         @(Html.Kendo().Button()
           .Name("textButton")
-          .HtmlAttributes(new { type = "button" })
+          .Icon("filter")
+          .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white"})
           .Content("Search")
           .Events(ev => ev.Click("DisplayData")))
 
         @(Html.Kendo().Button()
           .Name("Add")
-          .HtmlAttributes(new { type = "button", title = "custom", id = "AddLandmarkPeriod" })
+          .Icon("k-icon k-i-plus-circle")
+          .HtmlAttributes(new {  style = "background-color:rgb(255, 153, 0); color:white", title = "custom", id = "ADD" })
           .Content("Adauga")
         .Events(e => e.Click("redirectAddEditLMPeriod")))
     </p>
@@ -35,8 +37,8 @@
     .Columns(columns =>
     {
         columns.Bound(c => c.LandmarkPeriodId).Hidden();
-        columns.Bound(c => c.LandmarkPeriodName).Width(900).Title("Interval pentru vizite");
-        columns.Template("<button id=\"btnDelete\" onclick=\"deleteLandmarkPeriod(#=LandmarkPeriodId#)\">Delete</button>");
+        columns.Bound(c => c.LandmarkPeriodName).Width(800).Title("Interval pentru vizite");
+        columns.Template("<button class='btn btn-danger' id=\"btnDelete\" onclick=\"deleteLandmarkPeriod(#=LandmarkPeriodId#)\">Delete</button>");
         columns.Template("<button id=\"btnEdit\" onclick=\"editLandmarkPeriod(#=LandmarkPeriodId#)\" width:\"10\">Edit</button>");
         
         

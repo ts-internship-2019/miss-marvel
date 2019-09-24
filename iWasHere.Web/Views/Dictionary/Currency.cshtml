@@ -30,7 +30,8 @@
 
                     @(Html.Kendo().Button()
                             .Name("btnSubmit")
-                            .HtmlAttributes(new { style = "background-color:rgb(40, 167, 69); color:white"})
+                            .Icon("filter")
+                            .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white"})
                             .Content("Filter")
                             .Events(ev => ev.Click("DisplayData"))
                     )
@@ -45,7 +46,7 @@
 
                     @(Html.Kendo().Button()
                            .Name("btnSubmit1")
-                           .HtmlAttributes(new { style = "background-color:rgb(40, 167, 69); color:white ", title = "custom", id = "ADD" })
+                           .HtmlAttributes(new {  style = "background-color:rgb(255, 153, 0); color:white", title = "custom", id = "ADD" })
                            .Icon("k-icon k-i-plus-circle")
                            .Content("Add Currency")
                            .Events(e => e.Click("OpenNewWindow"))
@@ -67,7 +68,7 @@
           columns.Template("<button class='btn btn-danger' id=btnDelete onclick=deleteCurrency(#=CurrencyTypeId#)>Delete</button>");
            columns.Command(c =>
                   {
-                c.Custom("EditRecord").Text("Edit").Click("EditCurrencyType").HtmlAttributes(new {style = "background-color:rgb(255, 153, 0); color:white" });
+                c.Custom("EditRecord").Text("Edit").Click("EditCurrencyType").HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white"});
             });
          // columns.Template("<button id=btnEdit onclick=EditCurrencyType(#=CurrencyTypeId#)>Edit</button>");
 

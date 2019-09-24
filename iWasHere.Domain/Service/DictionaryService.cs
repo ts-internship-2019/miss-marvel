@@ -642,17 +642,18 @@ namespace iWasHere.Domain.Service
             return null;
         }
 
+        //-------------------------------------------------------------------------------
 
 
-        public Models.DictionaryCountry AddDictionaryCountry(Models.DictionaryCountry dc)
-        {
-            if (!String.IsNullOrWhiteSpace(dc.CountryName))
-            {
-                _dbContext.Add(dc);
-                _dbContext.SaveChanges();
-            }
-            return dc;
-        }
+        //public Models.DictionaryCountry AddDictionaryCountry(Models.DictionaryCountry dc)
+        //{
+        //    if (!String.IsNullOrWhiteSpace(dc.CountryName))
+        //    {
+        //        _dbContext.Add(dc);
+        //        _dbContext.SaveChanges();
+        //    }
+        //    return dc;
+        //}
 
 
         public IEnumerable<DictionaryCountryModel> GetCountry(int pageNo, int pageSize, out int rowsNo, string lFilter)

@@ -171,13 +171,29 @@ namespace iWasHere.Web.Controllers
                 return View();
             }
         }
-        public ActionResult AddDictionaryCountry(DictionaryCountryModel country)
+
+
+
+        public ActionResult AddDictionaryCountry([Bind("CountryId, CountryName, CountryCode")] DictionaryCountry dc, int id)
         {
-            if (ModelState.IsValid && country != null)
+            String exMessage;
+            if (dc.CountryName != null)
             {
-                _dictionaryService.AddDictionaryCountry(country);
+                var result = _dictionaryService.AddEditDictionaryCountry(dc, out exMessage);
+                if (result == null)
+                {
+                    ModelState.AddModelError(string.Empty, exMessage);
+                    return View();
+                }
             }
-            return View();
+            if (id != 0)
+            {
+                return View(_dictionaryService.GetDictionaryCountry(id));
+            }
+            else
+            {
+                return View();
+            }
         }
 
         public ActionResult GetLT([DataSourceRequest] DataSourceRequest request, String LandmarkTypeId)
@@ -408,27 +424,7 @@ namespace iWasHere.Web.Controllers
 
 
 
-        public ActionResult AddDictionaryCountry([Bind("CountryId, CountryName, CountryCode")] DictionaryCountry dc, int id)
-        {
-            String exMessage;
-            if (dc.CountryName != null)
-            {
-                var result = _dictionaryService.AddEditDictionaryCountry(dc, out exMessage);
-                if (result == null)
-                {
-                    ModelState.AddModelError(string.Empty, exMessage);
-                    return View();
-                }
-            }
-            if (id != 0)
-            {
-                return View(_dictionaryService.GetDictionaryCountry(id));
-            }
-            else
-            {
-                return View();
-            }
-        }
+
 
 
         public ActionResult AddEditDictionaryCountry(DictionaryCountryModel country)
