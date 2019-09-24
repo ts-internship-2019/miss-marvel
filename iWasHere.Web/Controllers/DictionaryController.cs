@@ -78,7 +78,7 @@ namespace iWasHere.Web.Controllers
             if (id != -1 && list.Count == 0)
             {
                 _dictionaryService.DeleteCity(id);
-                msg = "Element adaugat cu success.";
+                msg = "Element sters cu success.";
             }
             else
             {
@@ -108,13 +108,18 @@ namespace iWasHere.Web.Controllers
 
         public ActionResult AddCity (string cityName,string cityCode,string countyId)
         {
-            var x = new DictionaryCity();
+            string msg = "";
             if (cityName !=null && cityCode != null && countyId != null)
             {
-                 x= _dictionaryService.AddDictionaryCity(cityName,cityCode,Convert.ToInt32(countyId));
+                 _dictionaryService.AddDictionaryCity(cityName,cityCode,Convert.ToInt32(countyId));
+                msg = "Element adaugat.";
+            }
+            else
+            {
+                msg = "Toate campurile sunt obligatorii.";
             }
 
-            return Json(x);
+            return Json(msg);
         }
 
         public IActionResult LandmarkDetails(int landmarkId = 35)
