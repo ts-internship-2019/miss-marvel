@@ -77,6 +77,24 @@
             window.location.href = '@Url.Action("LandmarkType", "Dictionary")';
         }
 
+        function save() {
+             var txtCode = document.getElementById("txtCode").value;
+            var txtName = document.getElementById("txtName").value;
+            if (txtCode == "" || txtCode.length == 0 || txtCode == null) {
+                alert("Please insert Landmark Type code first!!");
+                return;
+            }
+            if (txtName == "" || txtName.length == 0 || txtName == null) {
+                alert("Please insert name first!!");
+                return;
+            }
+
+            operationType = document.getElementById("mode");
+            form = document.getElementById("addForm");
+            form.submit();
+
+        }
+
         function saveNew() {
              $('<input />').attr('type', 'hidden')
             .attr('name',"buttonPressed")
