@@ -110,6 +110,36 @@ namespace iWasHere.Web.Controllers
             return Json(x);
         }
 
+        public IActionResult LandmarkDetails(int landmarkId = 33)
+        {
+            var landmarkDetails = _dictionaryService.GetLandmark(landmarkId, out List<TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType);
+            LandmarkModel landmarkModel = new LandmarkModel();
+            landmarkModel.Pictures = _dictionaryService.GetLandmarkPictures(landmarkId);
+            landmarkModel.LandmarkName = landmarkDetails.LandmarkName;
+            landmarkModel.LandmarkDescription = landmarkDetails.LandmarkDescription;
+            landmarkModel.LandmarkTicket = landmarkDetails.LandmarkTicket;
+            landmarkModel.LandmarkCode = landmarkDetails.LandmarkCode;
+            landmarkModel.LandmarkPeriodName = landmarkDetails.LandmarkPeriod.LandmarkPeriodName;
+            landmarkModel.LandmarkType = new DictionaryLandmarkTypeModel();
+            landmarkModel.City = new DictionaryCityModel();
+            landmarkModel.City.CityName = landmarkDetails.City.CityName;
+            for(int i = 0;i< priceList.Count;i++)
+            {
+                if(priceList[i].TicketTypeId == 1)
+                landmarkModel.StudentPrice = Convert.ToDecimal(priceList[i].TicketValue);
+                if(priceList[i].TicketTypeId ==3)
+                landmarkModel.RetiredPrice = Convert.ToDecimal(priceList[i].TicketValue);
+                if(priceList[i].TicketTypeId ==137)
+                landmarkModel.AdultPrice = Convert.ToDecimal(priceList[i].TicketValue);
+            }
+            landmarkModel.LandmarkType.DictionaryItemName = landmarkDetails.LandmarkType.DictionaryItemName;
+            
+
+
+            return View(landmarkModel);
+        }
+        
+
         #endregion
 
         #region Mihnea
@@ -216,7 +246,7 @@ namespace iWasHere.Web.Controllers
         public ActionResult AddEditCurrency([Bind("CurrencyTypeId, CurrencyName, CurrencyCode, CurrencyExRate")] DictionaryCurrencyType dc, int id)
         {
             String exMessage;
-            if (ModelState.IsValid && dc.CurrencyTypeId != null)
+            if (dc.CurrencyCode != null)
             {
                 var result = _dictionaryService.AddEditDictionaryCurrencyType(dc, out exMessage);
                 if (result == null)
@@ -327,13 +357,17 @@ namespace iWasHere.Web.Controllers
             return null;
         }
 
+        public ActionResult GetDictionaryCountry([DataSourceRequest] DataSourceRequest request, String CountryId)
+        {
+            int rowsNo = 0;
+            var x = _dictionaryService.LoadCountry(Convert.ToInt32(CountryId));
+            return Json(x);
 
-
+        }
 
 
         public IActionResult Country()
         {
-         
             return View();
         }
 
@@ -362,6 +396,67 @@ namespace iWasHere.Web.Controllers
                 }).ToList();
             }
         }
+
+        public ActionResult DeleteCountry([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            if (id != -1)
+            {
+                _dictionaryService.DeleteCountry(id);
+            }
+            return Json(ModelState.ToDataSourceResult());
+        }
+
+
+
+        public ActionResult AddDictionaryCountry([Bind("CountryId, CountryName, CountryCode")] DictionaryCountry dc, int id)
+        {
+            String exMessage;
+            if (dc.CountryName != null)
+            {
+                var result = _dictionaryService.AddEditDictionaryCountry(dc, out exMessage);
+                if (result == null)
+                {
+                    ModelState.AddModelError(string.Empty, exMessage);
+                    return View();
+                }
+            }
+            if (id != 0)
+            {
+                return View(_dictionaryService.GetDictionaryCountry(id));
+            }
+            else
+            {
+                return View();
+            }
+        }
+
+
+        public ActionResult AddEditDictionaryCountry(DictionaryCountryModel country)
+        {
+            if (ModelState.IsValid && country != null)
+            {
+               _dictionaryService.AddDictionaryCountry(country);
+            }
+            return View();
+        }
+
+
+        public ActionResult Edit(int id, string name, string code)
+        {
+            String err;
+            DictionaryCountry ct = _dictionaryService.GetDictionaryCountry(id);
+            if (ct == null)
+            {
+                return View();
+            }
+            ct.CountryId = id;
+            ct.CountryName = name;
+            ct.CountryCode = code;
+            _dictionaryService.AddEditDictionaryCountry(ct, out err);
+            return Json(ModelState.ToDataSourceResult());
+        }
+
+
         #endregion
 
         #region Gabi
@@ -425,7 +520,7 @@ namespace iWasHere.Web.Controllers
 
         public IActionResult IndexComments()
         {
-            List<LandmarkReview> landmarkReviews = _dictionaryService.GetDbCommentsAll();
+            List<LandmarkReview> landmarkReviews = null;// _dictionaryService.GetDbCommentsAll();
             return View(landmarkReviews);
         }
 
@@ -513,31 +608,9 @@ namespace iWasHere.Web.Controllers
             return Json(ModelState.ToDataSourceResult());
         }
 
-        // ------------------- LandmarkPeriod
-        public IActionResult AddEditLandmarkperiod(int id=0)
+        public IActionResult onUpdateCountry()
         {
-            return View(new DictionaryLandmarkPeriod());
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddEditLandmarkPeriod([Bind("LandmarkPeriodId, LandmarkPeriodName")] DictionaryLandmarkPeriod landmarkPeriod, int id)
-        {
-            if (ModelState.IsValid)
-            {
-                if (id == 0)
-                {
-                    _dictionaryService.AddEditLandmarkPeriods(landmarkPeriod);
-                }
-                
-            }
-            return View();
-
-        }
-        public ActionResult DeletePeriod( int id)
-        {
-            _dictionaryService.DeletePeriod(id);
-            return Json(ModelState.ToDataSourceResult());
+            return Redirect("/Dictionary/Country");
         }
         #endregion
 
@@ -555,6 +628,33 @@ namespace iWasHere.Web.Controllers
             dataSourceResult.Total = totalCount;
 
             return Json(dataSourceResult);
+        }
+
+        public IActionResult AddEditLandmarkPeriod(int id)
+        {
+            return View(_dictionaryService.GetDictionaryLandmarkPeriod(id));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddEditLandmarkPeriod(DictionaryLandmarkPeriod landmarkPeriod)
+        {
+            if (landmarkPeriod.LandmarkPeriodId == 0 || landmarkPeriod.LandmarkPeriodId ==null)
+            {
+                _dictionaryService.AddEditLandmarkPeriods(landmarkPeriod);
+                ModelState.Clear();
+            }
+            else
+            {
+                _dictionaryService.AddEditLandmarkPeriods(landmarkPeriod);
+            }
+            return View();
+
+
+        }
+        public ActionResult DeletePeriod(int id)
+        {
+            _dictionaryService.DeletePeriod(id);
+            return Json(ModelState.ToDataSourceResult());
         }
         #endregion
 
