@@ -54,7 +54,7 @@
             <p>
                 @(Html.Kendo().Button()
                             .Name("btnSubmit")
-                            .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                            .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white ; width:130px"})
                             .Content("Save")
                             .Events(e => e.Click("addCity"))
                 )
@@ -62,7 +62,7 @@
             <p>
                 @(Html.Kendo().Button()
                     .Name("btnNew")
-                    .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                    .HtmlAttributes(new {style = "background-color:rgb(255, 153, 0); color:white; width:130px"})
                     .Content("Save and New")
                     .Events(e => e.Click("saveNew"))
                 )
@@ -75,7 +75,8 @@
     <p>
         @(Html.Kendo().Button()
                     .Name("btnCancel")
-                    .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                    .HtmlAttributes(new {  style = "background-color:rgb(220, 53, 69); color:white; width:130px"})
+                    //.HtmlAttributes(new { type = "button", @class = "k-primary" })
                     .Content("Cancel")
                     .Events(e => e.Click("back"))
                     )
