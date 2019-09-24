@@ -315,22 +315,25 @@ namespace iWasHere.Domain.Service
 
         public Models.Landmark GetLandmark(int landmarkId, out List<Models.TicketXlandmark> priceList, out DictionaryCurrencyType currency)
         {
-          
+
 
             priceList = _dbContext.TicketXlandmark.Where((a => Convert.ToInt32(a.LandmarkId) == landmarkId)).Select(
-                price => new TicketXlandmark
-                {
-                    TicketXlandmarkId = price.TicketXlandmarkId,
-                    LandmarkId = price.LandmarkId,
-                    TicketTypeId = price.TicketTypeId,
-                    CurrencyTypeId = price.CurrencyTypeId,
-                    TicketValue = price.TicketValue
+               price => new TicketXlandmark
+               {
+                   TicketXlandmarkId = price.TicketXlandmarkId,
+                   LandmarkId = price.LandmarkId,
+                   TicketTypeId = price.TicketTypeId,
+                   CurrencyTypeId = price.CurrencyTypeId,
+                   TicketValue = price.TicketValue
 
-                })
-            .ToList();
-
-            int currencyId = Convert.ToInt32(priceList[0].CurrencyTypeId);
-            currency = _dbContext.DictionaryCurrencyType.FirstOrDefault(a => a.CurrencyTypeId == currencyId);
+               })
+           .ToList();
+            currency = null;
+            if (priceList.Count > 0)
+            {
+                int currencyId = Convert.ToInt32(priceList[0].CurrencyTypeId);
+                currency = _dbContext.DictionaryCurrencyType.FirstOrDefault(a => a.CurrencyTypeId == currencyId);
+            }
             Models.Landmark landmark = _dbContext.Landmark.Include(a => a.City)
                 .Include(a => a.LandmarkType)
                 .Include(a => a.LandmarkPeriod)

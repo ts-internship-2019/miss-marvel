@@ -77,12 +77,43 @@
             window.location.href = '@Url.Action("LandmarkType", "Dictionary")';
         }
 
-        function saveNew() {
+        function save() {
+             var txtCode = document.getElementById("txtCode").value;
+            var txtName = document.getElementById("txtName").value;
+            if (txtCode == "" || txtCode.length == 0 || txtCode == null) {
+                alert("Please insert Landmark Type code first!!");
+                return;
+            }
+            if (txtName == "" || txtName.length == 0 || txtName == null) {
+                alert("Please insert name first!!");
+                return;
+            }
+
             operationType = document.getElementById("mode");
-            operationType.setAttribute("value", "New");
             form = document.getElementById("addForm");
             form.submit();
-            //window.location.href = '@Url.Action("LandmarkType", "AddEditLandmarkType")';
+
+        }
+
+        function saveNew() {
+             $('<input />').attr('type', 'hidden')
+            .attr('name',"buttonPressed")
+            .attr('value', "SN")
+            .appendTo('#addForm');
+            var txtCode = document.getElementById("txtCode").value;
+            var txtName = document.getElementById("txtName").value;
+            if (txtCode == "" || txtCode.length == 0 || txtCode == null) {
+                alert("Please insert Landmark Type code first!!");
+                return;
+            }
+            if (txtName == "" || txtName.length == 0 || txtName == null) {
+                alert("Please insert name first!!");
+                return;
+            }
+
+            operationType = document.getElementById("mode");
+            form = document.getElementById("addForm");
+            form.submit();
         }
     </script>
 </body>
