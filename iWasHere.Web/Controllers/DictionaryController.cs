@@ -516,12 +516,14 @@ namespace iWasHere.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddEditTicketType(DictionaryTicketType ticketType, int id)
+        public IActionResult AddEditTicketType(DictionaryTicketType ticketType, int id,string btn)
         {
             if (id == 0)
             {
                 _dictionaryService.AddTicket(ticketType);
+                ModelState.Clear();
                 return View();
+
             }
             else
             {
@@ -532,25 +534,26 @@ namespace iWasHere.Web.Controllers
 
         }
 
-        public IActionResult IndexComments()
-        {
-            List<LandmarkReview> landmarkReviews = null;// _dictionaryService.GetDbCommentsAll();
-            return View(landmarkReviews);
-        }
 
-        public IActionResult AddReview()
-        {
-            return View();
-        }
+        //public IActionResult IndexComments()
+        //{
+        //    List<LandmarkReview> landmarkReviews = null;// _dictionaryService.GetDbCommentsAll();
+        //    return View(landmarkReviews);
+        //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult AddReview(LandmarkReview review, int id)
-        {
-            //if (id == 0)
-                _dictionaryService.AddReview(review);
-                return View();
-        }
+        //public IActionResult AddReview()
+        //{
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult AddReview(LandmarkReview review, int id)
+        //{
+          
+        //        _dictionaryService.AddReview(review);
+        //        return View();
+        //}
 
   
 
