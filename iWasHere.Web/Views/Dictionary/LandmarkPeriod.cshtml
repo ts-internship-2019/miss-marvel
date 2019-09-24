@@ -49,7 +49,7 @@
          columns.Bound(c => c.LandmarkPeriodId).Hidden();
          columns.Bound(c => c.LandmarkPeriodName).Width(800).Title("Interval pentru vizite");
          columns.Template("<button class='btn btn-danger' id=btnDelete onclick=deleteLandmarkPeriod(#=LandmarkPeriodId#)>Delete</button>");
-         columns.Template("<button id=btnEdit onclick=editLandmarkPeriod(#=LandmarkPeriodId#)>Edit</button>");
+         columns.Template("<button class='btn btn-warning' id=btnEdit onclick=editLandmarkPeriod(#=LandmarkPeriodId#)>Edit</button>");
        })
 
 
