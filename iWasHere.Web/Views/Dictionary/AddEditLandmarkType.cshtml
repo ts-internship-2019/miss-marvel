@@ -38,8 +38,8 @@
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <button name="submit" value="create" id="btnAddModify" onclick="save()" class="btn btn-primary"> Create </button>
-                    <button name="submit" value="SN" class="btn btn-primary" > Save and New </button>
+                    <a value="create" id="btnAddModify" onclick="save()" class="btn btn-primary"> Create </a>
+                    <a value="SN" class="btn btn-primary" onclick="saveNew()" > Save and New </a>
                     <a class="btn btn-primary" onclick="cancel()"> Cancel </a>
                 </div>
             </form>
@@ -73,11 +73,24 @@
         }
 
         function saveNew() {
+             $('<input />').attr('type', 'hidden')
+            .attr('name',"buttonPressed")
+            .attr('value', "SN")
+            .appendTo('#addForm');
+            var txtCode = document.getElementById("txtCode").value;
+            var txtName = document.getElementById("txtName").value;
+            if (txtCode == "" || txtCode.length == 0 || txtCode == null) {
+                alert("Please insert Landmark Type code first!!");
+                return;
+            }
+            if (txtName == "" || txtName.length == 0 || txtName == null) {
+                alert("Please insert name first!!");
+                return;
+            }
+
             operationType = document.getElementById("mode");
-            operationType.setAttribute("value", "New");
             form = document.getElementById("addForm");
             form.submit();
-            //window.location.href = '@Url.Action("LandmarkType", "AddEditLandmarkType")';
         }
     </script>
 </body>
