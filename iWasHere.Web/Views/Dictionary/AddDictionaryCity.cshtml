@@ -116,8 +116,9 @@
                 url: '@Url.Action("AddCity", "Dictionary")',
                 data: { cityName: cityName, cityCode: cityCode, countyId: countyId },
                 success: function (response) {
-                    alert("Element adaugat");
-                  back();
+                    alert(response);
+                    if(response == "Element adaugat.")
+                    back();
                 },
                 error: function (response) {
                     alert("Not good");

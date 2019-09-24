@@ -42,7 +42,7 @@
                 @(Html.Kendo().Button()
                         .Name("btnSubmit")
                         .Icon("filter")
-                        .HtmlAttributes(new { type = "button" })
+                        .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white"})
                         .Content("Filter")
                         .Events(ev => ev.Click("DisplayData"))
                 )
@@ -50,7 +50,7 @@
                 @(Html.Kendo().Button()
                        .Name("btnSubmit1")
                        .Icon("filter-clear")
-                       .HtmlAttributes(new { type = "button" })
+                        .HtmlAttributes(new {  style = "background-color:rgb(220, 53, 69); color:white"})
                        .Content("Delete Filter")
                        .Events(ev => ev.Click("deleteFilters"))
                 )
@@ -58,7 +58,7 @@
                 @(Html.Kendo().Button()
                       .Name("btnSubmit2")
                       .Icon("k-icon k-i-plus-circle")
-                      .HtmlAttributes(new { type = "button" })
+                      .HtmlAttributes(new {  style = "background-color:rgb(255, 153, 0); color:white", title = "custom", id = "ADD" })
                       .Content("Add Country")
                       .Events(e => e.Click("OpenNewWindow"))
                 )
@@ -75,23 +75,13 @@
               columns.Bound(p => p.CountryId).Hidden();
               columns.Bound(p => p.CountryName).Width(400);
               columns.Bound(p => p.CountryCode).Width(400);
-              //columns.Command(c =>
-              //{
-              //    c.Custom("EditRecord").Text("Edit").Click("dgChange");
-              //});
-              //       columns.Command(c =>
-              //            {
-              //    c.Custom("DeleteRecord").Text("Delete").Click("dgChange");
-              //});
-              //columns.Template("<button id=buttonEdit onCLick= editCountry(#=CountryId#)>Edit</button>");
-
 
               columns.Command(c =>
               {
-                  c.Custom("EditRecord").Text("Edit").Click("dgChange");
+                  c.Custom("EditRecord").Text("Edit").Click("dgChange").HtmlAttributes(new {style = "background-color:rgb(255, 153, 0); color:white" });
               });
 
-              columns.Template("<button id=buttonDelete onCLick= deleteCountry(#=CountryId#)>Delete</button>");
+              columns.Template("<button class='btn btn-danger' id=buttonDelete onCLick= deleteCountry(#=CountryId#)>Delete</button>");
           })
           .Scrollable()
           // .Groupable()

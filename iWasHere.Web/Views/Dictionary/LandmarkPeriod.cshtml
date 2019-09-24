@@ -27,13 +27,15 @@
 
         @(Html.Kendo().Button()
           .Name("textButton")
-          .HtmlAttributes(new { type = "button" })
+          .Icon("filter")
+          .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white"})
           .Content("Search")
           .Events(ev => ev.Click("DisplayData")))
 
         @(Html.Kendo().Button()
           .Name("Add")
-          .HtmlAttributes(new { type = "button", title = "custom", id = "AddLandmarkPeriod" })
+          .Icon("k-icon k-i-plus-circle")
+          .HtmlAttributes(new {  style = "background-color:rgb(255, 153, 0); color:white", title = "custom", id = "ADD" })
           .Content("Adauga")
         .Events(e => e.Click("redirectAddEditLMPeriod")))
     </p>
