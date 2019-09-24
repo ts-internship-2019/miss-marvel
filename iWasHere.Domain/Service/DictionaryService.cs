@@ -133,23 +133,16 @@ namespace iWasHere.Domain.Service
             }
         }
 
-        //public DTOs.LandmarkModel GetLandmarkDetails (int landmarkId)
-        //{
-        //    LandmarkModel landmarkModel = _dbContext.Landmark.Select(a => new LandmarkModel()
-        //    {
-        //        LandmarkName = a.LandmarkName,
-        //        LandmarkPeriodName = a.LandmarkPeriod.LandmarkPeriodName,
-
-
-
-        //    }).Where 
-        //}
-        public string RCity(int cityId)
+       public List<LandmarkPicture> GetLandmarkPictures(int landmarkId)
         {
-            DictionaryCity dictionaryCity = _dbContext.DictionaryCity.Find(cityId);
-            string cityName = dictionaryCity.CityName;
-            return cityName;
+            List<LandmarkPicture> landmarkPictures = _dbContext.LandmarkPicture.Where(a=> a.LandmarkId == landmarkId).Select(a => new LandmarkPicture()
+            {
+                PictureName = a.PictureName
+            }).ToList();
+
+            return landmarkPictures;
         }
+    
 
 
         #endregion
@@ -195,10 +188,19 @@ namespace iWasHere.Domain.Service
             }
         }
 
-        public object GetCurrencyTypeCombo(string text)
-        {
-            throw new NotImplementedException();
-        }
+        //public List<DictionaryCurrencyTypeModel> GetCurrencyTypeCombo(String filter)
+        //{
+
+        //    return _dbContext.DictionaryCurrencyType.Where((a => a.CurrencyName.Contains(filter))).Take(10).Select(
+        //        currency => new DictionaryCurrencyTypeModel
+        //        {
+        //            CurrencyTypeId = currency.CurrencyTypeId,
+        //            CurrencyCode = currency.CurrencyCode,
+        //            CurrencyName = currency.CurrencyName,
+        //            CurrencyExRate = currency.CurrencyExRate
+        //        }).ToList();
+
+        //}
 
         public IEnumerable<DictionaryLandmarkTypeModel> LoadLandmarkType(int LandmarkTypeId)
         {
@@ -226,7 +228,7 @@ namespace iWasHere.Domain.Service
 
         }
 
-       
+
 
         public List<DictionaryCityModel> GetCities(String filter)
         {
@@ -242,7 +244,8 @@ namespace iWasHere.Domain.Service
         }
 
 
-        public Models.Landmark AddEditLandmark(Models.Landmark landmark, List<Models.TicketXlandmark> priceList, out String errMsg, List<LandmarkPicture> landmarkPictures)
+        public Models.Landmark AddEditLandmark(Models.Landmark landmark, List<Models.TicketXlandmark> priceList,
+            out String errMsg, List<LandmarkPicture> pictures)
         {
             errMsg = null;
             try
@@ -259,11 +262,35 @@ namespace iWasHere.Domain.Service
                         _dbContext.TicketXlandmark.Add(price);
                         _dbContext.SaveChanges();
                     }
+                    foreach (LandmarkPicture picture in pictures)
+                    {
+                        picture.LandmarkId = lastInserted.LandmarkId;
+                        _dbContext.LandmarkPicture.Add(picture);
+                        _dbContext.SaveChanges();
+                    }
                 }
                 else
                 {
+
                     _dbContext.Update(landmark);
                     _dbContext.SaveChanges();
+                    List<TicketXlandmark> oldPriceList = _dbContext.TicketXlandmark.Where((a => Convert.ToInt32(a.LandmarkId) == landmark.LandmarkId)).Select(
+                 price => new TicketXlandmark
+                 {
+                     TicketXlandmarkId = price.TicketXlandmarkId,
+                     LandmarkId = price.LandmarkId,
+                     TicketTypeId = price.TicketTypeId,
+                     CurrencyTypeId = price.CurrencyTypeId,
+                     TicketValue = price.TicketValue
+
+                 })
+             .ToList();
+                    for (int i = 0; i < priceList.Count; i++)
+                    {
+                        priceList[i].TicketXlandmarkId = oldPriceList[i].TicketXlandmarkId;
+                        _dbContext.TicketXlandmark.Update(priceList[i]);
+                        _dbContext.SaveChanges();
+                    }
                 }
 
                 return landmark;
@@ -277,9 +304,9 @@ namespace iWasHere.Domain.Service
 
 
 
-        public Models.Landmark GetLandmark(int landmarkId, out List<Models.TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType)
+        public Models.Landmark GetLandmark(int landmarkId, out List<Models.TicketXlandmark> priceList, out DictionaryCurrencyType currency)
         {
-            dictionaryCurrencyType = new DictionaryCurrencyType();
+          
 
             priceList = _dbContext.TicketXlandmark.Where((a => Convert.ToInt32(a.LandmarkId) == landmarkId)).Select(
                 price => new TicketXlandmark
@@ -293,15 +320,13 @@ namespace iWasHere.Domain.Service
                 })
             .ToList();
 
-
-            //Models.Landmark landmark = _dbContext.Landmark.Include(a => a.LandmarkPeriod).FirstOrDefault(a => a.LandmarkId == landmarkId);
+            int currencyId = Convert.ToInt32(priceList[0].CurrencyTypeId);
+            currency = _dbContext.DictionaryCurrencyType.FirstOrDefault(a => a.CurrencyTypeId == currencyId);
             Models.Landmark landmark = _dbContext.Landmark.Include(a => a.City)
-               .Include(a => a.LandmarkType)
-               .Include(a => a.LandmarkPeriod)
-               .FirstOrDefault(a => a.LandmarkId == landmarkId);
-
+                .Include(a => a.LandmarkType)
+                .Include(a => a.LandmarkPeriod)
+                .FirstOrDefault(a => a.LandmarkId == landmarkId);
             return landmark;
-
         }
         //pana aici
 
@@ -574,7 +599,7 @@ namespace iWasHere.Domain.Service
             }
 
         }
-      
+
 
         #endregion
 
@@ -688,279 +713,307 @@ namespace iWasHere.Domain.Service
                 CountryCode = a.CountryCode
             });
 
+
         }
 
-        public Models.DictionaryCountry GetDictionaryCountry(int countryId)
+        public List<DictionaryCurrencyTypeModel> GetCurrencyTypeCombo(String filter)
         {
-            Models.DictionaryCountry country = _dbContext.DictionaryCountry.Find(countryId);
-            return country;
-        }
 
-
-
-
-
-
-
-
-
-        #endregion
-
-        #region Victor
-
-        public IEnumerable<DictionaryCountyModel> GetCounty(int pageNo, int pageSize, out int rowsNo, string lFilter, int text)
-        {
-            rowsNo = 0;
-            rowsNo = _dbContext.DictionaryCounty.Count();
-            if (lFilter == null && text < 1)
-                return _dbContext.DictionaryCounty.Skip((pageNo - 1) * pageSize).Take(pageSize).Select(County => new DictionaryCountyModel
+            return _dbContext.DictionaryCurrencyType.Where((a => a.CurrencyName.Contains(filter))).Take(10).Select(
+                currency => new DictionaryCurrencyTypeModel
                 {
-                    CountyId = County.CountyId,
-                    CountyName = County.CountyName,
-                    CountryId = Convert.ToInt32(County.CountryId),
-                    CountyCode = County.CountyCode
-                });
-            else if (lFilter != null && text < 1)
+                    CurrencyTypeId = currency.CurrencyTypeId,
+                    CurrencyCode = currency.CurrencyCode,
+                    CurrencyName = currency.CurrencyName,
+                    CurrencyExRate = currency.CurrencyExRate
+                }).ToList();
+        }
+            public Models.DictionaryCountry GetDictionaryCountry(int countryId)
             {
-                rowsNo = _dbContext.DictionaryCounty.Where(a => a.CountyName.Contains(lFilter)).Count();
-                return _dbContext.DictionaryCounty.Where(a => a.CountyName.Contains(lFilter)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(County => new DictionaryCountyModel
+                Models.DictionaryCountry country = _dbContext.DictionaryCountry.Find(countryId);
+                return country;
+            }
+
+
+
+
+
+
+
+
+
+            #endregion
+
+            #region Victor
+
+            public IEnumerable<DictionaryCountyModel> GetCounty(int pageNo, int pageSize, out int rowsNo, string lFilter, int text)
+            {
+                rowsNo = 0;
+                rowsNo = _dbContext.DictionaryCounty.Count();
+                if (lFilter == null && text < 1)
+                    return _dbContext.DictionaryCounty.Skip((pageNo - 1) * pageSize).Take(pageSize).Select(County => new DictionaryCountyModel
+                    {
+                        CountyId = County.CountyId,
+                        CountyName = County.CountyName,
+                        CountryId = Convert.ToInt32(County.CountryId),
+                        CountyCode = County.CountyCode
+                    });
+                else if (lFilter != null && text < 1)
+                {
+                    rowsNo = _dbContext.DictionaryCounty.Where(a => a.CountyName.Contains(lFilter)).Count();
+                    return _dbContext.DictionaryCounty.Where(a => a.CountyName.Contains(lFilter)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(County => new DictionaryCountyModel
+                    {
+                        CountyId = County.CountyId,
+                        CountyName = County.CountyName,
+                        CountryId = Convert.ToInt32(County.CountryId),
+                        CountyCode = County.CountyCode
+                    });
+                }
+                else if (lFilter == null && text > 0)
+                {
+                    rowsNo = _dbContext.DictionaryCounty.Where(a => a.CountryId.Equals(text)).Count();
+                    return _dbContext.DictionaryCounty.Where(a => a.CountryId.Equals(text)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(County => new DictionaryCountyModel
+                    {
+                        CountyId = County.CountyId,
+                        CountyName = County.CountyName,
+                        CountryId = Convert.ToInt32(County.CountryId),
+                        CountyCode = County.CountyCode
+                    });
+                }
+                else
+                {
+                    rowsNo = _dbContext.DictionaryCounty.Where(a => a.CountyName.Contains(lFilter) && a.CountyId.Equals(text)).Count();
+                    return _dbContext.DictionaryCounty.Where(a => a.CountyName.Contains(lFilter) && a.CountyId.Equals(text)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(County => new DictionaryCountyModel
+                    {
+                        CountyId = County.CountyId,
+                        CountyName = County.CountyName,
+                        CountryId = Convert.ToInt32(County.CountryId),
+                        CountyCode = County.CountyCode
+                    });
+                }
+            }
+
+            public IEnumerable<DictionaryCountyModel> LoadCounty(int CountyId)
+            {
+                return _dbContext.DictionaryCounty.Where(a => a.CountyId == CountyId).Select(County => new DictionaryCountyModel
                 {
                     CountyId = County.CountyId,
                     CountyName = County.CountyName,
-                    CountryId = Convert.ToInt32(County.CountryId),
-                    CountyCode = County.CountyCode
+                    CountyCode = County.CountyCode,
+                    CountryId = Convert.ToInt32(County.CountryId)
                 });
             }
-            else if (lFilter == null && text > 0)
+
+            public IEnumerable<DictionaryCountyModel> GetCounty(out int totalRows)
             {
-                rowsNo = _dbContext.DictionaryCounty.Where(a => a.CountryId.Equals(text)).Count();
-                return _dbContext.DictionaryCounty.Where(a => a.CountryId.Equals(text)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(County => new DictionaryCountyModel
+                totalRows = _dbContext.DictionaryCounty.Count();
+                return _dbContext.DictionaryCounty.Select(County => new DictionaryCountyModel
                 {
                     CountyId = County.CountyId,
                     CountyName = County.CountyName,
-                    CountryId = Convert.ToInt32(County.CountryId),
-                    CountyCode = County.CountyCode
+                    CountyCode = County.CountyCode,
+                    CountryId = Convert.ToInt32(County.CountryId)
                 });
             }
-            else
+
+            public Models.DictionaryCounty AddEditDictionaryCounty(Models.DictionaryCounty county, out String errMsg)
             {
-                rowsNo = _dbContext.DictionaryCounty.Where(a => a.CountyName.Contains(lFilter) && a.CountyId.Equals(text)).Count();
-                return _dbContext.DictionaryCounty.Where(a => a.CountyName.Contains(lFilter) && a.CountyId.Equals(text)).Skip((pageNo - 1) * pageSize).Take(pageSize).Select(County => new DictionaryCountyModel
+                errMsg = null;
+                try
                 {
-                    CountyId = County.CountyId,
-                    CountyName = County.CountyName,
-                    CountryId = Convert.ToInt32(County.CountryId),
-                    CountyCode = County.CountyCode
-                });
+
+                    if (county.CountyId == 0)
+                    {
+                        _dbContext.Add(county);
+                        _dbContext.SaveChanges();
+                    }
+                    else
+                    {
+                        _dbContext.Update(county);
+                        _dbContext.SaveChanges();
+                    }
+
+                    return county;
+                }
+                catch (Exception ex)
+                {
+                    errMsg = ex.Message.ToString();
+                    return null;
+                }
             }
-        }
 
-        public IEnumerable<DictionaryCountyModel> LoadCounty(int CountyId)
-        {
-            return _dbContext.DictionaryCounty.Where(a => a.CountyId == CountyId).Select(County => new DictionaryCountyModel
+            public void DeleteCounty(int id)
             {
-                CountyId = County.CountyId,
-                CountyName = County.CountyName,
-                CountyCode = County.CountyCode,
-                CountryId = Convert.ToInt32(County.CountryId)
-            });
-        }
+                Models.DictionaryCounty county = new Models.DictionaryCounty() { CountyId = id };
 
-        public IEnumerable<DictionaryCountyModel> GetCounty(out int totalRows)
-        {
-            totalRows = _dbContext.DictionaryCounty.Count();
-            return _dbContext.DictionaryCounty.Select(County => new DictionaryCountyModel
+                _dbContext.DictionaryCounty.Remove(county);
+                _dbContext.SaveChanges();
+
+            }
+
+
+            public List<DictionaryCountry> GetComboCountry(string text)
             {
-                CountyId = County.CountyId,
-                CountyName = County.CountyName,
-                CountyCode = County.CountyCode,
-                CountryId = Convert.ToInt32(County.CountryId)
-            });
-        }
+                List<DictionaryCountry> comboCountry = _dbContext.DictionaryCountry.Select(a => new DictionaryCountry()
+                {
+                    CountryId = a.CountryId,
+                    CountryName = a.CountryName
 
-        public Models.DictionaryCounty AddEditDictionaryCounty(Models.DictionaryCounty county, out String errMsg)
-        {
-            errMsg = null;
-            try
+                }).Where(a => a.CountryName.Contains(text)).Take(10).ToList();
+                return comboCountry;
+            }
+
+            public Models.DictionaryCounty GetDictionaryCounty(int countyId)
             {
+                Models.DictionaryCounty county = _dbContext.DictionaryCounty.Find(countyId);
+                return county;
+            }
 
-                if (county.CountyId == 0)
+            public Models.DictionaryCounty AddDictionaryCounty(Models.DictionaryCounty countyModel)
+            {
+                if (!String.IsNullOrWhiteSpace(countyModel.CountyName))
+                {
+                    _dbContext.Add(countyModel);
+                    _dbContext.SaveChanges();
+                }
+                return countyModel;
+            }
+
+
+            public DictionaryCountyModel AddDictionaryCounty(DictionaryCountyModel county)
+            {
+                if (!String.IsNullOrWhiteSpace(county.CountyName))
                 {
                     _dbContext.Add(county);
                     _dbContext.SaveChanges();
                 }
-                else
-                {
-                    _dbContext.Update(county);
-                    _dbContext.SaveChanges();
-                }
-
                 return county;
             }
-            catch (Exception ex)
+
+            #endregion
+
+            #region Gabi
+            public IEnumerable<DictionaryTicketTypeModel> GetDictionaryTicketType(int pgNo, int pgSize, out int countRows, string FilterTicketType)
             {
-                errMsg = ex.Message.ToString();
-                return null;
+                countRows = _dbContext.DictionaryTicketType.Count();
+                int toSkip = (pgNo - 1) * pgSize;
+                if (FilterTicketType == null)
+                    return _dbContext.DictionaryTicketType.Skip(toSkip).Take(pgSize).Select(x => new DictionaryTicketTypeModel
+                    {
+                        TicketTypeId = x.TicketTypeId,
+                        TicketTypeName = x.TicketTypeName
+
+                    });
+                else
+                    return _dbContext.DictionaryTicketType.Where(x => x.TicketTypeName.Contains(FilterTicketType)).Skip(toSkip).Take(pgSize).Select(x => new DictionaryTicketTypeModel
+                    {
+                        TicketTypeId = x.TicketTypeId,
+                        TicketTypeName = x.TicketTypeName
+                    });
             }
-        }
 
-        public void DeleteCounty(int id)
-        {
-            Models.DictionaryCounty county = new Models.DictionaryCounty() { CountyId = id };
-
-            _dbContext.DictionaryCounty.Remove(county);
-            _dbContext.SaveChanges();
-
-        }
-
-
-        public List<DictionaryCountry> GetComboCountry(string text)
-        {
-            List<DictionaryCountry> comboCountry = _dbContext.DictionaryCountry.Select(a => new DictionaryCountry()
+            public DictionaryTicketType GetTicketTypeId(int ticketTypeId)
             {
-                CountryId = a.CountryId,
-                CountryName = a.CountryName
+                DictionaryTicketType ticketType = _dbContext.DictionaryTicketType.Where(x => x.TicketTypeId == ticketTypeId)
+                    .Select(x => new DictionaryTicketType()
+                    {
+                        TicketTypeId = x.TicketTypeId,
+                        TicketTypeName = x.TicketTypeName
+                    }).First();
 
-            }).Where(a => a.CountryName.Contains(text)).Take(10).ToList();
-            return comboCountry;
-        }
-
-        public Models.DictionaryCounty GetDictionaryCounty(int countyId)
-        {
-            Models.DictionaryCounty county = _dbContext.DictionaryCounty.Find(countyId);
-            return county;
-        }
-
-        public Models.DictionaryCounty AddDictionaryCounty(Models.DictionaryCounty countyModel)
-        {
-            if (!String.IsNullOrWhiteSpace(countyModel.CountyName))
-            {
-                _dbContext.Add(countyModel);
-                _dbContext.SaveChanges();
+                return ticketType;
             }
-            return countyModel;
-        }
 
 
-        public DictionaryCountyModel AddDictionaryCounty(DictionaryCountyModel county)
-        {
-            if (!String.IsNullOrWhiteSpace(county.CountyName))
+
+            public void AddTicket(DictionaryTicketType ticketType)
             {
-                _dbContext.Add(county);
-                _dbContext.SaveChanges();
-            }
-            return county;
-        }
-
-        #endregion
-
-        #region Gabi
-        public IEnumerable<DictionaryTicketTypeModel> GetDictionaryTicketType(int pgNo, int pgSize, out int countRows, string FilterTicketType)
-        {
-            countRows = _dbContext.DictionaryTicketType.Count();
-            int toSkip = (pgNo - 1) * pgSize;
-            if (FilterTicketType == null)
-                return _dbContext.DictionaryTicketType.Skip(toSkip).Take(pgSize).Select(x => new DictionaryTicketTypeModel
+                _dbContext.DictionaryTicketType.Add(new DictionaryTicketType
                 {
-                    TicketTypeId = x.TicketTypeId,
-                    TicketTypeName = x.TicketTypeName
-
-                });
-            else
-                return _dbContext.DictionaryTicketType.Where(x => x.TicketTypeName.Contains(FilterTicketType)).Skip(toSkip).Take(pgSize).Select(x => new DictionaryTicketTypeModel
-                {
-                    TicketTypeId = x.TicketTypeId,
-                    TicketTypeName = x.TicketTypeName
-                });
-        }
-
-        public DictionaryTicketType GetTicketTypeId(int ticketTypeId)
-        {
-            DictionaryTicketType ticketType = _dbContext.DictionaryTicketType.Where(x => x.TicketTypeId == ticketTypeId)
-                .Select(x => new DictionaryTicketType()
-                {
-                    TicketTypeId = x.TicketTypeId,
-                    TicketTypeName = x.TicketTypeName
-                }).First();
-
-            return ticketType;
-        }
-
-
-
-        public void AddTicket(DictionaryTicketType ticketType)
-        {
-            _dbContext.DictionaryTicketType.Add(new DictionaryTicketType
-            {
-                TicketTypeName = ticketType.TicketTypeName
-            });
-            _dbContext.SaveChanges();
-        }
-
-        public void EditTicket(DictionaryTicketType ticketType)
-        {
-            _dbContext.DictionaryTicketType.Update(new DictionaryTicketType
-            {
-                TicketTypeId = ticketType.TicketTypeId,
-                TicketTypeName = ticketType.TicketTypeName
-            });
-
-            _dbContext.SaveChanges();
-
-        }
-
-        public void DeleteTicket(int ticketTypeId)
-        {
-            DictionaryTicketType ticketType = new DictionaryTicketType() { TicketTypeId = ticketTypeId };
-
-            _dbContext.DictionaryTicketType.Remove(ticketType);
-            _dbContext.SaveChanges();
-        }
-
-        public string AddReview(LandmarkReview review)
-        {
-            try
-            {
-                _dbContext.LandmarkReview.Add(new LandmarkReview
-                {
-                    ReviewTitle = review.ReviewTitle,
-                    ReviewComment = review.ReviewComment,
-                    LandmarkId = review.LandmarkId,
-                    UserId = review.UserId,
-                    Rating = review.Rating
+                    TicketTypeName = ticketType.TicketTypeName
                 });
                 _dbContext.SaveChanges();
-                return null;
             }
-            catch (Exception ex)
+
+            public void EditTicket(DictionaryTicketType ticketType)
             {
-                return "Please fill the required fields";
+                _dbContext.DictionaryTicketType.Update(new DictionaryTicketType
+                {
+                    TicketTypeId = ticketType.TicketTypeId,
+                    TicketTypeName = ticketType.TicketTypeName
+                });
+
+                _dbContext.SaveChanges();
+
             }
+
+            public void DeleteTicket(int ticketTypeId)
+            {
+                DictionaryTicketType ticketType = new DictionaryTicketType() { TicketTypeId = ticketTypeId };
+
+                _dbContext.DictionaryTicketType.Remove(ticketType);
+                _dbContext.SaveChanges();
+            }
+
+            public string AddReview(LandmarkReview review)
+            {
+                try
+                {
+                    _dbContext.LandmarkReview.Add(new LandmarkReview
+                    {
+                        ReviewTitle = review.ReviewTitle,
+                        ReviewComment = review.ReviewComment,
+                        LandmarkId = review.LandmarkId,
+                        UserId = review.UserId,
+                        Rating = review.Rating
+                    });
+                    _dbContext.SaveChanges();
+                    return null;
+                }
+                catch (Exception ex)
+                {
+                    return "Please fill the required fields";
+                }
+            }
+
+            public List<LandmarkReview> GetDbCommentsAll()
+            {
+                List<LandmarkReview> landmarkReviews = _dbContext.LandmarkReview.Select(x => new LandmarkReview()
+                {
+                    ReviewTitle = x.ReviewTitle,
+                    ReviewComment = x.ReviewComment,
+                    LandmarkId = x.LandmarkId,
+                    UserId = x.UserId,
+                    Rating = x.Rating
+
+                }).ToList();
+
+                return landmarkReviews;
+            }
+
+            #endregion
+
+            #region Gunoi
+            //public List<DictionaryCityModel> GetDictionaryCities(int skip, int take, out int totalCount)
+            //{
+            //    totalCount = _dbContext.DictionaryCity.Count();
+            //    int toSkip = (skip-1) * take;
+
+            //    List<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
+            //    {
+            //        CityName = a.CityName,
+            //        CityCode = a.CityCode,
+            //        CityId = a.CityId
+            //    }
+            //    ).Skip(toSkip).Take(take).ToList();
+
+            //    return dictionaryCities;
+            //}
+            //paginare
+            //  public List<DictionaryCurrencyTypeModel> GetDictionaryCurrencyType(int pageNo, int pageSize, out int totalCount)
+            #endregion
+
         }
-
-
-        #endregion
-
-        #region Gunoi
-        //public List<DictionaryCityModel> GetDictionaryCities(int skip, int take, out int totalCount)
-        //{
-        //    totalCount = _dbContext.DictionaryCity.Count();
-        //    int toSkip = (skip-1) * take;
-
-        //    List<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
-        //    {
-        //        CityName = a.CityName,
-        //        CityCode = a.CityCode,
-        //        CityId = a.CityId
-        //    }
-        //    ).Skip(toSkip).Take(take).ToList();
-
-        //    return dictionaryCities;
-        //}
-        //paginare
-        //  public List<DictionaryCurrencyTypeModel> GetDictionaryCurrencyType(int pageNo, int pageSize, out int totalCount)
-        #endregion
-
     }
-}
+
 

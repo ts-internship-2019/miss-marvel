@@ -110,10 +110,11 @@ namespace iWasHere.Web.Controllers
             return Json(x);
         }
 
-        public IActionResult LandmarkDetails(int landmarkId = 32)
+        public IActionResult LandmarkDetails(int landmarkId = 33)
         {
             var landmarkDetails = _dictionaryService.GetLandmark(landmarkId, out List<TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType);
             LandmarkModel landmarkModel = new LandmarkModel();
+            landmarkModel.Pictures = _dictionaryService.GetLandmarkPictures(landmarkId);
             landmarkModel.LandmarkName = landmarkDetails.LandmarkName;
             landmarkModel.LandmarkDescription = landmarkDetails.LandmarkDescription;
             landmarkModel.LandmarkTicket = landmarkDetails.LandmarkTicket;
@@ -137,69 +138,7 @@ namespace iWasHere.Web.Controllers
 
             return View(landmarkModel);
         }
-        /*      <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LandmarkName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LandmarkName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LandmarkDescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LandmarkDescription)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LandmarkTicket)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LandmarkTicket)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LandmarkCode)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LandmarkCode)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StudentPrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StudentPrice)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AdultPrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AdultPrice)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RetiredPrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RetiredPrice)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LandmarkPeriodName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LandmarkPeriodName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.City)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.City.CityId)
-        </dd>
-       
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LandmarkPeriod.LandmarkPeriodName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LandmarkType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LandmarkType.DictionaryItemId) */
+        
 
         #endregion
 
@@ -307,7 +246,7 @@ namespace iWasHere.Web.Controllers
         public ActionResult AddEditCurrency([Bind("CurrencyTypeId, CurrencyName, CurrencyCode, CurrencyExRate")] DictionaryCurrencyType dc, int id)
         {
             String exMessage;
-            if (ModelState.IsValid && dc.CurrencyTypeId != null)
+            if (dc.CurrencyCode != null)
             {
                 var result = _dictionaryService.AddEditDictionaryCurrencyType(dc, out exMessage);
                 if (result == null)

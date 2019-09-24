@@ -4,17 +4,21 @@
     ViewData["Title"] = "Currency";
     }
 
-    <h1 style="margin-left=90px">Currency Details</h1>
+
+  
+    <h1 style="color:black; margin-top:50px;"><b style="font-family:'Comic Sans MS';">Currency</b></h1>
 
     <body>
-        <p>
+        @*<p>
             <a asp-action="AddCurrency_Read">Filter</a>
-        </p>
+        </p>*@
+        <div class="display-field">
+            <img src=@Url.Content("https://image.flaticon.com/icons/png/512/21/21066.png") alt="Currency Imag" width=100 height=100 />
+        </div>
+       
 
 
-
-
-        <div class="demo-section k-content">
+        <div style="margin-top:50px;" class="demo-section k-content">
             <div>
 
                 <p>
@@ -26,21 +30,23 @@
 
                     @(Html.Kendo().Button()
                             .Name("btnSubmit")
-                            .HtmlAttributes(new { type = "button" })
+                            .HtmlAttributes(new { style = "background-color:rgb(40, 167, 69); color:white"})
                             .Content("Filter")
                             .Events(ev => ev.Click("DisplayData"))
                     )
 
                     @(Html.Kendo().Button()
                         .Name("btnSubmit2")
-                        .HtmlAttributes(new { type = "button" })
-                        .Content("Delete Filter")
+                        .HtmlAttributes(new { style = "background-color:rgb(220, 53, 69); color:white" })
+                        .Content("Clear Filter")
+                         .Icon("filter-clear")
                         .Events(ev => ev.Click("delFilters"))
                     )
 
                     @(Html.Kendo().Button()
                            .Name("btnSubmit1")
-                           .HtmlAttributes(new { type = "button", title = "custom", id = "ADD" })
+                           .HtmlAttributes(new { style = "background-color:rgb(40, 167, 69); color:white ", title = "custom", id = "ADD" })
+                           .Icon("k-icon k-i-plus-circle")
                            .Content("Add Currency")
                            .Events(e => e.Click("OpenNewWindow"))
                     )
@@ -58,9 +64,10 @@
           columns.Bound(c => c.CurrencyCode).Width(280);
           columns.Bound(c => c.CurrencyName).Width(280);
           columns.Bound(c => c.CurrencyExRate).Width(280);
-          columns.Template("<button id=btnDelete onclick=deleteCurrency(#=CurrencyTypeId#)>Delete</button>");
-           columns.Command(c => {
-                c.Custom("EditRecord").Text("Edit").Click("EditCurrencyType");
+          columns.Template("<button class='btn btn-danger' id=btnDelete onclick=deleteCurrency(#=CurrencyTypeId#)>Delete</button>");
+           columns.Command(c =>
+                  {
+                c.Custom("EditRecord").Text("Edit").Click("EditCurrencyType").HtmlAttributes(new {style = "background-color:rgb(255, 153, 0); color:white" });
             });
          // columns.Template("<button id=btnEdit onclick=EditCurrencyType(#=CurrencyTypeId#)>Edit</button>");
 
@@ -132,7 +139,7 @@
         var currencyName = e.currentTarget.closest("tr").cells[2].outerText;
         var currencyCode = e.currentTarget.closest("tr").cells[3].outerText;
 
-        window.location = '/Dictionary/AddDictionaryCurrencyType?id=' + row + '&typeID=' + currencytypeID + '&name=' + currencyName + '&code=' + currencyCode;
+        window.location = '/Dictionary/AddEditCurrency?id=' + row + '&typeID=' + currencytypeID + '&name=' + currencyName + '&code=' + currencyCode;
 
       
 
@@ -155,7 +162,7 @@
     
     function OpenNewWindow() {
 
-             location.href = '@Url.Content("/Dictionary/AddDictionaryCurrencyType")';
+             location.href = '@Url.Content("/Dictionary/AddEditCurrency")';
 
                };
 

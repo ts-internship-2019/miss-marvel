@@ -106,10 +106,8 @@
         var cityName = $("#txtCityName").val();
         var countyId = $("#countiesCB").val();
         var cityCode = $("#txtCityCode").val();
-        if (cityName != "" && countyId != 0 && cityCode != "")
-            AddCities(cityName, countyId, cityCode);
-        else
-            alert("Campuri necompletate");
+        AddCities(cityName, countyId, cityCode);
+        
     }
 
       function AddCities(cityName,countyId,cityCode) {
@@ -119,7 +117,7 @@
                 data: { cityName: cityName, cityCode: cityCode, countyId: countyId },
                 success: function (response) {
                     alert("Element adaugat");
-                  
+                  back();
                 },
                 error: function (response) {
                     alert("Not good");
@@ -127,6 +125,7 @@
 
 
             })
+          
         }
     
 
