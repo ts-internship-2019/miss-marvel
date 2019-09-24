@@ -73,12 +73,19 @@ namespace iWasHere.Web.Controllers
         }
         public ActionResult DeleteCity([DataSourceRequest] DataSourceRequest request, int id)
         {
-            if (id != -1)
+            string msg = "";
+            List<LandmarkModel> list = _dictionaryService.CheckLandmark(id);
+            if (id != -1 && list.Count == 0)
             {
                 _dictionaryService.DeleteCity(id);
+                msg = "Element sters cu success.";
+            }
+            else
+            {
+                msg = "Elementul nu poate fi sters.";
             }
 
-            return Json(ModelState.ToDataSourceResult());
+            return Json(msg);
         }
 
 
@@ -101,16 +108,21 @@ namespace iWasHere.Web.Controllers
 
         public ActionResult AddCity (string cityName,string cityCode,string countyId)
         {
-            var x = new DictionaryCity();
+            string msg = "";
             if (cityName !=null && cityCode != null && countyId != null)
             {
-                 x= _dictionaryService.AddDictionaryCity(cityName,cityCode,Convert.ToInt32(countyId));
+                 _dictionaryService.AddDictionaryCity(cityName,cityCode,Convert.ToInt32(countyId));
+                msg = "Element adaugat.";
+            }
+            else
+            {
+                msg = "Toate campurile sunt obligatorii.";
             }
 
-            return Json(x);
+            return Json(msg);
         }
 
-        public IActionResult LandmarkDetails(int landmarkId = 33)
+        public IActionResult LandmarkDetails(int landmarkId = 35)
         {
             var landmarkDetails = _dictionaryService.GetLandmark(landmarkId, out List<TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType);
             LandmarkModel landmarkModel = new LandmarkModel();
@@ -149,26 +161,32 @@ namespace iWasHere.Web.Controllers
 
             return View();
         }
-        public ActionResult AddEditLandmarkType([Bind("DictionaryItemId, DictionaryItemCode, DictionaryItemName, Description")]DictionaryLandmarkType dt, int id)
+        public ActionResult AddEditLandmarkType([Bind("DictionaryItemId, DictionaryItemCode, DictionaryItemName, Description")]DictionaryLandmarkType dt, int id, String submit)
         {
 
             String exMessage;
-            if (ModelState.IsValid && dt.DictionaryItemCode != null)
+            if (dt.DictionaryItemName != null && dt.DictionaryItemCode != null)
             {
                 var result = _dictionaryService.AddEditDictionaryLandmarkType(dt, out exMessage);
                 if (result == null)
                 {
                     ModelState.AddModelError(string.Empty, exMessage);
-                    return View();
+                    
+                     return View();
                 }
             }
+           
+
             if (id != 0)
             {
                 return View(_dictionaryService.GetDictionaryLandmarkType(id));
             }
             else
             {
-                return View();
+                if (String.Equals("SN", submit))
+                    return RedirectToAction("AddEditLandmarkType", "Dictionary");
+                else
+                    return View();
             }
         }
 

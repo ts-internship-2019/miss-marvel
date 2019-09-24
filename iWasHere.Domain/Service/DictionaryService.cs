@@ -143,6 +143,15 @@ namespace iWasHere.Domain.Service
             return landmarkPictures;
         }
     
+        public List<LandmarkModel> CheckLandmark(int cityId)
+        {
+            List<LandmarkModel> landmarkModel = _dbContext.Landmark.Where(a=> a.CityId==cityId).Select(a => new LandmarkModel()
+            {
+                LandmarkName = a.LandmarkName
+            }).ToList();
+
+            return landmarkModel;
+        }
 
 
         #endregion
@@ -335,9 +344,23 @@ namespace iWasHere.Domain.Service
             errMsg = null;
             try
             {
-
+                
                 if (landmarkType.DictionaryItemId == 0)
                 {
+                    Models.DictionaryLandmarkType validation = _dbContext.DictionaryLandmarkType.FirstOrDefault(a => a.DictionaryItemName.Equals(landmarkType.DictionaryItemName));
+                    if(validation != null)
+                    {
+                        errMsg = "The code exists already";
+                        return null;
+                    }
+                    validation = _dbContext.DictionaryLandmarkType.FirstOrDefault(a => a.DictionaryItemCode.Equals(landmarkType.DictionaryItemCode));
+                   if(validation != null)
+                    {
+                        errMsg = "The name exists already";
+                        return null;
+                    }
+                    
+                       
                     _dbContext.Add(landmarkType);
                     _dbContext.SaveChanges();
                 }

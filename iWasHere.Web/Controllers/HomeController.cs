@@ -48,9 +48,9 @@ namespace iWasHere.Web.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult AddLandmark([Bind("LandmarkId, LandmarkName, LandmarkDescription, LandmarkCode, Photos")]LandmarkModel landmark, String LandmarkTypeId,
-            String LandmarkTypeId_input, String LandmarkPeriodId, String LandmarkPeriodId_input, String CityId, String CityId_input,
-            String StudentPrice, String AdultPrice, String RetiredPrice, String CurrencyId, String CurrencyId_input, int id)
+        public IActionResult AddLandmark([Bind("LandmarkId, LandmarkName, LandmarkDescription, LandmarkCode, Photos, Latitude, Longitude")]LandmarkModel landmark, String LandmarkTypeId,
+          String LandmarkTypeId_input, String LandmarkPeriodId, String LandmarkPeriodId_input, String CityId, String CityId_input,
+          String StudentPrice, String AdultPrice, String RetiredPrice, String CurrencyId, String CurrencyId_input, int id)
         {
             if (id != 0)
             {
@@ -69,14 +69,19 @@ namespace iWasHere.Web.Controllers
                     LandmarkTypeName = loadedLandmark.LandmarkType.DictionaryItemName,
                     LandmarkPeriodId = Convert.ToInt32(loadedLandmark.LandmarkPeriodId),
                     LandmarkPeriodName = loadedLandmark.LandmarkPeriod.LandmarkPeriodName,
-                    CurrencyId = currency.CurrencyTypeId,
-                    CurrencyName = currency.CurrencyName,
-                    StudentPrice = Convert.ToDecimal(pricesList[0].TicketValue),
-                    AdultPrice = Convert.ToDecimal(pricesList[1].TicketValue),
-                    RetiredPrice = Convert.ToDecimal(pricesList[2].TicketValue)
+
+
 
 
                 };
+                if (pricesList.Count > 0 && currency != null)
+                {
+                    modelToLoad.CurrencyId = currency.CurrencyTypeId;
+                    modelToLoad.CurrencyName = currency.CurrencyName;
+                    modelToLoad.StudentPrice = Convert.ToDecimal(pricesList[0].TicketValue);
+                    modelToLoad.AdultPrice = Convert.ToDecimal(pricesList[1].TicketValue);
+                    modelToLoad.RetiredPrice = Convert.ToDecimal(pricesList[2].TicketValue);
+                }
 
                 return View(modelToLoad);
 
@@ -106,12 +111,16 @@ namespace iWasHere.Web.Controllers
                 l.LandmarkId = landmark.LandmarkId;
                 l.LandmarkDescription = landmark.LandmarkDescription;
                 l.LandmarkCode = landmark.LandmarkCode;
-
+                l.Latitude = landmark.Latitude;
+                l.Longitude = landmark.Longitude;
                 List<TicketXlandmark> pricesList = new List<TicketXlandmark>();
-                pricesList.Add(new TicketXlandmark(0, l.LandmarkId, 1, Convert.ToInt32(CurrencyId), Convert.ToDecimal(StudentPrice)));
-                pricesList.Add(new TicketXlandmark(0, l.LandmarkId, 137, Convert.ToInt32(CurrencyId), Convert.ToDecimal(AdultPrice)));
-                pricesList.Add(new TicketXlandmark(0, l.LandmarkId, 3, Convert.ToInt32(CurrencyId), Convert.ToDecimal(RetiredPrice)));
-                
+                if (StudentPrice != null)
+                {
+
+                    pricesList.Add(new TicketXlandmark(0, l.LandmarkId, 1, Convert.ToInt32(CurrencyId), Convert.ToDecimal(StudentPrice)));
+                    pricesList.Add(new TicketXlandmark(0, l.LandmarkId, 137, Convert.ToInt32(CurrencyId), Convert.ToDecimal(AdultPrice)));
+                    pricesList.Add(new TicketXlandmark(0, l.LandmarkId, 3, Convert.ToInt32(CurrencyId), Convert.ToDecimal(RetiredPrice)));
+                }
                 _LandmarkService.AddEditLandmark(l, pricesList, out err, pictures);
             }
 
