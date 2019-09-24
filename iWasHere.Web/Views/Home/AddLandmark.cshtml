@@ -161,19 +161,9 @@
                             <label class="custom-file-label">Choose File...</label>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div id="myMap"></div>
-                        <input id="address" type="text" style="width:600px;" /><br />
-                        <input type="text" id="latitude" placeholder="Latitude" />
-                        <input type="text" id="longitude" placeholder="Longitude" />
-                    </div>
-                    @*<div id="googleMap" style="width:50%;height:400px;" class="map-container"></div>*@
-                    Latitude: <input id="lat" name="lat" val="40.713956" /> <br />
-
-                    Longitude: <input id="long" name="long" val="74.006653" /> <br />
-
-                    <div id="map_canvas" 500px; height: 250px;"></div>
-
+                    <div id="map-canvas" style="width:400px;height:400px"></div>
+                    <input asp-for="Latitude" type="hidden" id="latitude" />
+                    <input asp-for="Longitude" type="hidden" id="longitude" />
                     <div class="form-group">
                         <button id="btnAddModify" type="submit" class="btn btn-primary"> Add </button>
                     </div>
@@ -186,102 +176,57 @@
         <a asp-action="Index">Back to List</a>
     </div>
     @section Scripts{
-        
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbRIxmMBjKw5IovRx6CF03hU8SDpqxtos&amp"></script>
         <script>
-            @*var map;
-            var markers = [];
-            function myMap() {
-                var startLatLng = { lat: 44.4894, lng: 26.1267 };
-                map = new google.maps.Map(document.getElementById('googleMap'), {
-                    zoom: 12,
-                    center: startLatLng,
+            $(document).ready(function () {
+                $('.custom-file-input').on("change", function () {
+                    var fileLabel = $(this).next('.custom-file-label');
+                    var files = $(this)[0].files;
+                    if (files.length > 1) {
+                        fileLabel.html(files.length + ' files selected');
+
+                    } else if (files.length) {
+                        fileLabel.html(files[0].name);
+                    }
                 });
+            })
 
-                map.addListener('click', function (event) {
-                    clearMarkers();
-                    addMarker(event.latLng);
-                    document.getElementById("Latitude").value = event.latLng.lat();
-                    document.getElementById("Longitude").value = event.latLng.lng();
-                });
-
-                addMarker(startLatLng);
+            function hide() {
+                if ($('#chkFree').is(":checked"))
+                    $('#taxes').hide();
             }
 
-            function addMarker(location) {
-                var marker = new google.maps.Marker({
-                    position: location,
-                    map: map
-                });
-                markers.push(marker);
+            function show() {
+                if ($('#chkTax').is(":checked"))
+                    $('#taxes').show();
             }
+            var map = new google.maps.Map(document.getElementById('map-canvas'), {
+                center: {
+                    lat: 27.72,
+                    lng: 85.36
+                },
+                zoom: 15
 
-            function setMapOnAll(map) {
-                for (var i = 0; i < markers.length; i++) {
-                    markers[i].setMap(map);
-                }
-            }
+            });
 
-            function clearMarkers() {
-                setMapOnAll(null);
-            }
+            var marker = new google.maps.Marker({
+                position: {
+                    lat: 27.72,
+                    lng: 85.36
+                },
+                map: map,
+                draggable: true
+            });
 
-            function showMarkers() {
-                setMapOnAll(map);
-            }
-
-            function deleteMarkers() {
-                clearMarkers();
-                markers = [];
-            }
-        </script>*@
-
-             function initialize() {
-
-        var myLatlng = new google.maps.LatLng(40.713956, -74.006653);
-
-        var myOptions = {
-
-            zoom: 8,
-
-            center: myLatlng,
-
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-
-        };
-
-        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-
-        var marker = new google.maps.Marker({
-
-            draggable: true,
-
-            position: myLatlng,
-
-            map: map,
-
-            title: "Your location"
-
-        });
-
-        google.maps.event.addListener(marker, 'dragend', function (event) {
-
-            document.getElementById("lat").value = event.latLng.lat();
-
-            document.getElementById("long").value = event.latLng.lng();
-
-            infoWindow.open(map, marker);
-
-        });
-
-           google.maps.event.addDomListener(window, "load", initialize());
-
-    }
-
-       
+            google.maps.event.addListener(marker, 'dragend', function () {
+                var lat = marker.getPosition().lat();
+                var lng = marker.getPosition().lng();
+                $("#latitude").val(lat);
+                $("#longitude").val(lng);
+            })
         </script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB96GQdBEPcmWURd_56ln3yLHQGLoMPCfs&callback=myMap"></script>
 
-   
+
 
 
     }
