@@ -8,117 +8,127 @@
 <!DOCTYPE html>
 
 <html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>LandmarkType</title>
-</head>
-<body>
-    <p>
-        <a asp-action="AddEditLandmarkType">Create New</a>
-    </p>
-    <div class="row">
-        @(Html.Kendo().Button()
-                        .Name("btnSubmit")
-                        .HtmlAttributes(new { type = "button" })
-                        .Content("Filter")
-                        .Events(e => e.Click("DisplayData"))
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>LandmarkType</title>
+    </head>
 
-        )
-        @(Html.Kendo().TextBox()
-            .Name("custom")
-            .HtmlAttributes(new { style = "width: 100%", title = "custom", id = "txtFilter" })
-        )
-        @(Html.Kendo().Button()
-                       .Name("btnDeleteFilter")
-                       .HtmlAttributes(new { type = "button", id = "btnDeleteFilter" })
-                       .Content("Delete Filter")
-                       .Events(e => e.Click("deleteFilter"))
+    <body>
+        <h1 style="color:black; margin-top:50px;"><b style="font-family:'Comic Sans MS';">Landmark</b></h1>
 
-        )
-    </div>
-    @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryLandmarkType>()
-          .Name("grid")
-          .HtmlAttributes(new { style = "height: 500px", id = "grdLandmarkType"  })
-          .Columns(columns =>
-            {
-                columns.Bound(p => p.DictionaryItemId).Hidden();
-                columns.Bound(p => p.DictionaryItemCode);
-                columns.Bound(p => p.DictionaryItemName);
-                columns.Bound(p => p.Description);
-                columns.Template("<button id=\"btnDelete\" onclick=\"deleteLandmarkType(#=DictionaryItemId#)\">Delete</button>");
-                columns.Command(c => {
-                c.Custom("EditRecord").Text("Edit").Click("dgChange");
-            });
-            })
-          .Scrollable()
-          .Groupable()
-          .Sortable()
-          .Filterable()
-          .Pageable(pageable => pageable
-            .Refresh(true)
-            .PageSizes(true)
-            .ButtonCount(5))
-          .DataSource(dataSource => dataSource
+        <div class="display-field">
+            <img src=@Url.Content("https://cdn1.iconfinder.com/data/icons/thin-line-icons/128/GeoTag_Tag_Mark_Landmark_Pin_Map-512.png") alt="LandmarkImg" width=100 height=100 />
+        </div>
+
+        <div style="margin-top:50px;" class="demo-section k-content">
+            <p>
+
+                @(Html.Kendo().TextBox()
+                    .Name("custom")
+                    .HtmlAttributes(new { style = "width: 30%", title = "custom", id = "txtFilter" }))
+
+                @(Html.Kendo().Button()
+                                  .Name("btnSubmit")
+                                  .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white" })
+                                  .Icon("filter")
+                                  .Content("Filter")
+                                  .Events(e => e.Click("DisplayData")))
+
+
+                @(Html.Kendo().Button()
+                               .Name("btnDeleteFilter")
+                               .Icon("filter-clear")
+                               .HtmlAttributes(new { style = "background-color:rgb(220, 53, 69); color:white", id = "btnDeleteFilter" })
+                               .Content("Delete Filter")
+                               .Events(e => e.Click("deleteFilter")))
+            </p>
+        </div>
+
+        @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryLandmarkType>()
+              .Name("grid")
+              .HtmlAttributes(new { style = "height: 500px", id = "grdLandmarkType" })
+              .Columns(columns =>
+                {
+                    columns.Bound(p => p.DictionaryItemId).Hidden();
+                    columns.Bound(p => p.DictionaryItemCode);
+                    columns.Bound(p => p.DictionaryItemName);
+                    columns.Bound(p => p.Description);
+                    columns.Template("<button class='btn btn-danger' id=\"btnDelete\" onclick=\"deleteLandmarkType(#=DictionaryItemId#)\">Delete</button>");
+                    columns.Command(c =>
+                 {
+                    c.Custom("EditRecord").Text("Edit").Click("dgChange").HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white" });
+                    });
+              })
+              .Scrollable()
+      
+              .Sortable()
+              .Filterable()
+              .Pageable(pageable => pageable
+              .Refresh(true)
+              .PageSizes(true)
+              .ButtonCount(5))
+              .DataSource(dataSource => dataSource
               .Ajax()
               .Read(read => read.Action("GetLandmarkType", "Dictionary").Data("filterFunction"))
-              .Update(update => update.Action("AddEditLandmarkType", "Grid"))  
-          )
-    )
+              .Update(update => update.Action("AddEditLandmarkType", "Grid")) ) )
 
 
 
-</body>
-<script>
 
-    function DisplayData() {
-       $("#grdLandmarkType").data("kendoGrid").dataSource.read()
+        <script>
 
-       
-    //$.ajax(
-    //    {
-    //        url: "/Dictionary/GetAjax",
-    //        type: 'post',
-    //        dataType: "json",
-    //        data: { filter: input},
-    //        success: function (result) {
-    //            var dialog = $("#win").data("kendoWindow");
-    //            $("#dataWin").html(result);
-    //            dialog.open();
-    //        }
-    //    })
-    }
-    function dgChange(e) {
-        grid = $("#grdLandmarkType").data("kendoGrid");
-        var row = e.currentTarget.closest("tr").cells[0].outerText;
+        function DisplayData() {
+           $("#grdLandmarkType").data("kendoGrid").dataSource.read()
 
-        window.location = '/Dictionary/AddEditLandmarkType?id=' + row
- 
-    }
+        }
+        //$.ajax(
+        //    {
+        //        url: "/Dictionary/GetAjax",
+        //        type: 'post',
+        //        dataType: "json",
+        //        data: { filter: input},
+        //        success: function (result) {
+        //            var dialog = $("#win").data("kendoWindow");
+        //            $("#dataWin").html(result);
+        //            dialog.open();
+        //        }
+        //    })
+
+            function dgChange(e) {
+                grid = $("#grdLandmarkType").data("kendoGrid");
+                var row = e.currentTarget.closest("tr").cells[0].outerText;
+
+                window.location = '/Dictionary/AddEditLandmarkType?id=' + row
+
+            }
 
 
-    function deleteFilter() {
-        $("#txtFilter").val("");
-         $("#grdLandmarkType").data("kendoGrid").dataSource.read()
-    }
-    function deleteLandmarkType(id) {
-             $.ajax({
-                    type: 'DELETE',
-                    url: '@Url.Action("DeleteLandmarkType", "Dictionary")',
-                    data: { id: id },
-                 success: function (response) {
-                        $("#grdLandmarkType").data("kendoGrid").dataSource.read();
-                    },
-                        error: function (response) {
-                       
-                    }
-                })
-    }
+            function deleteFilter() {
+                $("#txtFilter").val("");
+                 $("#grdLandmarkType").data("kendoGrid").dataSource.read()
+            }
+            function deleteLandmarkType(id) {
+                     $.ajax({
+                            type: 'DELETE',
+                            url: '@Url.Action("DeleteLandmarkType", "Dictionary")',
+                            data: { id: id },
+                         success: function (response) {
+                                $("#grdLandmarkType").data("kendoGrid").dataSource.read();
+                         },
+                                error: function (response) {
 
-    function filterFunction() {
-        var filter = $("#txtFilter").val();
-        var obj = {};
-        obj["lFilter"] = filter;
-        return obj;
-    }
-</script>
+                                }
+                     })
+            }
+
+            function filterFunction() {
+                var filter = $("#txtFilter").val();
+                var obj = {};
+                obj["lFilter"] = filter;
+                return obj;
+            }
+
+
+        </script>
+    </body>
 </html>
