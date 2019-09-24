@@ -143,6 +143,15 @@ namespace iWasHere.Domain.Service
             return landmarkPictures;
         }
     
+        public List<LandmarkModel> CheckLandmark(int cityId)
+        {
+            List<LandmarkModel> landmarkModel = _dbContext.Landmark.Where(a=> a.CityId==cityId).Select(a => new LandmarkModel()
+            {
+                LandmarkName = a.LandmarkName
+            }).ToList();
+
+            return landmarkModel;
+        }
 
 
         #endregion
@@ -659,17 +668,18 @@ namespace iWasHere.Domain.Service
             return null;
         }
 
+        //-------------------------------------------------------------------------------
 
 
-        public Models.DictionaryCountry AddDictionaryCountry(Models.DictionaryCountry dc)
-        {
-            if (!String.IsNullOrWhiteSpace(dc.CountryName))
-            {
-                _dbContext.Add(dc);
-                _dbContext.SaveChanges();
-            }
-            return dc;
-        }
+        //public Models.DictionaryCountry AddDictionaryCountry(Models.DictionaryCountry dc)
+        //{
+        //    if (!String.IsNullOrWhiteSpace(dc.CountryName))
+        //    {
+        //        _dbContext.Add(dc);
+        //        _dbContext.SaveChanges();
+        //    }
+        //    return dc;
+        //}
 
 
         public IEnumerable<DictionaryCountryModel> GetCountry(int pageNo, int pageSize, out int rowsNo, string lFilter)
@@ -972,41 +982,41 @@ namespace iWasHere.Domain.Service
                 _dbContext.SaveChanges();
             }
 
-            public string AddReview(LandmarkReview review)
-            {
-                try
-                {
-                    _dbContext.LandmarkReview.Add(new LandmarkReview
-                    {
-                        ReviewTitle = review.ReviewTitle,
-                        ReviewComment = review.ReviewComment,
-                        LandmarkId = review.LandmarkId,
-                        UserId = review.UserId,
-                        Rating = review.Rating
-                    });
-                    _dbContext.SaveChanges();
-                    return null;
-                }
-                catch (Exception ex)
-                {
-                    return "Please fill the required fields";
-                }
-            }
+            //public string AddReview(LandmarkReview review)
+            //{
+            //    try
+            //    {
+            //        _dbContext.LandmarkReview.Add(new LandmarkReview
+            //        {
+            //            ReviewTitle = review.ReviewTitle,
+            //            ReviewComment = review.ReviewComment,
+            //            LandmarkId = review.LandmarkId,
+            //            UserId = review.UserId,
+            //            Rating = review.Rating
+            //        });
+            //        _dbContext.SaveChanges();
+            //        return null;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        return "Please fill the required fields";
+            //    }
+            //}
 
-            public List<LandmarkReview> GetDbCommentsAll()
-            {
-                List<LandmarkReview> landmarkReviews = _dbContext.LandmarkReview.Select(x => new LandmarkReview()
-                {
-                    ReviewTitle = x.ReviewTitle,
-                    ReviewComment = x.ReviewComment,
-                    LandmarkId = x.LandmarkId,
-                    UserId = x.UserId,
-                    Rating = x.Rating
+            //public List<LandmarkReview> GetDbCommentsAll()
+            //{
+            //    List<LandmarkReview> landmarkReviews = _dbContext.LandmarkReview.Select(x => new LandmarkReview()
+            //    {
+            //        ReviewTitle = x.ReviewTitle,
+            //        ReviewComment = x.ReviewComment,
+            //        LandmarkId = x.LandmarkId,
+            //        UserId = x.UserId,
+            //        Rating = x.Rating
 
-                }).ToList();
+            //    }).ToList();
 
-                return landmarkReviews;
-            }
+            //    return landmarkReviews;
+            //}
 
             #endregion
 

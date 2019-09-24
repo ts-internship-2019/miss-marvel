@@ -6,10 +6,13 @@
 }
 
 <meta name="viewport" content="width=device-width" />
-<h1>Add a new Country</h1>
+    <div style="font-family: 'Source Sans Pro, sans-serif';">
+        <h2>Add a new Country</h2>
+    </div>
+   
 
 <hr />
-<div class="row">
+<div class="row" style="font-family: 'Source Sans Pro, sans-serif';">
     <div class="col-md-4">
         <form asp-action="AddDictionaryCountry">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -25,10 +28,10 @@
                 <span asp-validation-for="CountryCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Salveaza" onclick="return goBack();" />
-                <input type="submit" name="btnAddNew" id="btnAddNew_id" value="Salveaza si nou" class="btn btn-primary" onclick="return empty();" />
+                <input type="submit" class="btn btn-warning" value="Salveaza" onclick="return goBack();" />
+                <input type="submit" name="btnAddNew" id="btnAddNew_id" value="Salveaza si nou" class="btn btn-warning" onclick="return empty();" />
                
-                <input type="button" class="btn btn-primary" value="Anuleaza" onclick="return goBack1();" />
+                <input type="button" class="btn btn-danger" value="Anuleaza" onclick="return goBack1();" />
 
 
 

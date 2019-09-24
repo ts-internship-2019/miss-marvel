@@ -12,18 +12,22 @@
     <meta name="viewport" content="width=device-width" />
     <title>Add Currency Type</title>
 </head>
+
+<div style="font-family: 'Source Sans Pro, sans-serif';">
+    <h2>Currency Form</h2>
+</div>
 <body>
 
-    <h4>Currency Form</h4>
+  
     <hr />
-    <div class="row">
+    <div class="row" style="font-family: 'Source Sans Pro, sans-serif';">
         <div class="col-md-6">
             @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
             <form asp-action="AddEditCurrency">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
+
                 <div class="form-group col-md-6">
-                   
+
                     <input type="hidden" asp-for="CurrencyTypeId" />
 
                     <label asp-for="CurrencyName" class="control-label"></label>
@@ -43,8 +47,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="submit" class="btn btn-success" value="Add / Edit" onclick="return goBack();" />
-                    <input type="submit" name="btnAddNew" id="btnAddNew_id" value="Add & New" class="btn btn-success" onclick="return empty();" />
+                    <input type="submit" class="btn btn-warning" value="Add / Edit" onclick="return goBack();" />
+                    <input type="submit" name="btnAddNew" id="btnAddNew_id" value="Add & New" class="btn btn-warning" onclick="return empty();" />
                     <input type="button" class="btn btn-danger" value="Cancel" onclick="return cancel();" />
 
                 </div>
@@ -53,8 +57,8 @@
     </div>
 
     @*<div>
-        <a asp-action="Currency">Back to List</a>
-    </div>*@
+            <a asp-action="Currency">Back to List</a>
+        </div>*@
 
     @section Scripts {
         @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -83,7 +87,7 @@
 
             //   })
 
-            @*function changeGrid() {
+            function changeGrid() {
 
                 console.log("changeGrid");
                 $.ajax({
@@ -96,14 +100,14 @@
                             rate: document.getElementById("currencyRate").value
                         }
                     })
-            }*@
+            }
 
             function goBack() {
                 $(document).on('submit', 'form', function () {
                     $.post('@Url.Content("/Dictionary/Currency")', function () { // urlPost, function
                     }).done(function () {
                    location.href = '@Url.Content("/Dictionary/Currency")';
-                    
+
                 });
 
 

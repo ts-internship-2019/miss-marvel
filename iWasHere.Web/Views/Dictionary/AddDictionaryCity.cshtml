@@ -3,12 +3,14 @@
 @{
     ViewData["Title"] = "AddDictionaryCity";
 }
+    <div style="font-family: 'Source Sans Pro, sans-serif';">
+        <h1>Add Dictionary City</h1>
+    </div>
 
-<h1>Add Dictionary City</h1>
 
 
 <hr />
-<div class="row">
+<div class="row" style="font-family: 'Source Sans Pro, sans-serif';">
     <div class="col-md-4">
         <form asp-action="AddEditCity">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -54,7 +56,7 @@
             <p>
                 @(Html.Kendo().Button()
                             .Name("btnSubmit")
-                            .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                            .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white ; width:130px"})
                             .Content("Save")
                             .Events(e => e.Click("addCity"))
                 )
@@ -62,7 +64,7 @@
             <p>
                 @(Html.Kendo().Button()
                     .Name("btnNew")
-                    .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                    .HtmlAttributes(new {style = "background-color:rgb(255, 153, 0); color:white; width:130px"})
                     .Content("Save and New")
                     .Events(e => e.Click("saveNew"))
                 )
@@ -75,7 +77,8 @@
     <p>
         @(Html.Kendo().Button()
                     .Name("btnCancel")
-                    .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                    .HtmlAttributes(new {  style = "background-color:rgb(220, 53, 69); color:white; width:130px"})
+                    //.HtmlAttributes(new { type = "button", @class = "k-primary" })
                     .Content("Cancel")
                     .Events(e => e.Click("back"))
                     )
@@ -116,8 +119,9 @@
                 url: '@Url.Action("AddCity", "Dictionary")',
                 data: { cityName: cityName, cityCode: cityCode, countyId: countyId },
                 success: function (response) {
-                    alert("Element adaugat");
-                  back();
+                    alert(response);
+                    if(response == "Element adaugat.")
+                    back();
                 },
                 error: function (response) {
                     alert("Not good");

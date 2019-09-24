@@ -56,23 +56,25 @@
 
         @(Html.Kendo().Button()
                        .Name("btnSubmit")
-                       .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                       .Icon("filter")
+                       .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white"})
                        .Content("Filter")
                        .Events(e => e.Click("DisplayData"))
         )
 
         @(Html.Kendo().Button()
            .Name("clearFilter")
-           .Icon("clear-filter")
+           .Icon("filter-clear")
            .Content("Delete Filters")
-           .HtmlAttributes(new { type = "button", @class = "k-primary" })
+           .HtmlAttributes(new {  style = "background-color:rgb(220, 53, 69); color:white"})
            .Events(e => e.Click("delFilters"))
         )
 
         @(Html.Kendo().Button()
    .Name("createButton")
    .Content("Create New")
-   .HtmlAttributes(new { type = "button", @class = "k-primary" })
+   .Icon("k-icon k-i-plus-circle")
+   .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white"})
    .Events(ev => ev.Click("createNew")))
 
     </p>
@@ -85,12 +87,12 @@
           .Columns(columns =>
           {
               columns.Bound(p => p.CityId).Hidden();
-              columns.Bound(p => p.CityName);
-              columns.Bound(p => p.CityCode);
+              columns.Bound(p => p.CityName).Width(400);
+              columns.Bound(p => p.CityCode).Width(400);
               columns.Command(c =>
               {
-                  c.Custom("Delete").Text("Delete").Click("getCityId");
-                  c.Custom("EditRecord").Text("Edit").Click("dgChange");
+                  c.Custom("Delete").Text("Delete").Click("getCityId").HtmlAttributes(new {style = "background-color:rgb(201, 29, 18); color:white" });
+                  c.Custom("EditRecord").Text("Edit").Click("dgChange").HtmlAttributes(new {style = "background-color:rgb(255, 153, 0); color:white" });
               });
 
 
@@ -159,11 +161,13 @@
                 url: '@Url.Action("DeleteCity", "Dictionary")',
                 data: { id: id },
                 success: function (response) {
-                    alert("Element sters cu success");
+                    alert(response);
                     
                     $("#grdCities").data("kendoGrid").dataSource.read();
                 },
                 error: function (response) {
+                    alert(response);
+
                     alert("Not good");
                 }
 

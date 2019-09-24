@@ -59,7 +59,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-warning border-bottom box-shadow mb-2 k-var-hover-background">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">iWasHere.Web</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -113,7 +113,7 @@
                                                               innerChildren.Add().Text("Landmark Types").Url("/Dictionary/LandmarkType");
                                                               innerChildren.Add().Text("Add Landmark Type ").Url("/Dictionary/AddEditLandmarkType");
                                                               innerChildren.Add().Text("Add Landmark").Url("/Home/AddLandmark");
-                                                              innerChildren.Add().Text("Review Landmark").Url("/Dictionary/AddReview");
+                                                            
 
                                                           });
 
@@ -151,7 +151,7 @@
                                                           .Items(innerChildren =>
                                                           {
                                                               innerChildren.Add().Text("Currency").Url("/Dictionary/Currency");
-                                                              innerChildren.Add().Text("Add Currency").Url("/Dictionary/AddDictionaryCurrencyType");
+                                                              innerChildren.Add().Text("Add Currency").Url("/Dictionary/AddEditCurrency");
 
                                                           });
                                               children.Add().Text("TicketType").Url("/Dictionary/TicketType")
