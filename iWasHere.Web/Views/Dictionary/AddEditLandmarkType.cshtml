@@ -19,7 +19,7 @@
     <div class="row">
         <div class="col-md-4">
             @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-            <form asp-action="Add Landmark Type">
+            <form asp-action="Add Landmark Type" id="addForm">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="DictionaryItemId" />
                 <div class="form-group">
@@ -38,8 +38,8 @@
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <button id="btnAddModify" class="btn btn-primary"> Create </button>
-                    <a class="btn btn-primary" onclick="saveNew()"> Save and New </a>
+                    <button name="submit" value="create" id="btnAddModify" onclick="save()" class="btn btn-primary"> Create </button>
+                    <button name="submit" value="SN" class="btn btn-primary" > Save and New </button>
                     <a class="btn btn-primary" onclick="cancel()"> Cancel </a>
                 </div>
             </form>
@@ -65,12 +65,19 @@
 
         })
 
+
+        
+
         function cancel() {
             window.location.href = '@Url.Action("LandmarkType", "Dictionary")';
         }
 
         function saveNew() {
-            window.location.href = '@Url.Action("LandmarkType", "AddEditLandmarkType")';
+            operationType = document.getElementById("mode");
+            operationType.setAttribute("value", "New");
+            form = document.getElementById("addForm");
+            form.submit();
+            //window.location.href = '@Url.Action("LandmarkType", "AddEditLandmarkType")';
         }
     </script>
 </body>
