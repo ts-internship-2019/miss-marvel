@@ -152,7 +152,18 @@ namespace iWasHere.Domain.Service
 
             return landmarkModel;
         }
+        public List<LandmarkModel> GetLandmarkList()
+        {
+            List<LandmarkModel> landmarkModel = _dbContext.Landmark.Select(a => new LandmarkModel()
+            {
+                LandmarkId = a.LandmarkId,
+                LandmarkName = a.LandmarkName,
+                LandmarkDescription = a.LandmarkDescription,
+                CityName = a.City.CityName,   
+            }).ToList();
 
+            return landmarkModel;
+        }
 
         #endregion
 
