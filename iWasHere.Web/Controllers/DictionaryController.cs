@@ -73,12 +73,19 @@ namespace iWasHere.Web.Controllers
         }
         public ActionResult DeleteCity([DataSourceRequest] DataSourceRequest request, int id)
         {
-            if (id != -1)
+            string msg = "";
+            List<LandmarkModel> list = _dictionaryService.CheckLandmark(id);
+            if (id != -1 && list.Count == 0)
             {
                 _dictionaryService.DeleteCity(id);
+                msg = "Element adaugat cu success.";
+            }
+            else
+            {
+                msg = "Elementul nu poate fi sters.";
             }
 
-            return Json(ModelState.ToDataSourceResult());
+            return Json(msg);
         }
 
 

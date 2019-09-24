@@ -143,6 +143,15 @@ namespace iWasHere.Domain.Service
             return landmarkPictures;
         }
     
+        public List<LandmarkModel> CheckLandmark(int cityId)
+        {
+            List<LandmarkModel> landmarkModel = _dbContext.Landmark.Where(a=> a.CityId==cityId).Select(a => new LandmarkModel()
+            {
+                LandmarkName = a.LandmarkName
+            }).ToList();
+
+            return landmarkModel;
+        }
 
 
         #endregion
