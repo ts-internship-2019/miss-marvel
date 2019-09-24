@@ -156,26 +156,32 @@ namespace iWasHere.Web.Controllers
 
             return View();
         }
-        public ActionResult AddEditLandmarkType([Bind("DictionaryItemId, DictionaryItemCode, DictionaryItemName, Description")]DictionaryLandmarkType dt, int id)
+        public ActionResult AddEditLandmarkType([Bind("DictionaryItemId, DictionaryItemCode, DictionaryItemName, Description")]DictionaryLandmarkType dt, int id, String submit)
         {
 
             String exMessage;
-            if (ModelState.IsValid && dt.DictionaryItemCode != null)
+            if (dt.DictionaryItemName != null && dt.DictionaryItemCode != null)
             {
                 var result = _dictionaryService.AddEditDictionaryLandmarkType(dt, out exMessage);
                 if (result == null)
                 {
                     ModelState.AddModelError(string.Empty, exMessage);
-                    return View();
+                    
+                     return View();
                 }
             }
+           
+
             if (id != 0)
             {
                 return View(_dictionaryService.GetDictionaryLandmarkType(id));
             }
             else
             {
-                return View();
+                if (String.Equals("SN", submit))
+                    return RedirectToAction("AddEditLandmarkType", "Dictionary");
+                else
+                    return View();
             }
         }
         public ActionResult AddDictionaryCountry(DictionaryCountryModel country)
