@@ -9,9 +9,12 @@
 {
     <body onload="hideSaveNew()">
         <br />
-        <h4>Add or edit a ticket type for team Marvel</h4>
+        <div style="font-family: 'Source Sans Pro, sans-serif';">
+            <h2>Add or edit a ticket type for team Marvel</h2>
+        </div>
+
         <hr />
-        <div class="row">
+        <div class="row" style="font-family: 'Source Sans Pro, sans-serif';">
             <div class="col-md-4">
                 <form asp-action="AddEditTicketType">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -22,7 +25,7 @@
                         <br />
                         <button type="submit" class="btn btn-success" onclick="redirect()">Save</button>
                         <button type="submit" class="btn btn-success" id="saveNew" onclick="saveNew()">Save and new</button>
-                        
+
                     </div>
                     <div class="form-group">
 
