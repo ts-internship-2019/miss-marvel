@@ -14,10 +14,12 @@
     <title>AddLandmarkPeriod</title>
 </head>
 <body>
+    <div style="font-family: 'Source Sans Pro, sans-serif';">
+        <h2>DictionaryLandmarkPeriod</h2>
+    </div>
 
-    <h4>DictionaryLandmarkPeriod</h4>
     <hr />
-    <div class="row">
+    <div class="row"  style="font-family: 'Source Sans Pro, sans-serif';">
         <div class="col-md-6">
 
             <form asp-action="AddEditLandmarkPeriod">
@@ -25,9 +27,9 @@
                 <div class="form-group">
 
                     <input type="hidden" asp-for="LandmarkPeriodId" />
-                    <label asp-for="LandmarkPeriodName" class="control-label" ></label>
-                    <input asp-for="LandmarkPeriodName" id="landPeriodlbl" class="form-control"  />
-                    <span asp-validation-for="LandmarkPeriodName" class="text-danger" ></span>
+                    <label asp-for="LandmarkPeriodName" class="control-label"></label>
+                    <input asp-for="LandmarkPeriodName" id="landPeriodlbl" class="form-control" />
+                    <span asp-validation-for="LandmarkPeriodName" class="text-danger"></span>
 
 
                 </div>
