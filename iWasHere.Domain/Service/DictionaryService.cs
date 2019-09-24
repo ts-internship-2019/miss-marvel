@@ -979,41 +979,41 @@ namespace iWasHere.Domain.Service
                 _dbContext.SaveChanges();
             }
 
-            public string AddReview(LandmarkReview review)
-            {
-                try
-                {
-                    _dbContext.LandmarkReview.Add(new LandmarkReview
-                    {
-                        ReviewTitle = review.ReviewTitle,
-                        ReviewComment = review.ReviewComment,
-                        LandmarkId = review.LandmarkId,
-                        UserId = review.UserId,
-                        Rating = review.Rating
-                    });
-                    _dbContext.SaveChanges();
-                    return null;
-                }
-                catch (Exception ex)
-                {
-                    return "Please fill the required fields";
-                }
-            }
+            //public string AddReview(LandmarkReview review)
+            //{
+            //    try
+            //    {
+            //        _dbContext.LandmarkReview.Add(new LandmarkReview
+            //        {
+            //            ReviewTitle = review.ReviewTitle,
+            //            ReviewComment = review.ReviewComment,
+            //            LandmarkId = review.LandmarkId,
+            //            UserId = review.UserId,
+            //            Rating = review.Rating
+            //        });
+            //        _dbContext.SaveChanges();
+            //        return null;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        return "Please fill the required fields";
+            //    }
+            //}
 
-            public List<LandmarkReview> GetDbCommentsAll()
-            {
-                List<LandmarkReview> landmarkReviews = _dbContext.LandmarkReview.Select(x => new LandmarkReview()
-                {
-                    ReviewTitle = x.ReviewTitle,
-                    ReviewComment = x.ReviewComment,
-                    LandmarkId = x.LandmarkId,
-                    UserId = x.UserId,
-                    Rating = x.Rating
+            //public List<LandmarkReview> GetDbCommentsAll()
+            //{
+            //    List<LandmarkReview> landmarkReviews = _dbContext.LandmarkReview.Select(x => new LandmarkReview()
+            //    {
+            //        ReviewTitle = x.ReviewTitle,
+            //        ReviewComment = x.ReviewComment,
+            //        LandmarkId = x.LandmarkId,
+            //        UserId = x.UserId,
+            //        Rating = x.Rating
 
-                }).ToList();
+            //    }).ToList();
 
-                return landmarkReviews;
-            }
+            //    return landmarkReviews;
+            //}
 
             #endregion
 
