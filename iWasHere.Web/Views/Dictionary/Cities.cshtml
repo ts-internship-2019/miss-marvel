@@ -159,11 +159,13 @@
                 url: '@Url.Action("DeleteCity", "Dictionary")',
                 data: { id: id },
                 success: function (response) {
-                    alert("Element sters cu success");
+                    alert(response);
                     
                     $("#grdCities").data("kendoGrid").dataSource.read();
                 },
                 error: function (response) {
+                    alert(response);
+
                     alert("Not good");
                 }
 
