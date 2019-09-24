@@ -4,8 +4,7 @@
     ViewData["Title"] = "County";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<!DOCTYPE html>
+<h1 style="color:black; margin-top:50px;"><b style="font-family: 'Source Sans Pro, sans-serif';">County</b></h1>
 
 
 <html>
@@ -33,6 +32,7 @@
             <label for="countriesCB">Country Name:</label>
         </td>
         <td>
+
 
             @(Html.Kendo().ComboBox()
              .Name("countriesCB")
@@ -80,38 +80,38 @@
         <br /><br />
     </div>
 
+
+
     @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryCounty>()
           .Name("grid")
           .HtmlAttributes(new { style = "height: 500px", id = "grdCounty" })
           .Columns(columns =>
           {
               columns.Bound(p => p.CountyId).Hidden();
-              columns.Bound(p => p.CountyName);
-              columns.Bound(p => p.CountyCode);
+              columns.Bound(p => p.CountyName).Width(400);
+              columns.Bound(p => p.CountyCode).Width(400);
               columns.Bound(p => p.CountryId).Hidden();
               columns.Command(c =>
               {
-                  c.Custom("EditRecord").Text("Edit").Click("dgChange");
-                  c.Custom("DeleteRecord").Text("Delete").Click("getCountyId");
+                  c.Custom("EditRecord").Text("Edit").Click("dgChange").HtmlAttributes(new {style = "background-color:rgb(255, 153, 0); color:white" });
+                  c.Custom("DeleteRecord").Text("Delete").Click("getCountyId").HtmlAttributes(new {  style = "background-color:rgb(220, 53, 69); color:white"});
               });
           })
           .Scrollable()
-          .Groupable()
           .Sortable()
           .Filterable()
           .Pageable(pageable => pageable
-            .Refresh(true)
-            .PageSizes(true)
-            .ButtonCount(5))
+          .Refresh(true)
+          .PageSizes(true)
+          .ButtonCount(5))
           .DataSource(dataSource => dataSource
-              .Ajax()
-              .Read(read => read.Action("GetCounty", "Dictionary").Data("myFunction"))
-              .Update(update => update.Action("AddEditCounty", "Grid"))
-          )
-    )
+          .Ajax()
+          .Read(read => read.Action("GetCounty", "Dictionary").Data("myFunction"))
+          .Update(update => update.Action("AddEditCounty", "Grid"))
+          ))
 
-</body>
-<script>
+
+    <script>
 
     function createNew() {
         window.location = '/Dictionary/AddEditCounty'
@@ -121,18 +121,18 @@
         $("#grdCounty").data("kendoGrid").dataSource.read()
     }
 
-    function dgChange(e) {
-        grid = $("#grdCounty").data("kendoGrid");
-        var row = e.currentTarget.closest("tr").cells[0].outerText;
-        window.location = '/Dictionary/AddEditCounty?id=' + row
-    }
+            function dgChange(e) {
+                grid = $("#grdCounty").data("kendoGrid");
+                var row = e.currentTarget.closest("tr").cells[0].outerText;
+                window.location = '/Dictionary/AddEditCounty?id=' + row
+            }
 
-    function delFilters() {
-        $("#txtFilter").val(null);
-        $("#countriesCB").data("kendoComboBox").value("");
-        $('#grdCounty').data("kendoGrid").dataSource.read();
-        $('#grdCounty').data("kendoGrid").dataSource.page(1);
-    }
+            function delFilters() {
+                $("#txtFilter").val(null);
+                $("#countriesCB").data("kendoComboBox").value("");
+                $('#grdCounty').data("kendoGrid").dataSource.read();
+                $('#grdCounty').data("kendoGrid").dataSource.page(1);
+            }
 
     function deleteCounty(id) {
         $.ajax({
@@ -154,15 +154,15 @@
             deleteCounty(id);
     }
 
-    function myFunction() {
-        var filter = $("#txtFilter").val();
-        var countryFilter = $("#countriesCB").val();
-        var obj = {};
-        obj["lFilter"] = filter;
-        obj["text"] = countryFilter;
-        return obj;
-    }
+            function myFunction() {
+                var filter = $("#txtFilter").val();
+                var countryFilter = $("#countriesCB").val();
+                var obj = {};
+                obj["lFilter"] = filter;
+                obj["text"] = countryFilter;
+                return obj;
+            }
 
-</script>
-
+    </script>
+</body>
 </html>
