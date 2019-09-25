@@ -13,6 +13,7 @@ namespace iWasHere.Domain.Models
         }
 
         public int CountryId { get; set; }
+        [Required]
         [DisplayName("Country Name")]
         public string CountryName { get; set; }
         [DisplayName("Country Code")]
