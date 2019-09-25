@@ -9,6 +9,12 @@
         <h4>See the full list of ticket types for team Marvel below</h4>
         <hr />
         <div>
+            <div style="float:right" class="display-field">
+                @*<h1 style="color:black; margin-top:-55px;"><b style="font-family: 'Source Sans Pro, sans-serif';">Ticket</b></h1>*@
+                <img src=@Url.Content("https://cdn1.iconfinder.com/data/icons/cinema-gliph/32/ticket-hand-cinema-film-movie-512.png") alt="Ticket Imag" width=100 height=100 />
+
+            </div>
+
             <p>
                 Please insert ticket type below and press "Filter" to find the appropiate data
                 <div align="left">
@@ -42,7 +48,7 @@
                    .Icon("k-icon k-i-plus-circle")
                    .Content("Add new ticket type")
                    .Events(e => e.Click("addTicket"))
-                   .HtmlAttributes(new {  style = "background-color:rgb(255, 153, 0); color:white", title = "custom", id = "ADD" })
+                   .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white", title = "custom", id = "ADD" })
                     )
                 </div>
 

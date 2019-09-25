@@ -270,9 +270,21 @@ namespace iWasHere.Domain.Service
             errMsg = null;
             try
             {
-
+                Models.Landmark validation = _dbContext.Landmark.FirstOrDefault(a => a.LandmarkName.Equals(landmark.LandmarkName));
+                if (validation != null)
+                {
+                    errMsg = "The name exists already";
+                    return null;
+                }
+                validation = _dbContext.Landmark.FirstOrDefault(a => a.LandmarkCode.Equals(landmark.LandmarkCode));
+                if (validation != null)
+                {
+                    errMsg = "The code exists already";
+                    return null;
+                }
                 if (landmark.LandmarkId == 0)
                 {
+                  
                     _dbContext.Add(landmark);
                     _dbContext.SaveChanges();
                     Models.Landmark lastInserted = _dbContext.Landmark.Last();
@@ -364,13 +376,13 @@ namespace iWasHere.Domain.Service
                     Models.DictionaryLandmarkType validation = _dbContext.DictionaryLandmarkType.FirstOrDefault(a => a.DictionaryItemName.Equals(landmarkType.DictionaryItemName));
                     if(validation != null)
                     {
-                        errMsg = "The code exists already";
+                        errMsg = "The name exists already";
                         return null;
                     }
                     validation = _dbContext.DictionaryLandmarkType.FirstOrDefault(a => a.DictionaryItemCode.Equals(landmarkType.DictionaryItemCode));
                    if(validation != null)
                     {
-                        errMsg = "The name exists already";
+                        errMsg = "The code exists already";
                         return null;
                     }
                     
@@ -393,13 +405,25 @@ namespace iWasHere.Domain.Service
             }
         }
 
-        public void DeleteLandmarkType(int id)
+        public int DeleteLandmarkType(int id)
         {
             Models.DictionaryLandmarkType landmarkType = new Models.DictionaryLandmarkType() { DictionaryItemId = id };
-
-            _dbContext.DictionaryLandmarkType.Remove(landmarkType);
-            _dbContext.SaveChanges();
-
+            int deleted = 0;
+            try
+            {
+                Models.Landmark validation = _dbContext.Landmark.FirstOrDefault(a => a.LandmarkTypeId == id);
+                if (validation == null)
+                {
+                    _dbContext.DictionaryLandmarkType.Remove(landmarkType);
+                    _dbContext.SaveChanges();
+                    deleted = 1;
+                    
+                }
+                return deleted;
+            }catch(Exception ex)
+            {
+                return deleted;
+            }
 
         }
         public Models.DictionaryLandmarkType GetDictionaryLandmarkType(int landmarkTypeId)
@@ -782,7 +806,7 @@ namespace iWasHere.Domain.Service
 
             #endregion
 
-            #region Victor
+        #region Victor
 
             public IEnumerable<DictionaryCountyModel> GetCounty(int pageNo, int pageSize, out int rowsNo, string lFilter, int text)
             {
@@ -860,7 +884,7 @@ namespace iWasHere.Domain.Service
                 try
                 {
 
-                    if (county.CountyId == 0)
+                    if (county.CountyId == 0 /*|| county.CountyId == null*/)
                     {
                         _dbContext.Add(county);
                         _dbContext.SaveChanges();
@@ -930,7 +954,7 @@ namespace iWasHere.Domain.Service
 
             #endregion
 
-            #region Gabi
+        #region Gabi
             public IEnumerable<DictionaryTicketTypeModel> GetDictionaryTicketType(int pgNo, int pgSize, out int countRows, string FilterTicketType)
             {
                 countRows = _dbContext.DictionaryTicketType.Count();
@@ -993,65 +1017,65 @@ namespace iWasHere.Domain.Service
                 _dbContext.SaveChanges();
             }
 
-            //public string AddReview(LandmarkReview review)
-            //{
-            //    try
-            //    {
-            //        _dbContext.LandmarkReview.Add(new LandmarkReview
-            //        {
-            //            ReviewTitle = review.ReviewTitle,
-            //            ReviewComment = review.ReviewComment,
-            //            LandmarkId = review.LandmarkId,
-            //            UserId = review.UserId,
-            //            Rating = review.Rating
-            //        });
-            //        _dbContext.SaveChanges();
-            //        return null;
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        return "Please fill the required fields";
-            //    }
-            //}
+        //public string AddReview(LandmarkReview review)
+        //{
+        //    try
+        //    {
+        //        _dbContext.LandmarkReview.Add(new LandmarkReview
+        //        {
+        //            ReviewTitle = review.ReviewTitle,
+        //            ReviewComment = review.ReviewComment,
+        //            LandmarkId = review.LandmarkId,
+        //            UserId = review.UserId,
+        //            Rating = review.Rating
+        //        });
+        //        _dbContext.SaveChanges();
+        //        return null;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return "Please fill the required fields";
+        //    }
+        //}
 
-            //public List<LandmarkReview> GetDbCommentsAll()
-            //{
-            //    List<LandmarkReview> landmarkReviews = _dbContext.LandmarkReview.Select(x => new LandmarkReview()
-            //    {
-            //        ReviewTitle = x.ReviewTitle,
-            //        ReviewComment = x.ReviewComment,
-            //        LandmarkId = x.LandmarkId,
-            //        UserId = x.UserId,
-            //        Rating = x.Rating
 
-            //    }).ToList();
+        //public List<LandmarkReview> GetDbCommentsAll(int landmarkId)
+        //{
+        //    List<LandmarkReview> landmarkReview = _dbContext.LandmarkReview.Select(x => new LandmarkReview()
+        //    {
+        //        UserId = x.UserId,
+        //        ReviewTitle = x.ReviewTitle,
+        //        ReviewComment = x.ReviewComment,
+        //        Rating = x.Rating
 
-            //    return landmarkReviews;
-            //}
+        //    }).Where(x => x.LandmarkId == landmarkId).ToList();
 
-            #endregion
+        //    return landmarkReview;
+        //}
 
-            #region Gunoi
-            //public List<DictionaryCityModel> GetDictionaryCities(int skip, int take, out int totalCount)
-            //{
-            //    totalCount = _dbContext.DictionaryCity.Count();
-            //    int toSkip = (skip-1) * take;
+        #endregion
 
-            //    List<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
-            //    {
-            //        CityName = a.CityName,
-            //        CityCode = a.CityCode,
-            //        CityId = a.CityId
-            //    }
-            //    ).Skip(toSkip).Take(take).ToList();
+        #region Gunoi
+        //public List<DictionaryCityModel> GetDictionaryCities(int skip, int take, out int totalCount)
+        //{
+        //    totalCount = _dbContext.DictionaryCity.Count();
+        //    int toSkip = (skip-1) * take;
 
-            //    return dictionaryCities;
-            //}
-            //paginare
-            //  public List<DictionaryCurrencyTypeModel> GetDictionaryCurrencyType(int pageNo, int pageSize, out int totalCount)
-            #endregion
+        //    List<DictionaryCityModel> dictionaryCities = _dbContext.DictionaryCity.Select(a => new DictionaryCityModel()
+        //    {
+        //        CityName = a.CityName,
+        //        CityCode = a.CityCode,
+        //        CityId = a.CityId
+        //    }
+        //    ).Skip(toSkip).Take(take).ToList();
 
-        }
+        //    return dictionaryCities;
+        //}
+        //paginare
+        //  public List<DictionaryCurrencyTypeModel> GetDictionaryCurrencyType(int pageNo, int pageSize, out int totalCount)
+        #endregion
+
+    }
     }
 
 
