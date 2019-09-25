@@ -224,8 +224,8 @@ namespace iWasHere.Web.Controllers
             landmarkModel.City.CityName = landmarkDetails.City.CityName;
             landmarkModel.Latitude = landmarkDetails.Latitude;
             landmarkModel.Longitude = landmarkDetails.Longitude;
-         
-            
+            landmarkModel.Reviews = _LandmarkService.GetDbCommentsAll(landmarkId);
+
             for (int i = 0; i < priceList.Count; i++)
             {
                 if (priceList[i].TicketTypeId == 1)

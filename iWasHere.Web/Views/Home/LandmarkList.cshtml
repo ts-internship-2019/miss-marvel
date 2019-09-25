@@ -29,8 +29,9 @@
           
            
                
-                <div class="w3-col m8 s12">
+                <div class="bgimg">
                     <div class="bgimg">
+                        <h2>Filters:</h2>
 
                         <form asp-action="LandmarkList">
                             <h5>Landmark Name:</h5>
@@ -57,7 +58,7 @@
     <div class="w3-row">
 
         <!-- Blog entries -->
-        <div class="w3-col l8 s12">
+        <div class="w3-card-4 w3-margin w3-white">
 
             @for (int i = 0; i < Model.LandmarkList.Count; i++)
             {
@@ -75,7 +76,7 @@
                         <h3><b> @Model.LandmarkList[i].LandmarkName </b></h3>
 
                     </div>
-                    @*https://stackoverflow.com/questions/30940914/javascript-creating-buttons-in-a-loop*@
+                 
                     <div class="w3-container">
                         <p>
                             @Model.LandmarkList[i].LandmarkDescription
@@ -85,7 +86,7 @@
                                 <p><input type="button" onClick="readLandmark(@Model.LandmarkList[i].LandmarkId)" value="Read More >>" class="w3-button w3-padding-large w3-white w3-border"></p>
                             </div>
                             <div class="w3-col m4 w3-hide-small">
-                                <p><span class="w3-padding-large w3-right"><b>Rating  </b> <span class="w3-tag">@Model.LandmarkList[i].Rating /10</span></span></p>
+                                <p><span class="w3-padding-large w3-right"><b>Rating  </b> <span class="w3-tag">@Model.LandmarkList[i].Rating /10★</span></span></p>
                             </div>
                         </div>
                     </div>
@@ -99,42 +100,11 @@
         <!-- Introduction menu -->
         <div class="w3-col l4">
             <!-- About Card -->
-            @*<div class="w3-card w3-margin w3-margin-top">
-
-                <h4><b>Filters:</b></h4>
-                <p>
-
-                <p><label>City:</label></p>
-                <p>
-                    @(Html.Kendo().TextBox()
-                         .Name("custom")
-                         .HtmlAttributes(new { style = "width: 70%", title = "custom", id = "txtCityName" })
-                    )
-                </p>
-                <p>
-                    @(Html.Kendo().Button()
-                             .Name("btnFilter")
-                                 .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
-                             .Content("Filter")
-                             .Events(e => e.Click("Filter"))
-                    )
-                    @(Html.Kendo().Button()
-                                        .Name("btnDeleteFilters")
-                                            .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
-                                        .Content("Delete Filters")
-                                        .Events(e => e.Click("deleteFilters"))
-                    )
-                </p>
+            <div class="w3-card w3-margin w3-margin-top">
+                
 
 
-                </p>
-
-
-
-            </div><hr>*@
-
-
-        </div>
+            </div>
 
         <!-- END GRID -->
     </div><br>

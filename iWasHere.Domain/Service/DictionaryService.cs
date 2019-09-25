@@ -239,6 +239,21 @@ namespace iWasHere.Domain.Service
             return landmarkModel;
         }
 
+        public List<LandmarkReview> GetDbCommentsAll(int landmarkId)
+        {
+            List<LandmarkReview> landmarkReview = _dbContext.LandmarkReview.Where(x => x.LandmarkId == landmarkId).Select(x => new LandmarkReview()
+            {
+                UserId = x.UserId,
+                ReviewTitle = x.ReviewTitle,
+                ReviewComment = x.ReviewComment,
+                Rating = x.Rating
+
+            }).ToList();
+
+            return landmarkReview;
+        }
+
+
 
         #endregion
 

@@ -127,36 +127,37 @@ namespace iWasHere.Web.Controllers
             return Json(msg);
         }
 
-        public IActionResult LandmarkDetails(int landmarkId = 44)
-        {
-            var landmarkDetails = _dictionaryService.GetLandmark(landmarkId, out List<TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType);
-            LandmarkModel landmarkModel = new LandmarkModel();
-            landmarkModel.Pictures = _dictionaryService.GetLandmarkPictures(landmarkId);
-            landmarkModel.LandmarkName = landmarkDetails.LandmarkName;
-            landmarkModel.LandmarkDescription = landmarkDetails.LandmarkDescription;
-            landmarkModel.LandmarkTicket = landmarkDetails.LandmarkTicket;
-            landmarkModel.LandmarkCode = landmarkDetails.LandmarkCode;
-            landmarkModel.LandmarkPeriodName = landmarkDetails.LandmarkPeriod.LandmarkPeriodName;
-            landmarkModel.LandmarkType = new DictionaryLandmarkTypeModel();
-            landmarkModel.City = new DictionaryCityModel();
-            landmarkModel.City.CityName = landmarkDetails.City.CityName;
-            landmarkModel.Latitude = landmarkDetails.Latitude;
-            landmarkModel.Longitude = landmarkDetails.Longitude;
-            for(int i = 0;i< priceList.Count;i++)
-            {
-                if(priceList[i].TicketTypeId == 1)
-                landmarkModel.StudentPrice = Convert.ToDecimal(priceList[i].TicketValue);
-                if(priceList[i].TicketTypeId ==3)
-                landmarkModel.RetiredPrice = Convert.ToDecimal(priceList[i].TicketValue);
-                if(priceList[i].TicketTypeId ==137)
-                landmarkModel.AdultPrice = Convert.ToDecimal(priceList[i].TicketValue);
-            }
-            landmarkModel.LandmarkType.DictionaryItemName = landmarkDetails.LandmarkType.DictionaryItemName;
+        //public IActionResult LandmarkDetails(int landmarkId = 44)
+        //{
+        //    var landmarkDetails = _dictionaryService.GetLandmark(landmarkId, out List<TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType);
+        //    LandmarkModel landmarkModel = new LandmarkModel();
+        //    landmarkModel.Pictures = _dictionaryService.GetLandmarkPictures(landmarkId);
+        //    landmarkModel.LandmarkName = landmarkDetails.LandmarkName;
+        //    landmarkModel.LandmarkDescription = landmarkDetails.LandmarkDescription;
+        //    landmarkModel.LandmarkTicket = landmarkDetails.LandmarkTicket;
+        //    landmarkModel.LandmarkCode = landmarkDetails.LandmarkCode;
+        //    landmarkModel.LandmarkPeriodName = landmarkDetails.LandmarkPeriod.LandmarkPeriodName;
+        //    landmarkModel.LandmarkType = new DictionaryLandmarkTypeModel();
+        //    landmarkModel.City = new DictionaryCityModel();
+        //    landmarkModel.City.CityName = landmarkDetails.City.CityName;
+        //    landmarkModel.Latitude = landmarkDetails.Latitude;
+        //    landmarkModel.Longitude = landmarkDetails.Longitude;
+           
+        //    for (int i = 0;i< priceList.Count;i++)
+        //    {
+        //        if(priceList[i].TicketTypeId == 1)
+        //        landmarkModel.StudentPrice = Convert.ToDecimal(priceList[i].TicketValue);
+        //        if(priceList[i].TicketTypeId ==3)
+        //        landmarkModel.RetiredPrice = Convert.ToDecimal(priceList[i].TicketValue);
+        //        if(priceList[i].TicketTypeId ==137)
+        //        landmarkModel.AdultPrice = Convert.ToDecimal(priceList[i].TicketValue);
+        //    }
+        //    landmarkModel.LandmarkType.DictionaryItemName = landmarkDetails.LandmarkType.DictionaryItemName;
             
 
 
-            return View(landmarkModel);
-        }
+        //    return View(landmarkModel);
+        //}
         
 
         #endregion
