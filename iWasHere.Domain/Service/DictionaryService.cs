@@ -271,13 +271,13 @@ namespace iWasHere.Domain.Service
             try
             {
                 Models.Landmark validation = _dbContext.Landmark.FirstOrDefault(a => a.LandmarkName.Equals(landmark.LandmarkName));
-                if (validation != null)
+                if (validation != null && validation.LandmarkId != landmark.LandmarkId)
                 {
                     errMsg = "The name exists already";
                     return null;
                 }
                 validation = _dbContext.Landmark.FirstOrDefault(a => a.LandmarkCode.Equals(landmark.LandmarkCode));
-                if (validation != null)
+                if (validation != null && validation.LandmarkId != landmark.LandmarkId)
                 {
                     errMsg = "The code exists already";
                     return null;
@@ -285,7 +285,7 @@ namespace iWasHere.Domain.Service
                 if (landmark.LandmarkId == 0)
                 {
                   
-                    _dbContext.Add(landmark);
+                    _dbContext.Landmark.Add(landmark);
                     _dbContext.SaveChanges();
                     Models.Landmark lastInserted = _dbContext.Landmark.Last();
                     foreach (Models.TicketXlandmark price in priceList)
