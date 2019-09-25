@@ -20,8 +20,6 @@
     }
 </style>
 <body>
-    
-    
 
     <h4>Landmark</h4>
     <hr />
@@ -30,7 +28,11 @@
             <form enctype="multipart/form-data" asp-action="AddLandmark" id="addForm">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <input type="hidden" asp-for="LandmarkId" />
+
+                    @if (Model != null && Model.LandmarkId != 0)
+                    {
+                        <input type="hidden" asp-for="LandmarkId" />
+                    }
                     <label asp-for="LandmarkName" class="control-label"></label>
                     <input asp-for="LandmarkName" id="txtLandmarkName" class="form-control" />
                     <span asp-validation-for="LandmarkName" class="text-danger"></span>
@@ -51,7 +53,7 @@
                     .Placeholder("Landmark Type")
                     .DataTextField("DictionaryItemName")
                     .DataValueField("DictionaryItemId")
-                    .HtmlAttributes(new { style = "width:100%;" })
+                    .HtmlAttributes(new { style = "width:100%;", id = "cboLandmarkType" })
                     .Filter(FilterType.Contains)
                     .AutoBind(false)
                     .Text(Model.LandmarkTypeName)
@@ -72,7 +74,7 @@
                     .Placeholder("Landmark Period")
                     .DataTextField("LandmarkPeriodName")
                     .DataValueField("LandmarkPeriodId")
-                    .HtmlAttributes(new { style = "width:100%;" })
+                    .HtmlAttributes(new { style = "width:100%;", id = "cboLandmarkPeriod" })
                     .Filter(FilterType.Contains)
                     .AutoBind(false)
                     .MinLength(1)
@@ -93,7 +95,7 @@
                         .Placeholder("City")
                         .DataTextField("CityName")
                         .DataValueField("CityId")
-                        .HtmlAttributes(new { style = "width:100%;", id = "cboCity" })
+                        .HtmlAttributes(new { style = "width:100%;", id = "cboLandmarkCity" })
                         .Filter(FilterType.Contains)
                         .AutoBind(false)
                         .MinLength(1)
@@ -191,7 +193,7 @@
                         fileLabel.html(files[0].name);
                     }
                 });
-
+                
                 var url_string = window.location.href;
                 var url = new URL(url_string);
 
@@ -200,25 +202,49 @@
                     document.getElementById("btnAddModify").innerText = "Update";
                 }
 
-            })
-
+                })
+        
             function saveLandmark() {
+           
+            var txtCode = document.getElementById("txtLandmarkCode").value;
+            var txtName = document.getElementById("txtLandmarkName").value;
 
-                var txtCode = document.getElementById("txtLandmarkCode").value;
-                var txtName = document.getElementById("txtLandmarkName").value;
+            var cboLandmarkType = $("#cboLandmarkType").data("kendoComboBox").text();
+            var cboLandmarkPeriod = $("#cboLandmarkPeriod").data("kendoComboBox").text();
+            var cboLandmarkCity = $("#cboLandmarkCity").data("kendoComboBox").text();
+            var cboCurrency = $("#cboCurrency").data("kendoComboBox").text();
 
-                if (txtCode == "" || txtCode.length == 0 || txtCode == null) {
-                    alert("Please insert landmark code first!!");
-                    return;
+
+            if (cboLandmarkType == "" || cboLandmarkType.length == 0 || cboLandmarkType == null) {
+                alert("Please insert landmark type first");
+                return;
+             }
+
+             if (cboLandmarkPeriod == "" || cboLandmarkPeriod.length == 0 || cboLandmarkPeriod == null) {
+                alert("Please insert landmark period first");
+                return;
                 }
-                if (txtName == "" || txtName.length == 0 || txtName == null) {
-                    alert("Please insert landmark name first!!");
-                    return;
-                }
-
-                form = document.getElementById("addForm");
-                form.submit();
+            if (cboLandmarkCity == "" || cboLandmarkCity.length == 0 || cboLandmarkCity == null) {
+                lert("Please insert landmark city first");
+                return;
             }
+            if (cboCurrency == "" || cboCurrency.length == 0 || cboCurrency == null) {
+                alert("Please insert currency!");
+                return;
+            }
+
+            if (txtCode == "" || txtCode.length == 0 || txtCode == null) {
+                alert("Please insert landmark code first!!");
+                return;
+            }
+            if (txtName == "" || txtName.length == 0 || txtName == null) {
+                alert("Please insert landmark name first!!");
+                return;
+            }
+
+            form = document.getElementById("addForm");
+            form.submit();
+        }
 
             function hide() {
                 if ($('#chkFree').is(":checked"))
@@ -259,7 +285,5 @@
 
 
     }
-
-   
 </body>
 </html>
