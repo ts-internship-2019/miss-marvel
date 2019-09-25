@@ -19,6 +19,7 @@
 
     <input type="hidden" id="landmarkId" value=@Html.DisplayFor(model=> model.LandmarkId)>
     <div class="w3-content" style="max-width:1400px">
+        <button type="button" class="btn btn-primary btn-block" onclick="exportWord()">Export to Word</button>
         @(Html.Kendo().Button()
                                    .Name("btnBackt")
                                        .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })

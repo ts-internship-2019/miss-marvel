@@ -8,6 +8,8 @@
 <h1> @Html.DisplayFor(model => model.LandmarkName)</h1>
 
 <div>
+    <button type="button" class="btn btn-primary btn-block" onclick="exportWord()">Export to Word</button>
+
     <h4> @Html.DisplayFor(model => model.LandmarkType.DictionaryItemName)</h4>
     <hr />
 
@@ -16,7 +18,7 @@
         <input type="hidden" id="longitude" value=@Html.DisplayFor(model => model.Longitude)>
         <div style="margin-left:400px">
             <aside>
-                 <div id="map-canvas" style="width:400px;height:400px"></div>
+                <div id="map-canvas" style="width:400px;height:400px"></div>
 
             </aside>
         </div>
@@ -79,62 +81,37 @@
 
         @*@foreach (var img in Model.Pictures)
         {
-            <div>
-                <img src="@Url.Content("~/images/"+img.PictureName)" width="1000" />
-            </div>
+        <div>
+            <img src="@Url.Content(" ~/images/"+img.PictureName)" width="1000" />
+        </div>
         }*@
-        <!--Carousel Wrapper-->
+        Carousel Wrapper
         <div id="carousel-example-2" class="carousel slide carousel-fade z-depth-1-half" data-ride="carousel">
-            <!--Indicators-->
+            Indicators
             <ol class="carousel-indicators">
                 <li data-target="#carousel-example-2" data-slide-to="0" class="active"></li>
                 <li data-target="#carousel-example-2" data-slide-to="1"></li>
                 <li data-target="#carousel-example-2" data-slide-to="2"></li>
             </ol>
-            <!--/.Indicators-->
-            <!--Slides-->
+            /.Indicators
+            Slides
             <div class="carousel-inner" role="listbox">
                 <div class="carousel-item active">
                     <div class="view">
-                        <img class="d-block w-100" src="@Url.Content("~/images/"+Model.Pictures[0].PictureName)" alt="MissMarvel-logo">
+                        <img class="d-block w-100" src="@Url.Content(" ~/images/"+Model.Pictures[0].PictureName)" alt="MissMarvel-logo">
                         <div class="mask rgba-black-light"></div>
                     </div>
+
+                </div>
+                <div class="carousel-item">
+                    Mask color
+                    <div class="view">
+                        <img class="d-block w-100" alt="Second slide">
                 
-                </div>
-                <div class="carousel-item">
-                    <!--Mask color-->
-                    <div class="view">
-                        <img class="d-block w-100" src="@Url.Content("~/images/"+Model.Pictures[1].PictureName)" alt="Second slide">
-                        <div class="mask rgba-black-light"></div>
-                    </div>
-                 
-                </div>
-                <div class="carousel-item">
-                    <!--Mask color-->
-                    <div class="view">
-                        <img class="d-block w-100" src="@Url.Content("~/images/"+Model.Pictures[2].PictureName)" alt="Third slide">
-                        <div class="mask rgba-black-light"></div>
-                    </div>
-                   
-                </div>
-            </div>
-            <!--/.Slides-->
-            <!--Controls-->
-            <a class="carousel-control-prev" href="#carousel-example-2" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carousel-example-2" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-            <!--/.Controls-->
-        </div>
-        <!--/.Carousel Wrapper-->
 
 
     </div>
-         
+
 
 
 
@@ -160,22 +137,68 @@
             draggable: true
         });
     })
+    function showMarkers() {
+        setMapOnAll(map);
+    }
+
+    function deleteMarkers() {
+        clearMarkers();
+        markers = [];
+    }
+    function exportWord(id) {
+        $.ajax({
+                type: 'GET',
+                url: '@Url.Action("LandmarkDetailsDocument", "DictionaryDictionarr")',
+                data: { id: id },
+                success: function (response) {
+                    console.log(response);
+                },
+                    error: function (response) {
+
+                    }
+            })
+    }
+            
 </script>
 
 
 
 <style>
-    aside {
-    width: 80%;
-    padding-left: .5rem;
-    margin-left: .5rem;
-    float: right;
-    box-shadow: inset 5px 0 5px -5px #29627e;
-    font-style: italic;
-    color: #29627e;
-}
-    aside > p {
-    margin: .5rem;
-}
-
+        aside {
+        width: 80%;
+        padding-left: .5rem;
+        margin-left: .5rem;
+        float: right;
+        box-shadow: inset 5px 0 5px -5px #29627e;
+        font-style: italic;
+        color: #29627e;
+    }
+        aside > p {
+        margin: .5rem;
+    }
 </style>
+<script>
+    function showMarkers() {
+        setMapOnAll(map);
+    }
+
+    function deleteMarkers() {
+        clearMarkers();
+        markers = [];
+    }
+    function exportWord(id) {
+                $.ajax({
+                            type: 'DELETE',
+                            url: '@Url.Action("DeleteLandmarkType", "Dictionary")',
+                            data: { id: id },
+                         success: function (response) {
+                                $("#grdLandmarkType").data("kendoGrid").dataSource.read();
+                         },
+                                error: function (response) {
+
+                                }
+                     })
+            }
+
+
+</script>*@*@*@

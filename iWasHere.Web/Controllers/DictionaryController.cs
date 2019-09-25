@@ -10,11 +10,16 @@ using Kendo.Mvc.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using iWasHere.Web;
 using iWasHere.Domain;
+using System.IO;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
+using System.Text.RegularExpressions;
+using System.Text;
 using System.Security.Claims;
 
 namespace iWasHere.Web.Controllers
 {
-    public class DictionaryController : Controller
+    public class DictionaryController : Controller 
     {
         private readonly DictionaryService _dictionaryService;
 
@@ -750,6 +755,111 @@ namespace iWasHere.Web.Controllers
         {
             _dictionaryService.DeletePeriod(id);
             return Json(ModelState.ToDataSourceResult());
+        }
+
+
+        //public ActionResult LandmarkDetailsDocument(int id)
+        //{
+        //    return View("LandmarkDetailsToWord");
+        //}
+       
+
+        public IActionResult LandmarkDetailsDocument(int id)
+        {
+            Document landmarkDetaildoc = new Document();
+
+            LandmarkModel landmarkModel = new LandmarkModel();
+            var landmarkDetails = _dictionaryService.GetLandmark(id, out List<TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType);
+            landmarkModel.Pictures = _dictionaryService.GetLandmarkPictures(id);
+            landmarkModel.LandmarkName = landmarkDetails.LandmarkName;
+            landmarkModel.LandmarkDescription = landmarkDetails.LandmarkDescription;
+            landmarkModel.LandmarkTicket = landmarkDetails.LandmarkTicket;
+            landmarkModel.LandmarkCode = landmarkDetails.LandmarkCode;
+            landmarkModel.LandmarkPeriodName = landmarkDetails.LandmarkPeriod.LandmarkPeriodName;
+            landmarkModel.LandmarkType = new DictionaryLandmarkTypeModel();
+            landmarkModel.City = new DictionaryCityModel();
+            landmarkModel.City.CityName = landmarkDetails.City.CityName;
+            for (int i = 0; i < priceList.Count; i++)
+            {
+                if (priceList[i].TicketTypeId == 1)
+                    landmarkModel.StudentPrice = Convert.ToDecimal(priceList[i].TicketValue);
+                if (priceList[i].TicketTypeId == 3)
+                    landmarkModel.RetiredPrice = Convert.ToDecimal(priceList[i].TicketValue);
+                if (priceList[i].TicketTypeId == 137)
+                    landmarkModel.AdultPrice = Convert.ToDecimal(priceList[i].TicketValue);
+            }
+            landmarkModel.LandmarkType.DictionaryItemName = landmarkDetails.LandmarkType.DictionaryItemName;
+
+            string templatePath  = $"{Directory.GetCurrentDirectory()}{@"\wwwroot\Templates\LandmarkDetails.docx"}";
+            
+            using (WordprocessingDocument wordDoc =
+        WordprocessingDocument.Open(templatePath, true))
+            {
+
+                string docText = null;
+                using (StreamReader sr = new StreamReader(wordDoc.MainDocumentPart.GetStream()))
+                {
+                    docText = sr.ReadToEnd();
+
+
+                    Regex regexText = new Regex("LandmarkCode");
+                    docText = regexText.Replace(docText, landmarkModel.LandmarkCode);
+                    regexText = new Regex("StudentPrice");
+                    docText = regexText.Replace(docText, landmarkModel.StudentPrice.ToString());
+                    sr.Close();
+                }
+
+                byte[] byteArray = Encoding.UTF8.GetBytes(docText);
+                MemoryStream stream = new MemoryStream();
+                ////MemoryStream stream = new MemoryStream(byteArray);
+                //StreamReader sr2 = new StreamReader(stream);
+                //String s1 = sr2.ReadToEnd();
+
+                //using (WordprocessingDocument doc = WordprocessingDocument.Create(stream, DocumentFormat.OpenXml.WordprocessingDocumentType.Document, true))
+                //{
+                //    //if you don't use the using you should close the WordprocessingDocument here
+                //    doc.Close();
+                //}
+                //stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                //using (StreamWriter sw = new StreamWriter(wordDoc.MainDocumentPart.GetStream(FileMode.Create)))
+                //{
+                //    sw.Write(docText);
+
+                //}
+
+                //Stream s = wordDoc.MainDocumentPart.GetStream();
+                MemoryStream streamword = new MemoryStream();
+                wordDoc.Clone(streamword);
+                wordDoc.Close();
+       //         using (WordprocessingDocument wordDocexport =
+       //WordprocessingDocument.CreateFromTemplate(templatePath, true))
+       //         {
+
+       //             MainDocumentPart mainPart = wordDocexport.AddMainDocumentPart();
+
+       //             new Document(new Body()).Save(mainPart);
+
+       //             Body body = mainPart.Document.Body;
+       //             body.Append(new Paragraph(
+       //                         new Run(
+       //                             new Text(stream.ToString()))));
+
+       //             mainPart.Document.Save();
+                   
+
+       //             //if you don't use the using you should close the WordprocessingDocument here
+       //             //doc.Close();
+       //         }
+                ////stream.Position = 0;
+                //stream.Seek(0, SeekOrigin.Begin);
+                //return File(landmarkDetaildoc.ToDataSourceResult, landmarkDetaildoc.ContentType);
+                return File(streamword, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "LandmarkDetails.docx");
+
+            }
+
         }
         #endregion
 
