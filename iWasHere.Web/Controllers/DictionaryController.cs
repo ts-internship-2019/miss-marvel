@@ -10,7 +10,9 @@ using Kendo.Mvc.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using iWasHere.Web;
 using iWasHere.Domain;
-using System.Security.Claims;
+using Microsoft.Office.Interop.Word;
+using DocumentFormat.OpenXml.Office2013.Excel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace iWasHere.Web.Controllers
 {
@@ -228,13 +230,12 @@ namespace iWasHere.Web.Controllers
 
         public ActionResult DeleteLandmarkType([DataSourceRequest] DataSourceRequest request, int id)
         {
-            int deleted = 0;
             if (id != -1)
             {
-                deleted = _dictionaryService.DeleteLandmarkType(id);
+                _dictionaryService.DeleteLandmarkType(id);
             }
 
-            return Json(deleted);
+            return Json(ModelState.ToDataSourceResult());
         }
 
 
@@ -509,14 +510,6 @@ namespace iWasHere.Web.Controllers
             }
         }
 
-        public IActionResult Review(string landmarkId)
-        {
-            LandmarkReview landmarkReview = new LandmarkReview();
-            landmarkReview.LandmarkId = Convert.ToInt32(landmarkId);
-            return View(landmarkReview);
-
-        }
-
         public IActionResult DeleteTicketType([DataSourceRequest] DataSourceRequest request, int id)
         {
             if (id != -1)
@@ -549,114 +542,50 @@ namespace iWasHere.Web.Controllers
         }
 
 
-        public IActionResult AddComment(int landmarkId, string author, string cTitle, string comment, int stored, bool user)
-        {
-            var userName = User.FindFirstValue(ClaimTypes.Name);
-            var anon = "anonymous";
+        //public IActionResult IndexComments()
+        //{
+        //    List<LandmarkReview> landmarkReviews = null;// _dictionaryService.GetDbCommentsAll();
+        //    return View(landmarkReviews);
+        //}
 
-            MissMarvelContext _dbContext = new MissMarvelContext();
-
-            if (user == true)
-            {
-                if (userName == null)
-                {
-                    _dbContext.LandmarkReview.Add(new LandmarkReview
-                    {
-                        LandmarkId = landmarkId,
-                        ReviewComment = comment,
-                        ReviewTitle = cTitle,
-                        Rating = stored,
-                        UserId = anon,
-                    });
-                }
-                else
-                {
-                    _dbContext.LandmarkReview.Add(new LandmarkReview
-                    {
-                        LandmarkId = landmarkId,
-                        ReviewComment = comment,
-                        ReviewTitle = cTitle,
-                        Rating = stored,
-                        UserId = userName,
-                    });
-
-                }
-            }
-            else
-            {
-                _dbContext.LandmarkReview.Add(new LandmarkReview
-                {
-                    LandmarkId = landmarkId,
-                    ReviewComment = comment,
-                    ReviewTitle = cTitle,
-                    Rating = stored,
-                    UserId = author
-
-
-                });
-            }
-
-
-            return Json(_dbContext.SaveChanges());
-
-        }
-
-
-
+        //public IActionResult AddReview()
+        //{
+        //    return View();
+        //}
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public IActionResult AddReview(LandmarkReview review, int id)
         //{
-
+          
         //        _dictionaryService.AddReview(review);
         //        return View();
         //}
 
+  
 
 
 
 
-
-
-        #endregion
+            #endregion
 
         #region Victor
 
-        public IActionResult County()
+            public IActionResult County()
         {
 
             return View();
         }
 
-        public ActionResult AddEditCounty([Bind("CountyId, CountyCode, CountyName, CountryId")]DictionaryCounty dc, int id)
+        public ActionResult AddEditCounty([Bind("CountyId, CountyCode, CountyName, CountryId")]DictionaryCounty dt, int id)
         {
-            //int k;
-            //String exMessage;
-            //if (/*ModelState.IsValid &&*/ dc.CountyCode != null)
-            //{
-            //     _dictionaryService.AddDictionaryCounty(dc);
-            //}
-            //return View();
-
+            int k;
             String exMessage;
-            if (dc.CountyCode != null)
+            if (/*ModelState.IsValid &&*/ dt.CountyCode != null)
             {
-                var result = _dictionaryService.AddEditDictionaryCounty(dc, out exMessage);
-                if (result == null)
-                {
-                    ModelState.AddModelError(string.Empty, exMessage);
-                    return View();
-                }
+                 _dictionaryService.AddDictionaryCounty(dt);
             }
-            if (id != 0)
-            {
-                return View(_dictionaryService.GetDictionaryCounty(id));
-            }
-            else
-            {
-                return View();
-            }
+            return View();
         }
 
         public ActionResult GetCounty([DataSourceRequest]DataSourceRequest request, String lFilter, String text)
@@ -870,6 +799,10 @@ namespace iWasHere.Web.Controllers
 
 
         #endregion
+
+
+        
+
 
     }
 
