@@ -20,6 +20,8 @@
     }
 </style>
 <body>
+    
+    
 
     <h4>Landmark</h4>
     <hr />
@@ -193,7 +195,7 @@
                         fileLabel.html(files[0].name);
                     }
                 });
-                
+
                 var url_string = window.location.href;
                 var url = new URL(url_string);
 
@@ -202,12 +204,12 @@
                     document.getElementById("btnAddModify").innerText = "Update";
                 }
 
-                })
-        
+            })
+
             function saveLandmark() {
-           
-            var txtCode = document.getElementById("txtLandmarkCode").value;
-            var txtName = document.getElementById("txtLandmarkName").value;
+
+                var txtCode = document.getElementById("txtLandmarkCode").value;
+                var txtName = document.getElementById("txtLandmarkName").value;
 
             var cboLandmarkType = $("#cboLandmarkType").data("kendoComboBox").text();
             var cboLandmarkPeriod = $("#cboLandmarkPeriod").data("kendoComboBox").text();
@@ -242,9 +244,9 @@
                 return;
             }
 
-            form = document.getElementById("addForm");
-            form.submit();
-        }
+                form = document.getElementById("addForm");
+                form.submit();
+            }
 
             function hide() {
                 if ($('#chkFree').is(":checked"))
@@ -285,5 +287,7 @@
 
 
     }
+
+   
 </body>
 </html>

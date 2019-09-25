@@ -18,8 +18,12 @@
         <h2>Dictionary LandmarkType</h2>
     </div>
 
+    <div class="bg">
+        <center>
+            <img src=@Url.Content("https://wallpaperplay.com/walls/full/c/3/0/320656.jpg") alt="LandmarkType" />
+        </center>
+    </div>
 
- 
     <hr />
     <div class="row" style="font-family: 'Source Sans Pro, sans-serif';">
         <div class="col-md-4">
@@ -45,9 +49,9 @@
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <a value="create" id="btnAddModify" onclick="save()" class="btn btn-primary"> Create </a>
-                    <a value="SN" class="btn btn-primary" onclick="saveNew()" > Save and New </a>
-                    <a class="btn btn-primary" onclick="cancel()"> Cancel </a>
+                    <button name="submit" value="create" id="btnAddModify" onclick="save()" class="btn btn-warning"> Create </button>
+                    <button name="submit" value="SN" class="btn btn-warning"> Save and New </button>
+                    <a class="btn btn-danger" onclick="cancel()"> Cancel </a>
                 </div>
             </form>
         </div>
@@ -118,5 +122,33 @@
             form.submit();
         }
     </script>
+
+    <style>
+
+        .btn {
+            background-color: #f4511e;
+            border: none;
+            color: white;
+            padding: 10px 22px;
+            text-align: center;
+            font-size: 16px;
+            margin: 4px 2px;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+
+            .btn:hover {
+                opacity: 1;
+            }
+
+        .bg {
+             position:fixed;
+            left: -500px;
+            top: 71px;
+            height: auto;
+            width: 100%;     
+            opacity: 0.4;
+        }
+    </style>
 </body>
 </html>

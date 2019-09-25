@@ -122,7 +122,7 @@ namespace iWasHere.Web.Controllers
             return Json(msg);
         }
 
-        public IActionResult LandmarkDetails(int landmarkId = 41)
+        public IActionResult LandmarkDetails(int landmarkId = 44)
         {
             var landmarkDetails = _dictionaryService.GetLandmark(landmarkId, out List<TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType);
             LandmarkModel landmarkModel = new LandmarkModel();
@@ -576,15 +576,34 @@ namespace iWasHere.Web.Controllers
             return View();
         }
 
-        public ActionResult AddEditCounty([Bind("CountyId, CountyCode, CountyName, CountryId")]DictionaryCounty dt, int id)
+        public ActionResult AddEditCounty([Bind("CountyId, CountyCode, CountyName, CountryId")]DictionaryCounty dc, int id)
         {
-            int k;
+            //int k;
+            //String exMessage;
+            //if (/*ModelState.IsValid &&*/ dc.CountyCode != null)
+            //{
+            //     _dictionaryService.AddDictionaryCounty(dc);
+            //}
+            //return View();
+
             String exMessage;
-            if (/*ModelState.IsValid &&*/ dt.CountyCode != null)
+            if (dc.CountyCode != null)
             {
-                 _dictionaryService.AddDictionaryCounty(dt);
+                var result = _dictionaryService.AddEditDictionaryCounty(dc, out exMessage);
+                if (result == null)
+                {
+                    ModelState.AddModelError(string.Empty, exMessage);
+                    return View();
+                }
             }
-            return View();
+            if (id != 0)
+            {
+                return View(_dictionaryService.GetDictionaryCounty(id));
+            }
+            else
+            {
+                return View();
+            }
         }
 
         public ActionResult GetCounty([DataSourceRequest]DataSourceRequest request, String lFilter, String text)

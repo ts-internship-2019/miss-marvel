@@ -12,6 +12,7 @@ namespace iWasHere.Domain.DTOs
         public int CountryId { get; set; }
         public string CountyCode { get; set; }
 
+
     }
 }
 

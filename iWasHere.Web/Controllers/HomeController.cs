@@ -34,7 +34,14 @@ namespace iWasHere.Web.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            LandmarkModelList landmarkModelList = new LandmarkModelList();
+            landmarkModelList.LandmarkList = _LandmarkService.GetLandmarkList();
+            for (int i = 0; i < landmarkModelList.LandmarkList.Count; i++)
+            {
+                landmarkModelList.LandmarkList[i].Pictures = _LandmarkService.GetLandmarkPictures(landmarkModelList.LandmarkList[i].LandmarkId);
+            }
+
+            return View(landmarkModelList);
         }
 
         public IActionResult Privacy()
@@ -172,6 +179,37 @@ namespace iWasHere.Web.Controllers
 
             return Json(x);
 
+        }
+
+        public IActionResult LandmarkView(int landmarkId =47)
+        {
+            var landmarkDetails = _LandmarkService.GetLandmark(landmarkId, out List<TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType);
+            LandmarkModel landmarkModel = new LandmarkModel();
+            landmarkModel.Pictures = _LandmarkService.GetLandmarkPictures(landmarkId);
+            landmarkModel.LandmarkName = landmarkDetails.LandmarkName;
+            landmarkModel.LandmarkDescription = landmarkDetails.LandmarkDescription;
+            landmarkModel.LandmarkTicket = landmarkDetails.LandmarkTicket;
+            landmarkModel.LandmarkCode = landmarkDetails.LandmarkCode;
+            landmarkModel.LandmarkPeriodName = landmarkDetails.LandmarkPeriod.LandmarkPeriodName;
+            landmarkModel.LandmarkType = new DictionaryLandmarkTypeModel();
+            landmarkModel.City = new DictionaryCityModel();
+            landmarkModel.City.CityName = landmarkDetails.City.CityName;
+            landmarkModel.Latitude = landmarkDetails.Latitude;
+            landmarkModel.Longitude = landmarkDetails.Longitude;
+            for (int i = 0; i < priceList.Count; i++)
+            {
+                if (priceList[i].TicketTypeId == 1)
+                    landmarkModel.StudentPrice = Convert.ToDecimal(priceList[i].TicketValue);
+                if (priceList[i].TicketTypeId == 3)
+                    landmarkModel.RetiredPrice = Convert.ToDecimal(priceList[i].TicketValue);
+                if (priceList[i].TicketTypeId == 137)
+                    landmarkModel.AdultPrice = Convert.ToDecimal(priceList[i].TicketValue);
+            }
+            landmarkModel.LandmarkType.DictionaryItemName = landmarkDetails.LandmarkType.DictionaryItemName;
+
+
+
+            return View(landmarkModel);
         }
     }
 }
