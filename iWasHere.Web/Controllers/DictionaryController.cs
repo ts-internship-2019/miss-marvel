@@ -10,7 +10,9 @@ using Kendo.Mvc.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using iWasHere.Web;
 using iWasHere.Domain;
-
+using Microsoft.Office.Interop.Word;
+using DocumentFormat.OpenXml.Office2013.Excel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace iWasHere.Web.Controllers
 {
@@ -797,6 +799,10 @@ namespace iWasHere.Web.Controllers
 
 
         #endregion
+
+
+        
+
 
     }
 
