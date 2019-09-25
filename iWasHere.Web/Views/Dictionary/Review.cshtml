@@ -4,13 +4,16 @@
     ViewData["Title"] = "Review";
 }
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 
 <body>
     <h4 align="center">work in progress</h4>
-    <div>
+    @*<div>
         <h5>User reviews</h5>
         <br />
-        <button @*style="float:right"*@ class="btn btn-dark" onclick="comment()" id="add"> Add Comment </button>
+        <button style="float:right" class="btn btn-dark" onclick="comment()" id="add"> Add Comment </button>
         <br />
         <br />
         <hr />
@@ -27,7 +30,7 @@
                         <div class="form-group">
                             <label class="control-label">Please rate this landmark:</label>
                             <fieldset class="rating">
-                                @*<legend>Please rate this landmark:</legend>*@
+                                <legend>Please rate this landmark:</legend>
                                 <input type="radio" id="star10" name="rating" value="10" onclick="getVal(this)" /><label for="star10" title="Rocks!">10 stars</label>
                                 <input type="radio" id="star9" name="rating" value="9" onclick="getVal(this)" /><label for="star9" title="Pretty good">9 stars</label>
                                 <input type="radio" id="star8" name="rating" value="8" onclick="getVal(this)" /><label for="star8" title="Good">8 stars</label>
@@ -60,7 +63,7 @@
                             <input id="Landmark" class="form-control" />
                             <span class="text-danger"></span>
                         </div>
-                        <div @*class="form-group"*@>
+                        <div class="form-group">
                             <label class="control-label">
                                 Comment with the account you are logged in&nbsp;
                                 <input type="checkbox" id="myCheck" onclick="checkuser()">
@@ -74,13 +77,98 @@
                 <button type="submit" class="btn btn-danger" onclick="cancel()">Cancel</button>
             </div>
         </div>
+    </div>*@
+
+
+    <div class="w3-card-4 w3-margin w3-white">
+
+        <div class="w3-container">
+            <h3><b>User reviews</b></h3>
+            <br />
+        </div>
+
+        <div class="w3-container">
+            <button style="float:right" class="btn btn-dark" onclick="comment()" id="add"> Add Comment </button>
+        </div>
+        <br />
+        <div class="w3-container">
+
+        </div>
+        <div class="w3-container">
+
+        </div>
+
     </div>
 
+    @*<div id="toggle" style="display:none" *>*@
+        <div class="w3-card-4 w3-margin w3-white" id="toggle" style="display:none" *>
 
-    @*@section Scripts {
-            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-        }*@
-    <script>
+            <div class="w3-container">
+                <h3><b>Insert a comment below</b></h3>
+                <br />
+            </div>
+
+            <div class="w3-container">
+                <p>
+                    <label class="control-label">Please rate this landmark:</label>
+                    <fieldset class="rating">
+                        @*<legend>Please rate this landmark:</legend>*@
+                        <input type="radio" id="star10" name="rating" value="10" onclick="getVal(this)" /><label for="star10" title="Rocks!">10 stars</label>
+                        <input type="radio" id="star9" name="rating" value="9" onclick="getVal(this)" /><label for="star9" title="Pretty good">9 stars</label>
+                        <input type="radio" id="star8" name="rating" value="8" onclick="getVal(this)" /><label for="star8" title="Good">8 stars</label>
+                        <input type="radio" id="star7" name="rating" value="7" onclick="getVal(this)" /><label for="star7" title="Not great,not terrible">7 stars</label>
+                        <input type="radio" id="star6" name="rating" value="6" onclick="getVal(this)" /><label for="star6" title="Better">6 star</label>
+                        <input type="radio" id="star5" name="rating" value="5" onclick="getVal(this)" /><label for="star5" title="We passed!">5 stars</label>
+                        <input type="radio" id="star4" name="rating" value="4" onclick="getVal(this)" /><label for="star4" title="Slightly better">4 stars</label>
+                        <input type="radio" id="star3" name="rating" value="3" onclick="getVal(this)" /><label for="star3" title="Meh">3 stars</label>
+                        <input type="radio" id="star2" name="rating" value="2" onclick="getVal(this)" /><label for="star2" title="Kinda bad">2 stars</label>
+                        <input type="radio" id="star1" name="rating" value="1" onclick="getVal(this)" /><label for="star1" title="Sucks big time">1 star</label>
+                    </fieldset>
+                </p>
+            </div>
+            <br />
+            <div class="w3-container">
+                <br />
+                <label class="control-label">Username</label>
+                <input id="Username" class="form-control" value="anonymous" />
+                <span class="text-danger"></span>
+            </div>
+            <div class="w3-container">
+                <br />
+                <label class="control-label">Review title</label>
+                <input id="Title" class="form-control" />
+                <span class="text-danger"></span>
+            </div>
+            <div class="w3-container">
+                <br />
+                <label class="control-label">Comment</label>
+                <input id="Comment" class="form-control" />
+                <span class="text-danger"></span>
+            </div>
+
+            <div class="w3-container">
+                <br />
+                <label class="control-label">
+                    Comment with the account you are logged in&nbsp;
+                </label>
+                <input type="checkbox" id="myCheck" onclick="checkuser()">
+            </div>
+
+            <div class="w3-container">
+                <button type="submit" class="btn btn-dark" onclick="insert()"> Save Comment </button>
+                <button type="submit" class="btn btn-danger" onclick="cancel()">Cancel</button>
+            </div>
+            <br />
+            <br />
+            <br />
+        </div>
+    @*</div>*@
+
+
+        @*@section Scripts {
+                @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+            }*@
+        <script>
 
     //function redirect() {
     //    window.location = '/Dictionary/IndexComments';
@@ -147,7 +235,7 @@
         }
 
         var storedVal = 0;
-    </script>
+        </script>
 </body>
 
 
