@@ -203,7 +203,7 @@ namespace iWasHere.Web.Controllers
             landmarkModel.City.CityName = landmarkDetails.City.CityName;
             landmarkModel.Latitude = landmarkDetails.Latitude;
             landmarkModel.Longitude = landmarkDetails.Longitude;
-            landmarkModel.Rating = Convert.ToInt32(landmarkDetails.LandmarkReview.Average(a => a.Rating));
+         
             
             for (int i = 0; i < priceList.Count; i++)
             {
