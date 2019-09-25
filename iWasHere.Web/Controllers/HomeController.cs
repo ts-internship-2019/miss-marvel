@@ -122,6 +122,10 @@ namespace iWasHere.Web.Controllers
                     pricesList.Add(new TicketXlandmark(0, l.LandmarkId, 3, Convert.ToInt32(CurrencyId), Convert.ToDecimal(RetiredPrice)));
                 }
                 _LandmarkService.AddEditLandmark(l, pricesList, out err, pictures);
+                if (!String.IsNullOrWhiteSpace(err))
+                {
+                    ModelState.AddModelError(string.Empty, err);
+                }
             }
 
             return View(new LandmarkModel());

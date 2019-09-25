@@ -259,9 +259,21 @@ namespace iWasHere.Domain.Service
             errMsg = null;
             try
             {
-
+                Models.Landmark validation = _dbContext.Landmark.FirstOrDefault(a => a.LandmarkName.Equals(landmark.LandmarkName));
+                if (validation != null)
+                {
+                    errMsg = "The name exists already";
+                    return null;
+                }
+                validation = _dbContext.Landmark.FirstOrDefault(a => a.LandmarkCode.Equals(landmark.LandmarkCode));
+                if (validation != null)
+                {
+                    errMsg = "The code exists already";
+                    return null;
+                }
                 if (landmark.LandmarkId == 0)
                 {
+                  
                     _dbContext.Add(landmark);
                     _dbContext.SaveChanges();
                     Models.Landmark lastInserted = _dbContext.Landmark.Last();
@@ -353,13 +365,13 @@ namespace iWasHere.Domain.Service
                     Models.DictionaryLandmarkType validation = _dbContext.DictionaryLandmarkType.FirstOrDefault(a => a.DictionaryItemName.Equals(landmarkType.DictionaryItemName));
                     if(validation != null)
                     {
-                        errMsg = "The code exists already";
+                        errMsg = "The name exists already";
                         return null;
                     }
                     validation = _dbContext.DictionaryLandmarkType.FirstOrDefault(a => a.DictionaryItemCode.Equals(landmarkType.DictionaryItemCode));
                    if(validation != null)
                     {
-                        errMsg = "The name exists already";
+                        errMsg = "The code exists already";
                         return null;
                     }
                     
@@ -382,13 +394,25 @@ namespace iWasHere.Domain.Service
             }
         }
 
-        public void DeleteLandmarkType(int id)
+        public int DeleteLandmarkType(int id)
         {
             Models.DictionaryLandmarkType landmarkType = new Models.DictionaryLandmarkType() { DictionaryItemId = id };
-
-            _dbContext.DictionaryLandmarkType.Remove(landmarkType);
-            _dbContext.SaveChanges();
-
+            int deleted = 0;
+            try
+            {
+                Models.Landmark validation = _dbContext.Landmark.FirstOrDefault(a => a.LandmarkTypeId == id);
+                if (validation == null)
+                {
+                    _dbContext.DictionaryLandmarkType.Remove(landmarkType);
+                    _dbContext.SaveChanges();
+                    deleted = 1;
+                    
+                }
+                return deleted;
+            }catch(Exception ex)
+            {
+                return deleted;
+            }
 
         }
         public Models.DictionaryLandmarkType GetDictionaryLandmarkType(int landmarkTypeId)

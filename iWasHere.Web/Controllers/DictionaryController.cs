@@ -228,12 +228,13 @@ namespace iWasHere.Web.Controllers
 
         public ActionResult DeleteLandmarkType([DataSourceRequest] DataSourceRequest request, int id)
         {
+            int deleted = 0;
             if (id != -1)
             {
-                _dictionaryService.DeleteLandmarkType(id);
+                deleted = _dictionaryService.DeleteLandmarkType(id);
             }
 
-            return Json(ModelState.ToDataSourceResult());
+            return Json(deleted);
         }
 
 

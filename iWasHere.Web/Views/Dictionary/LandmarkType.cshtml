@@ -61,7 +61,7 @@
                     columns.Template("<button class='btn btn-danger' id=\"btnDelete\" onclick=\"deleteLandmarkType(#=DictionaryItemId#)\">Delete</button>");
                     columns.Command(c =>
                  {
-                    c.Custom("EditRecord").Text("Edit").Click("dgChange").HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white" });
+                    c.Custom("EditRecord").Text("Edit").Click("dgChange").HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white;" });
                     });
               })
               .Scrollable()
@@ -118,7 +118,11 @@
                             url: '@Url.Action("DeleteLandmarkType", "Dictionary")',
                             data: { id: id },
                          success: function (response) {
-                                $("#grdLandmarkType").data("kendoGrid").dataSource.read();
+                             if (response == 1) {
+                                 $("#grdLandmarkType").data("kendoGrid").dataSource.read();
+                             } else {
+                                 alert("You cannot delete this landmark type because it exists a landmark with this type")
+                             }
                          },
                                 error: function (response) {
 
