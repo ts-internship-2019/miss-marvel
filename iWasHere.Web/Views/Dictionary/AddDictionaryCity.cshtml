@@ -71,7 +71,7 @@
                             .Name("btnNew")
                             .HtmlAttributes(new {style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
                             .Content("Save and New")
-                            .Events(e => e.Click("saveNew"))
+                            .Events(e => e.Click("addCityNew"))
                         )
                     </p>
 
@@ -102,7 +102,7 @@
             }
 
             function saveNew() {
-                addCity();
+                
 
                 $("#txtCityName").val(null);
 
@@ -118,6 +118,14 @@
                 AddCities(cityName, countyId, cityCode);
 
             }
+             function addCityNew() {
+                var cityName = $("#txtCityName").val();
+                var countyId = $("#countiesCB").val();
+                var cityCode = $("#txtCityCode").val();
+                 AddCitiesX(cityName, countyId, cityCode);
+                 saveNew();
+
+            }
 
           function AddCities(cityName,countyId,cityCode) {
                 $.ajax({
@@ -128,6 +136,24 @@
                         alert(response);
                         if(response == "Element adaugat.")
                         back();
+                    },
+                    error: function (response) {
+                        alert("Not good");
+                    }
+
+
+                })
+
+            }
+
+             function AddCitiesX(cityName,countyId,cityCode) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("AddCity", "Dictionary")',
+                    data: { cityName: cityName, cityCode: cityCode, countyId: countyId },
+                    success: function (response) {
+                        alert(response);
+                       
                     },
                     error: function (response) {
                         alert("Not good");
