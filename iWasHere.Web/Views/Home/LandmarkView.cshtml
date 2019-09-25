@@ -17,21 +17,26 @@
 </style>
 <body class="w3-light-grey">
 
-    <!-- w3-content defines a container for fixed size centered content,
-    and is wrapped around the whole page content, except for the footer in this example -->
+    <input type="hidden" id="landmarkId" value=@Html.DisplayFor(model=> model.LandmarkId)>
     <div class="w3-content" style="max-width:1400px">
         @(Html.Kendo().Button()
-                            .Name("btnSubmit")
-                            .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white ; width:150px" })
-                            .Content("Back To List")
-                            .Events(e => e.Click("back"))
+                                   .Name("btnBackt")
+                                       .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
+                                   .Content("Back To List")
+                                   .Events(e => e.Click("back"))
+        )
+        @(Html.Kendo().Button()
+                                    .Name("btnEdit")
+                                        .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
+                                    .Content("Edit")
+                                    .Events(e => e.Click("edit"))
         )
         <!-- Header -->
         <header class="w3-container w3-center w3-padding-32">
             <h1><b>@Html.DisplayFor(model => model.LandmarkName)</b></h1>
             <h3>@Html.DisplayFor(model => model.LandmarkType.DictionaryItemName)</h3>
         </header>
-        
+
         <!-- Grid -->
         <div class="w3-row">
 
@@ -41,7 +46,7 @@
                 <!-- Blog entry -->
                 <div class="w3-card-4 w3-margin w3-white">
                     <div class="right-div">
-                       
+
                         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                             <div class="carousel-inner">
                                 @if (Model.Pictures != null)
@@ -166,8 +171,13 @@
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbRIxmMBjKw5IovRx6CF03hU8SDpqxtos&amp"></script>
 <script>
     function back() {
-        window.location = '/Home/Index'
+        window.location = '/Home/LandmarkList'
     }
+
+    function edit() {
+             window.location = '/Home/AddLandmark?id='+ $("#landmarkId").val()
+        }
+
     $(document).ready(function () {
         var map = new google.maps.Map(document.getElementById('map-canvas'), {
             center: {
@@ -177,6 +187,8 @@
             zoom: 15
 
         });
+
+        
 
         var marker = new google.maps.Marker({
             position: {
@@ -188,3 +200,32 @@
         });
     })
 </script>
+
+<style>
+     .btn {
+                background-color: #f4511e;
+                border: none;
+                color: white;
+                padding: 10px 22px;
+                text-align: center;
+                font-size: 16px;
+                width:170px;
+                opacity: 0.6;
+                transition: 0.3s;
+
+            }
+
+      .btn:hover, .btn1:hover {
+                    opacity: 1;
+                 
+                }
+
+            .bg {
+                position: absolute;
+                left: 0;
+                top: 71px;
+                width: 100%;
+                height: auto;
+                opacity: 0.4;
+            }
+</style>

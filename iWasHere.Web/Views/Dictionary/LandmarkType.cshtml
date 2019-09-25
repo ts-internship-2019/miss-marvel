@@ -53,16 +53,18 @@
               .Name("grid")
               .HtmlAttributes(new { style = "height: 500px", id = "grdLandmarkType" })
               .Columns(columns =>
-                {
-                    columns.Bound(p => p.DictionaryItemId).Hidden();
-                    columns.Bound(p => p.DictionaryItemCode);
-                    columns.Bound(p => p.DictionaryItemName);
-                    columns.Bound(p => p.Description);
-                    columns.Template("<button class='btn btn-danger' id=\"btnDelete\" onclick=\"deleteLandmarkType(#=DictionaryItemId#)\">Delete</button>");
-                    columns.Command(c =>
-                 {
-                    c.Custom("EditRecord").Text("Edit").Click("dgChange").HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white;" });
-                    });
+              {
+                  columns.Bound(p => p.DictionaryItemId).Hidden();
+                  columns.Bound(p => p.DictionaryItemCode);
+                  columns.Bound(p => p.DictionaryItemName);
+                  columns.Bound(p => p.Description);
+                  columns.Template("<button class='btn btn-danger' id=\"btnDelete\" onclick=\"deleteLandmarkType(#=DictionaryItemId#)\">Delete</button>");
+                  columns.Command(c =>
+                  {
+                      c.Custom("EditRecord").Text("Edit").Click("dgChange").HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white" });
+                  });
+
+    
               })
               .Scrollable()
 
