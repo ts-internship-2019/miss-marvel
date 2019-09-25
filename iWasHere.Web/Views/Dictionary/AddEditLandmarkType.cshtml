@@ -14,48 +14,139 @@
 </head>
 <body>
 
-<h4>DictionaryLandmarkType</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-        <form asp-action="Add Landmark Type">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="DictionaryItemId" />
-            <div class="form-group">
-                <label asp-for="DictionaryItemCode" class="control-label"></label>
-                <input asp-for="DictionaryItemCode" id="txtCode" class="form-control" />
-                <span asp-validation-for="DictionaryItemCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DictionaryItemName" class="control-label"></label>
-                <input asp-for="DictionaryItemName" id="txtName" class="form-control" />
-                <span asp-validation-for="DictionaryItemName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" id="txtDescription" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <button id="btnAddModify" onclick="SaveChanges" class="btn btn-primary"> Create </button>
-            </div>
-        </form>
+    <div style="font-family: 'Source Sans Pro, sans-serif';">
+        <h2>Dictionary LandmarkType</h2>
     </div>
-</div>
 
-<div>
-    <a asp-action="LandmarkType">Back to List</a>
-</div>
+    <div class="bg">
+        <center>
+            <img src=@Url.Content("https://wallpaperplay.com/walls/full/c/3/0/320656.jpg") alt="LandmarkType" />
+        </center>
+    </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
- <script>
-     $(document).ready(function () {
-      
-     })
-   
- </script>
+    <hr />
+    <div class="row" style="font-family: 'Source Sans Pro, sans-serif';">
+        <div class="col-md-4">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+            <form asp-action="Add Landmark Type" id="addForm">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="DictionaryItemId" />
+                <div class="form-group">
+                    <label asp-for="DictionaryItemCode" class="control-label"></label>
+                    <input asp-for="DictionaryItemCode" id="txtCode" class="form-control" />
+                    <span asp-validation-for="DictionaryItemCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DictionaryItemName" class="control-label"></label>
+                    <input asp-for="DictionaryItemName" id="txtName" class="form-control" />
+                    <span asp-validation-for="DictionaryItemName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" id="txtDescription" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button name="submit" value="create" id="btnAddModify" onclick="save()" class="btn btn-warning"> Create </button>
+                    <button name="submit" value="SN" class="btn btn-warning"> Save and New </button>
+                    <a class="btn btn-danger" onclick="cancel()"> Cancel </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="LandmarkType">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+    <script>
+        $(document).ready(function () {
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+
+        var id = url.searchParams.get("id");
+        if (id != 0 && id != null) {
+            document.getElementById("btnAddModify").innerText = "Update";
+        }
+
+        })
+
+
+
+
+        function cancel() {
+            window.location.href = '@Url.Action("LandmarkType", "Dictionary")';
+        }
+
+        function save() {
+             var txtCode = document.getElementById("txtCode").value;
+            var txtName = document.getElementById("txtName").value;
+            if (txtCode == "" || txtCode.length == 0 || txtCode == null) {
+                alert("Please insert Landmark Type code first!!");
+                return;
+            }
+            if (txtName == "" || txtName.length == 0 || txtName == null) {
+                alert("Please insert name first!!");
+                return;
+            }
+
+            operationType = document.getElementById("mode");
+            form = document.getElementById("addForm");
+            form.submit();
+
+        }
+
+        function saveNew() {
+             $('<input />').attr('type', 'hidden')
+            .attr('name',"buttonPressed")
+            .attr('value', "SN")
+            .appendTo('#addForm');
+            var txtCode = document.getElementById("txtCode").value;
+            var txtName = document.getElementById("txtName").value;
+            if (txtCode == "" || txtCode.length == 0 || txtCode == null) {
+                alert("Please insert Landmark Type code first!!");
+                return;
+            }
+            if (txtName == "" || txtName.length == 0 || txtName == null) {
+                alert("Please insert name first!!");
+                return;
+            }
+
+            operationType = document.getElementById("mode");
+            form = document.getElementById("addForm");
+            form.submit();
+        }
+    </script>
+
+    <style>
+
+        .btn {
+            background-color: #f4511e;
+            border: none;
+            color: white;
+            padding: 10px 22px;
+            text-align: center;
+            font-size: 16px;
+            margin: 4px 2px;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+
+            .btn:hover {
+                opacity: 1;
+            }
+
+        .bg {
+             position:fixed;
+            left: -500px;
+            top: 71px;
+            height: auto;
+            width: 100%;     
+            opacity: 0.4;
+        }
+    </style>
 </body>
 </html>

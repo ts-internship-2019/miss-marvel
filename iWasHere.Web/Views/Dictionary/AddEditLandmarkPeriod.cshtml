@@ -14,10 +14,17 @@
     <title>AddLandmarkPeriod</title>
 </head>
 <body>
+    <div style="font-family: 'Source Sans Pro, sans-serif';">
+        <h2>DictionaryLandmarkPeriod</h2>
+    </div>
 
-    <h4>DictionaryLandmarkPeriod</h4>
+    <div class="bg">
+        <center>
+            <img src=@Url.Content("https://wallpaperplay.com/walls/full/c/3/0/320656.jpg") alt="Currency Imag" />
+        </center>
+    </div>
     <hr />
-    <div class="row">
+    <div class="row" style="font-family: 'Source Sans Pro, sans-serif';">
         <div class="col-md-6">
 
             <form asp-action="AddEditLandmarkPeriod">
@@ -25,19 +32,19 @@
                 <div class="form-group">
 
                     <input type="hidden" asp-for="LandmarkPeriodId" />
-                    <label asp-for="LandmarkPeriodName" class="control-label" ></label>
-                    <input asp-for="LandmarkPeriodName" id="landPeriodlbl" class="form-control"  />
-                    <span asp-validation-for="LandmarkPeriodName" class="text-danger" ></span>
+                    <label asp-for="LandmarkPeriodName" class="control-label"></label>
+                    <input asp-for="LandmarkPeriodName" id="landPeriodlbl" class="form-control" />
+                    <span asp-validation-for="LandmarkPeriodName" class="text-danger"></span>
 
 
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <input type="submit" value="Salveaza" class="btn btn-primary btn-block" id="Save" />
+                        <input type="submit" value="Save" class="btn btn-warning" id="Save" />
                     </div>
                     <div class="form-group col-md-6">
-                        <a asp-action="LandmarkPeriod" class="btn btn-secondary btn-block">Renunta</a>
+                        <a asp-action="LandmarkPeriod" class="btn btn-danger">Cancel</a>
                     </div>
                 </div>
 
@@ -48,9 +55,8 @@
     <div>
         <a asp-action="LandmarkPeriod">Inapoi la lista</a>
     </div>
-</body>
-</html>
-<script>
+
+    <script>
     function redirect() {
 
           location.href = '@Url.Content("/Dictionary/LandmarkPeriod")';
@@ -60,7 +66,38 @@
 {
     document.getElementById('landPeriodlbl').val(null);
 }
-</script>
+    </script>
+
+    <style>
+
+        .btn {
+            background-color: #f4511e;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-align: center;
+            font-size: 16px;
+            margin: 4px 2px;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+
+            .btn:hover {
+                opacity: 1;
+            }
+
+        .bg {
+             position:fixed;
+            left: -500px;
+            top: 71px;
+            height: auto;
+            width: 100%;     
+            opacity: 0.4;
+        }
+    </style>
+
+</body>
+</html>
 @section Scripts
 {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");};
