@@ -25,12 +25,12 @@
             <h4>County</h4>
             @using (Html.BeginForm("AddCounty", "Dictionary", FormMethod.Post))
             {
-                <h5>Nume judet</h5>
+                <h5>County Name</h5>
                 <input type="text" asp-for="CountyName" id="textBoxCountyName" />
-                <h5>Cod judet</h5>
+                <h5>County Code</h5>
                 <input type="text" asp-for="CountyCode" id="textBoxCountyCode" />
 
-                <h4>Tara</h4>
+                <h4>Country</h4>
                 <div>
                     <p>
                         @(Html.Kendo().ComboBoxFor(model => model.CountryId)
