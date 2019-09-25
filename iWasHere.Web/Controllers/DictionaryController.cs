@@ -122,7 +122,7 @@ namespace iWasHere.Web.Controllers
             return Json(msg);
         }
 
-        public IActionResult LandmarkDetails(int landmarkId = 41)
+        public IActionResult LandmarkDetails(int landmarkId = 44)
         {
             var landmarkDetails = _dictionaryService.GetLandmark(landmarkId, out List<TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType);
             LandmarkModel landmarkModel = new LandmarkModel();
@@ -163,7 +163,7 @@ namespace iWasHere.Web.Controllers
 
             return View();
         }
-        public ActionResult AddEditLandmarkType([Bind("DictionaryItemId, DictionaryItemCode, DictionaryItemName, Description")]DictionaryLandmarkType dt, int id, String submit)
+        public ActionResult AddEditLandmarkType([Bind("DictionaryItemId, DictionaryItemCode, DictionaryItemName, Description")]DictionaryLandmarkType dt, int id, String buttonPressed)
         {
 
             String exMessage;
@@ -177,15 +177,18 @@ namespace iWasHere.Web.Controllers
                      return View();
                 }
             }
-           
+          
 
             if (id != 0)
             {
-                return View(_dictionaryService.GetDictionaryLandmarkType(id));
+                if (String.Equals("SN", buttonPressed))
+                    return RedirectToAction("AddEditLandmarkType", "Dictionary");
+                else
+                    return View(_dictionaryService.GetDictionaryLandmarkType(id));
             }
             else
             {
-                if (String.Equals("SN", submit))
+                if (String.Equals("SN", buttonPressed))
                     return RedirectToAction("AddEditLandmarkType", "Dictionary");
                 else
                     return View();

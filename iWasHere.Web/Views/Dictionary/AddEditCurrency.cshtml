@@ -11,59 +11,92 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Add Currency Type</title>
-</head>
+    </head>
 
-<div style="font-family: 'Source Sans Pro, sans-serif';">
-    <h2>Currency Form</h2>
-</div>
-<body>
-
-  
-    <hr />
-    <div class="row" style="font-family: 'Source Sans Pro, sans-serif';">
-        <div class="col-md-6">
-            @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
-            <form asp-action="AddEditCurrency">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                <div class="form-group col-md-6">
-
-                    <input type="hidden" asp-for="CurrencyTypeId" />
-
-                    <label asp-for="CurrencyName" class="control-label"></label>
-                    <input asp-for="CurrencyName" class="form-control" id="currencyName" />
-                    <span asp-validation-for="CurrencyName" class="text-danger"></span>
+                <div style="font-family: 'Source Sans Pro, sans-serif'; color:black">
+                    <h2>Currency Form</h2>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label asp-for="CurrencyCode" class="control-label"></label>
-                        <input asp-for="CurrencyCode" class="form-control" id="currencyCode" />
-                        <span asp-validation-for="CurrencyCode" class="text-danger"></span>
+                <body>
+                    <div class="bg">
+                        <center>
+                            <img src=@Url.Content("https://wallpaperplay.com/walls/full/c/3/0/320656.jpg") alt="Currency Imag" />
+                        </center>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label asp-for="CurrencyExRate" class="control-label"></label>
-                        <input asp-for="CurrencyExRate" class="form-control" id="currencyRate" />
-                        <span asp-validation-for="CurrencyExRate" class="text-danger"></span>
+
+                    <hr />
+                    <div class="row" style="font-family: 'Source Sans Pro, sans-serif'; font-size:20px">
+                        <div class="col-md-6">
+                            @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
+                            <form asp-action="AddEditCurrency">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                <div style="margin-left:-2px" class="form-group">
+
+                                    <input type="hidden" asp-for="CurrencyTypeId" />
+
+                                    <label asp-for="CurrencyName" class="control-label"></label>
+                                    <input asp-for="CurrencyName" class="form-control" id="currencyName" />
+                                    <span asp-validation-for="CurrencyName" class="text-danger"></span>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-6">
+                                        <label asp-for="CurrencyCode" class="control-label"></label>
+                                        <input asp-for="CurrencyCode" class="form-control" id="currencyCode" />
+                                        <span asp-validation-for="CurrencyCode" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label asp-for="CurrencyExRate" class="control-label"></label>
+                                        <input asp-for="CurrencyExRate" class="form-control" id="currencyRate" />
+                                        <span asp-validation-for="CurrencyExRate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-warning" value="Save" onclick="return goBack();" />
+                                    <input type="submit" name="btnAddNew" id="btnAddNew_id" value="Save & New" class="btn btn-warning" onclick="return empty();" />
+                                    <input type="button" class="btn btn-danger" value="Cancel" onclick="return cancel();" />
+
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <input type="submit" class="btn btn-warning" value="Add / Edit" onclick="return goBack();" />
-                    <input type="submit" name="btnAddNew" id="btnAddNew_id" value="Add & New" class="btn btn-warning" onclick="return empty();" />
-                    <input type="button" class="btn btn-danger" value="Cancel" onclick="return cancel();" />
 
-                </div>
-            </form>
-        </div>
-    </div>
+                    <style>
 
-    @*<div>
+                        .btn {
+                            background-color: #f4511e;
+                            border: none;
+                            color: white;
+                            padding: 16px 32px;
+                            text-align: center;
+                            font-size: 16px;
+                            margin: 4px 2px;
+                            opacity: 0.6;
+                            transition: 0.3s;
+                        }
+
+                            .btn:hover {
+                                opacity: 1;
+                            }
+
+                        .bg {
+                            position: absolute;
+                            left: 0;
+                            top: 71px;
+                            width: 100%;
+                            height: auto;
+                            opacity: 0.4;
+                        }
+                    </style>
+
+
+                    @*<div>
             <a asp-action="Currency">Back to List</a>
         </div>*@
 
-    @section Scripts {
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+                    @section Scripts {
+                        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-        <script>
+                        <script>
 
             //var id = -1;
             //var code = "NaN";
@@ -132,9 +165,9 @@
              location.href = '@Url.Content("/Dictionary/Currency")';
 
                };
-        </script>
-    }
+                        </script>
+                    }
 
 
-</body>
+                </body>
 </html>

@@ -6,12 +6,12 @@
 }
 
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Add County</title>
+<meta name="viewport" content="width=device-width" />
+<title>Add County</title>
 </head>
-<div style="font-family: 'Source Sans Pro, sans-serif';">
-    <h2>DictionaryCounty</h2>
-</div>
+        <div style="font-family: 'Source Sans Pro, sans-serif';">
+            <h2>DictionaryCounty</h2>
+        </div>
 
 <h4>County</h4>
 @using (Html.BeginForm("AddCounty", "Dictionary", FormMethod.Post))
@@ -59,10 +59,10 @@
 }
 
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-<script>
+            @section Scripts {
+                @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+            }
+            <script>
 
     function canceladd() {
 
@@ -123,3 +123,28 @@
 
 </script>
 
+                .btn {
+                    background-color: #f4511e;
+                    border: none;
+                    color: white;
+                    padding: 10px 22px;
+                    text-align: center;
+                    font-size: 16px;
+                    opacity: 0.6;
+                    transition: 0.3s;
+                }
+
+                    .btn:hover {
+                        opacity: 1;
+                    }
+
+                .bg {
+                    position: absolute;
+                    left: 0;
+                    top: 71px;
+                    width: 100%;
+                    height: auto;
+                    opacity: 0.4;
+                }
+            </style>
+        </body >

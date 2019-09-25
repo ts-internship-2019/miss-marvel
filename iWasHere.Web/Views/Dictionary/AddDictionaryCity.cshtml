@@ -7,137 +7,183 @@
         <h1>Add Dictionary City</h1>
     </div>
 
+    <body>
+        <div class="bg">
+            <center>
+                <img src=@Url.Content("https://wallpaperplay.com/walls/full/c/3/0/320656.jpg") alt="Currency Imag" />
+            </center>
+        </div>
+
+        <div class="row" style="font-family: 'Source Sans Pro, sans-serif';">
+            <div class="col-md-4">
+                <form asp-action="AddEditCity">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input type="hidden" asp-for="CityId" />
+                    <p>
+                        <label>City Name:</label>
+                        @(Html.Kendo().TextBox()
+                        .Name("custom")
+                        .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCityName" })
+                        )
+                    </p>
+                    <p>
+                        <label>City Code:</label>
+                        @(Html.Kendo().TextBox()
+                        .Name("custom")
+                        .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCityCode" })
+                        )
 
 
-<hr />
-<div class="row" style="font-family: 'Source Sans Pro, sans-serif';">
-    <div class="col-md-4">
-        <form asp-action="AddEditCity">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="CityId" />
-            <p>
-                <label>City Name:</label>
-                @(Html.Kendo().TextBox()
-                .Name("custom")
-                .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCityName" })
-                )
-            </p>
-            <p>
-                <label>City Code:</label>
-                @(Html.Kendo().TextBox()
-           .Name("custom")
-           .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCityCode" })
-                )
+                    </p>
+                    <p>
 
+                        <label>County:</label>
+                        @(Html.Kendo().ComboBox()
+                        .Name("countiesCB")
+                        .Placeholder("Judet..")
+                        .DataTextField("CountyName")
+                        .DataValueField("CountyId")
+                        .HtmlAttributes(new { style = "width:55%;" })
+                        .Filter(FilterType.Contains)
+                        .AutoBind(false)
+                        .MinLength(3)
+                        .DataSource(source =>
+                        {
+                            source.Read(read =>
+                            {
+                                read.Action("GetComboCounty", "Dictionary");
+                            })
+                            .ServerFiltering(true);
+                        })
+                        )
+                    </p>
+                    <p>
+                        @(Html.Kendo().Button()
+                                    .Name("btnSubmit")
+                                        .HtmlAttributes(new {style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
+                                    .Content("Save")
+                                    .Events(e => e.Click("addCity"))
+                        )
+                    </p>
+                    <p>
+                        @(Html.Kendo().Button()
+                            .Name("btnNew")
+                            .HtmlAttributes(new {style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
+                            .Content("Save and New")
+                            .Events(e => e.Click("saveNew"))
+                        )
+                    </p>
 
-            </p>
-            <p>
-
-                <label>County:</label>
-                @(Html.Kendo().ComboBox()
-         .Name("countiesCB")
-         .Placeholder("Judet..")
-         .DataTextField("CountyName")
-         .DataValueField("CountyId")
-         .HtmlAttributes(new { style = "width:55%;" })
-         .Filter(FilterType.Contains)
-         .AutoBind(false)
-         .MinLength(3)
-         .DataSource(source =>
-         {
-             source.Read(read =>
-             {
-                 read.Action("GetComboCounty", "Dictionary");
-             })
-             .ServerFiltering(true);
-         })
-                )
-            </p>
+                </form>
+            </div>
+        </div>
+        <div>
             <p>
                 @(Html.Kendo().Button()
-                            .Name("btnSubmit")
-                            .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white ; width:130px"})
-                            .Content("Save")
-                            .Events(e => e.Click("addCity"))
+                            .Name("btnCancel")
+
+                            .HtmlAttributes(new {style = "background-color:rgb(220, 53, 69); color:white", type = "button", @class = "btn1" })
+                            //.HtmlAttributes(new { type = "button", @class = "k-primary" })
+                            .Content("Cancel")
+                            .Events(e => e.Click("back"))
                 )
             </p>
-            <p>
-                @(Html.Kendo().Button()
-                    .Name("btnNew")
-                    .HtmlAttributes(new {style = "background-color:rgb(255, 153, 0); color:white; width:130px"})
-                    .Content("Save and New")
-                    .Events(e => e.Click("saveNew"))
-                )
-            </p>
+        </div>
 
-        </form>
-    </div>
-</div>
-<div>
-    <p>
-        @(Html.Kendo().Button()
-                    .Name("btnCancel")
-                    .HtmlAttributes(new {  style = "background-color:rgb(220, 53, 69); color:white; width:130px"})
-                    //.HtmlAttributes(new { type = "button", @class = "k-primary" })
-                    .Content("Cancel")
-                    .Events(e => e.Click("back"))
-                    )
-    </p>
-</div>
+        @section Scripts {
+            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        }
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+        <script>
 
-<script>
+            function back() {
+                window.location = '/Dictionary/Cities'
+            }
 
-    function back() {
-        window.location = '/Dictionary/Cities'
-    }
+            function saveNew() {
+                addCity();
 
-    function saveNew() {
-        addCity();
+                $("#txtCityName").val(null);
 
-        $("#txtCityName").val(null);
-       
-        $("#txtCityCode").val(null);
-     
-       $("#countiesCB").data("kendoComboBox").value("");
-    }
+                $("#txtCityCode").val(null);
 
-    function addCity() {
-        var cityName = $("#txtCityName").val();
-        var countyId = $("#countiesCB").val();
-        var cityCode = $("#txtCityCode").val();
-        AddCities(cityName, countyId, cityCode);
-        
-    }
+               $("#countiesCB").data("kendoComboBox").value("");
+            }
 
-      function AddCities(cityName,countyId,cityCode) {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("AddCity", "Dictionary")',
-                data: { cityName: cityName, cityCode: cityCode, countyId: countyId },
-                success: function (response) {
-                    alert(response);
-                    if(response == "Element adaugat.")
-                    back();
-                },
-                error: function (response) {
-                    alert("Not good");
+            function addCity() {
+                var cityName = $("#txtCityName").val();
+                var countyId = $("#countiesCB").val();
+                var cityCode = $("#txtCityCode").val();
+                AddCities(cityName, countyId, cityCode);
+
+            }
+
+          function AddCities(cityName,countyId,cityCode) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("AddCity", "Dictionary")',
+                    data: { cityName: cityName, cityCode: cityCode, countyId: countyId },
+                    success: function (response) {
+                        alert(response);
+                        if(response == "Element adaugat.")
+                        back();
+                    },
+                    error: function (response) {
+                        alert("Not good");
+                    }
+
+
+                })
+
+          }
+
+
+        </script>
+        <style>
+            .k-primary {
+                min-width: 200px;
+                color: black;
+                background-color: cadetblue;
+            }
+            
+            .btn {
+                background-color: #f4511e;
+                border: none;
+                color: white;
+                padding: 10px 22px;
+                text-align: center;
+                font-size: 16px;
+                width:170px;
+                opacity: 0.6;
+                transition: 0.3s;
+
+            }
+
+            .btn1 {
+                background-color: red;
+                border: none;
+                color: white;
+                padding: 10px 22px;
+                text-align: center;
+                font-size: 16px;
+                width:170px;
+                opacity: 0.6;
+                transition: 0.3s;
+            }
+
+                .btn:hover, .btn1:hover {
+                    opacity: 1;
+                 
                 }
 
-
-            })
-          
-        }
-    
-
-</script>
-<style>
-    .k-primary {
-        min-width: 200px;
-        color: black;
-        background-color: cadetblue;
-    }
-</style>
+            .bg {
+                position: absolute;
+                left: 0;
+                top: 71px;
+                width: 100%;
+                height: auto;
+                opacity: 0.4;
+            }
+        </style>
+    </body>
