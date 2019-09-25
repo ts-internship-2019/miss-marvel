@@ -11,7 +11,6 @@
 
 <head>
     <meta name="viewport" content="width=device-width" />
-   
 </head>
 
 <body>
@@ -34,7 +33,6 @@
             <label for="countriesCB">Country Name:</label>
         </td>
         <td>
-
 
             @(Html.Kendo().ComboBox()
              .Name("countriesCB")
@@ -69,7 +67,7 @@
                 .Name("clearFilter")
                 .Icon("filter-clear")
                 .Content("Delete filters")
-                .HtmlAttributes(new { type = "button", style = "background-color:rgb(255, 15, 0); color:white" })
+                .HtmlAttributes(new { type = "button", style = "background-color:rgb(255, 25, 0); color:white" })
                 .Events(e => e.Click("delFilters"))
             )
 
@@ -77,7 +75,7 @@
                 .Name("createButton")
                 .Content("Create New")
                 .Icon("k-icon k-i-plus-circle")
-                .HtmlAttributes(new { type = "button", style = "background-color:rgb(0, 155, 255); color:white" })
+                .HtmlAttributes(new { type = "button", style = "background-color:rgb(255, 155, 0); color:white" })
                 .Events(e => e.Click("createNew"))
             )
         </td>
@@ -123,18 +121,18 @@
         $("#grdCounty").data("kendoGrid").dataSource.read()
     }
 
-            function dgChange(e) {
-                grid = $("#grdCounty").data("kendoGrid");
-                var row = e.currentTarget.closest("tr").cells[0].outerText;
-                window.location = '/Dictionary/AddEditCounty?id=' + row
-            }
+    function dgChange(e) {
+        grid = $("#grdCounty").data("kendoGrid");
+        var row = e.currentTarget.closest("tr").cells[0].outerText;
+        window.location = '/Dictionary/AddEditCounty?id=' + row
+    }
 
-            function delFilters() {
-                $("#txtFilter").val(null);
-                $("#countriesCB").data("kendoComboBox").value("");
-                $('#grdCounty').data("kendoGrid").dataSource.read();
-                $('#grdCounty').data("kendoGrid").dataSource.page(1);
-            }
+    function delFilters() {
+        $("#txtFilter").val(null);
+        $("#countriesCB").data("kendoComboBox").value("");
+        $('#grdCounty').data("kendoGrid").dataSource.read();
+        $('#grdCounty').data("kendoGrid").dataSource.page(1);
+    }
 
     function deleteCounty(id) {
         $.ajax({
@@ -166,7 +164,6 @@
             }
 
     </script>
-
 
     <style>
         .k-primary {
