@@ -29,6 +29,7 @@ namespace iWasHere.Domain.DTOs
         public string Longitude { get; set; }
         public string Latitude { get; set; }
 
+        public int Rating { get; set; }
         public List<IFormFile> Photos { get; set; }
         public List<LandmarkPicture> Pictures { get; set; }
         public virtual DictionaryCityModel City { get; set; }

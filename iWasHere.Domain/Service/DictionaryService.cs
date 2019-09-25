@@ -72,6 +72,8 @@ namespace iWasHere.Domain.Service
 
         }
 
+  
+
         public Models.DictionaryCity GetDictionaryCity(int cityId)
         {
             Models.DictionaryCity dictionaryCity = _dbContext.DictionaryCity.Find(cityId);
@@ -164,6 +166,77 @@ namespace iWasHere.Domain.Service
 
             return landmarkModel;
         }
+
+        public List<LandmarkModel> GetLandmarkListFiltered(string landmarkName,string City)
+        {
+            List<LandmarkModel> landmarkModel = new List<LandmarkModel>();
+            if (landmarkName != null && City != null)
+            {
+                 landmarkModel = _dbContext.Landmark.Where(a => a.LandmarkName.Contains(landmarkName) && a.City.CityName.Contains(City)).Select(a => new LandmarkModel()
+                {
+                    LandmarkId = a.LandmarkId,
+                    LandmarkName = a.LandmarkName,
+                    LandmarkDescription = a.LandmarkDescription,
+                    CityName = a.City.CityName,
+                    
+                 }).ToList();
+            }
+            else if(landmarkName != null && City == null)
+            {
+                 landmarkModel = _dbContext.Landmark.Where(a => a.LandmarkName.Contains(landmarkName)).Select(a => new LandmarkModel()
+                {
+                    LandmarkId = a.LandmarkId,
+                    LandmarkName = a.LandmarkName,
+                    LandmarkDescription = a.LandmarkDescription,
+                    CityName = a.City.CityName,
+                   
+                }).ToList();
+            }
+            else if(landmarkName == null && City != null)
+            {
+                 landmarkModel = _dbContext.Landmark.Where(a => a.City.CityName.Contains(City)).Select(a => new LandmarkModel()
+                {
+                    LandmarkId = a.LandmarkId,
+                    LandmarkName = a.LandmarkName,
+                    LandmarkDescription = a.LandmarkDescription,
+                    CityName = a.City.CityName,
+                     
+                 }).ToList();
+            }
+            else
+            {
+                landmarkModel = _dbContext.Landmark.Select(a => new LandmarkModel()
+                {
+                    LandmarkId = a.LandmarkId,
+                    LandmarkName = a.LandmarkName,
+                    LandmarkDescription = a.LandmarkDescription,
+                    CityName = a.City.CityName,
+                    
+                }).ToList();
+            }
+           
+            for(int i = 0;i< landmarkModel.Count;i++)
+            {
+
+                List<ReviewsModel> reviews = _dbContext.LandmarkReview.Where(b=>b.LandmarkId == landmarkModel[i].LandmarkId).Select(a => new ReviewsModel()
+                {
+                    Rating = a.Rating
+                }).ToList();
+                int sum = 0;
+                for(int x = 0; x<reviews.Count;x++ )
+                {
+                    sum = sum + reviews[x].Rating;
+                }
+                if(reviews.Count !=0)
+                landmarkModel[i].Rating = Convert.ToInt32(sum / reviews.Count);
+            }
+
+            
+            
+
+            return landmarkModel;
+        }
+
 
         #endregion
 
@@ -358,6 +431,7 @@ namespace iWasHere.Domain.Service
                 currency = _dbContext.DictionaryCurrencyType.FirstOrDefault(a => a.CurrencyTypeId == currencyId);
             }
             Models.Landmark landmark = _dbContext.Landmark.Include(a => a.City)
+                .Include(a =>a.LandmarkReview)
                 .Include(a => a.LandmarkType)
                 .Include(a => a.LandmarkPeriod)
                 .FirstOrDefault(a => a.LandmarkId == landmarkId);
