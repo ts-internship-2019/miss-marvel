@@ -27,10 +27,12 @@
     <hr />
     <div class="row" style="font-family: 'Source Sans Pro, sans-serif';">
         <div class="col-md-4">
-            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
             <form asp-action="Add Landmark Type" id="addForm">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="DictionaryItemId" />
+                @if (Model!= null && Model.DictionaryItemId != 0)
+                {
+                    <input type="hidden" asp-for="DictionaryItemId" />
+                }
                 <div class="form-group">
                     <label asp-for="DictionaryItemCode" class="control-label"></label>
                     <input asp-for="DictionaryItemCode" id="txtCode" class="form-control" />
@@ -55,9 +57,9 @@
         </div>
     </div>
 
-    <div>
+    @*<div>
         <a asp-action="LandmarkType">Back to List</a>
-    </div>
+    </div>*@
 
     @section Scripts {
         @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -140,11 +142,11 @@
             }
 
         .bg {
-            position: absolute;
-            left: 0;
-            top: 71px;
-            width: 100%;
+            position:fixed;
+            left: -500px;
+            top: 70px;
             height: auto;
+            width: 100%;     
             opacity: 0.4;
         }
     </style>
