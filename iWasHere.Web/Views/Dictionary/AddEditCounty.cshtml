@@ -19,7 +19,6 @@
         <div class="col-md-4">
             @using (Html.BeginForm("AddCounty", "Dictionary", FormMethod.Post, new { onsubmit = "return checkForm(this)" }))
             {
-                <br /><br />
                 <h5>Nume judet</h5>
                 <input type="text" asp-for="CountyName" id="textBoxCountyName" />
                 <h5>Cod judet</h5>
