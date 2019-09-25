@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<!DOCTYPE html>
 
 <html>
 
@@ -13,17 +14,14 @@
     <title>County</title>
 </head>
 
-        <div style="font-family: 'Source Sans Pro, sans-serif';">
-            <h2>DictionaryCounty</h2>
-        </div>
 <body>
-    <div style="float:right" class="display-field">
-        <h1 style="color:black; margin-top:10px;"><b style="font-family: 'Source Sans Pro, sans-serif';">County</b></h1>
-        <img src=@Url.Content("https://png.pngtree.com/svg/20170809/district_and_county_706289.png") alt="Currency Imag" width=100 height=100 />
+    <h1 style="color:black; margin-top:10px;"><b style="font-family: 'Source Sans Pro, sans-serif';">County</b></h1>
 
+    <div class="display-field">
+        <img src=@Url.Content("https://png.pngtree.com/svg/20170809/district_and_county_706289.png") alt="Currency Imag" width=100 height=100 />
     </div>
-    <br /><br />
-    <div>
+
+    <div style="margin-top:20px;" class="demo-section k-content">
         <td>
             <label for="filterTXT">County Name:</label>
         </td>
@@ -61,23 +59,25 @@
         <td>
             @(Html.Kendo().Button()
                 .Name("btnSubmit")
-                .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                .HtmlAttributes(new { type = "button", style = "background-color:rgb(255, 155, 0); color:white" })
+                .Icon("filter")
                 .Content("Filter")
                 .Events(e => e.Click("DisplayData"))
             )
 
             @(Html.Kendo().Button()
                 .Name("clearFilter")
-                .Icon("clear-filter")
+                .Icon("filter-clear")
                 .Content("Delete filters")
-                .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                .HtmlAttributes(new { type = "button", style = "background-color:rgb(255, 15, 0); color:white" })
                 .Events(e => e.Click("delFilters"))
             )
 
             @(Html.Kendo().Button()
                 .Name("createButton")
                 .Content("Create New")
-                .HtmlAttributes(new { type = "button", @class = "k-primary" })
+                .Icon("k-icon k-i-plus-circle")
+                .HtmlAttributes(new { type = "button", style = "background-color:rgb(0, 155, 255); color:white" })
                 .Events(e => e.Click("createNew"))
             )
         </td>
@@ -97,8 +97,8 @@
               columns.Bound(p => p.CountryId).Hidden();
               columns.Command(c =>
               {
-                  c.Custom("EditRecord").Text("Edit").Click("dgChange").HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white" });
-                  c.Custom("DeleteRecord").Text("Delete").Click("getCountyId").HtmlAttributes(new { style = "background-color:rgb(220, 53, 69); color:white" });
+                  c.Custom("EditRecord").Text("Edit").Click("dgChange").HtmlAttributes(new { style = "background-color:rgb(0, 100, 0); color:white" });
+                  c.Custom("DeleteRecord").Text("Delete").Click("getCountyId").HtmlAttributes(new { style = "background-color:rgb(255, 25, 0); color:white" });
               });
           })
           .Scrollable()
