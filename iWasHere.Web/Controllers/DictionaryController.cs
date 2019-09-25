@@ -292,7 +292,7 @@ namespace iWasHere.Web.Controllers
         public ActionResult AddEditCurrency([Bind("CurrencyTypeId, CurrencyName, CurrencyCode, CurrencyExRate")] DictionaryCurrencyType dc, int id)
         {
             String exMessage;
-            if (dc.CurrencyCode != null)
+            if (dc.CurrencyCode != null && dc.CurrencyName != null && dc.CurrencyExRate !=null && dc.CurrencyTypeId !=null)
             {
                 var result = _dictionaryService.AddEditDictionaryCurrencyType(dc, out exMessage);
                 if (result == null)
@@ -301,32 +301,17 @@ namespace iWasHere.Web.Controllers
                     return View();
                 }
             }
-            if (id != 0)
-            {
-                return View(_dictionaryService.GetDictionaryCurrencyType(id));
-            }
-            else
-            {
+            //if (id != 0)
+            //{
+            //    return View(_dictionaryService.GetDictionaryCurrencyType(id));
+            //}
+            //else
+            //{
                 return View();
-            }
+            //}
         }
 
-        public ActionResult iEdit(int id, string code, string name, decimal rate)
-        {
-        
-            String err;
-            DictionaryCurrencyType ct = _dictionaryService.GetDictionaryCurrencyType(id);
-            if(ct == null)
-            {
-                return View();
-            }
-            ct.CurrencyCode = code;
-            ct.CurrencyExRate = rate;
-            ct.CurrencyName = name;
-            ct.CurrencyTypeId = id;
-            _dictionaryService.AddEditDictionaryCurrencyType(ct, out err);
-            return Json(ModelState.ToDataSourceResult());
-        }
+  
 
         private static IEnumerable<DictionaryCurrencyType> GetCurrency()
         {

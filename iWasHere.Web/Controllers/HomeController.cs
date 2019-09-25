@@ -241,5 +241,18 @@ namespace iWasHere.Web.Controllers
 
             return View(landmarkModel);
         }
+
+        public IActionResult DeleteLandmark(int id)
+        {
+            string msg = "";
+            if (id != -1)
+            {
+                _LandmarkService.DeleteLandmark(id);
+                msg = "Element sters cu success.";
+            }
+          
+
+            return Json(msg);
+        }
     }
 }

@@ -17,11 +17,7 @@
                     <h2>Currency Form</h2>
                 </div>
                 <body>
-                    <div class="bg">
-                        <center>
-                            <img src=@Url.Content("https://wallpaperplay.com/walls/full/c/3/0/320656.jpg") alt="Currency Imag" />
-                        </center>
-                    </div>
+               
 
                     <hr />
                     <div class="row" style="font-family: 'Source Sans Pro, sans-serif'; font-size:20px">
@@ -78,97 +74,56 @@
                                 opacity: 1;
                             }
 
-                        .bg {
-                            position:fixed;
-                            left: -500px;
-                            top: 71px;
-                           height: auto;
-                           width: 100%;     
-                            opacity: 0.4;
-                           
-                        }
+                      
                     </style>
 
 
-                    @*<div>
-            <a asp-action="Currency">Back to List</a>
-        </div>*@
+                            @*<div>
+                    <a asp-action="Currency">Back to List</a>
+                </div>*@
 
-                    @section Scripts {
+   @section Scripts {
                         @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
                         <script>
 
-            //var id = -1;
-            //var code = "NaN";
-            //var name = "NaN";
-            //var rate = -1;
+            
 
-            //   $(document).ready(function () {
+        
 
-            //        var url_string = window.location.href;
-            //        var url = new URL(url_string);
-            //       id = url.searchParams.get("id");
-            //       code = url.searchParams.get("typeID");
-            //       name = url.searchParams.get("name");
-            //       rate = url.searchParams.get("code");
+                                function goBack() {
+                                    $(document).on('submit', 'form', function () {
+                                        $.post('@Url.Content("/Dictionary/Currency")', function () { // urlPost, function
+                                        }).done(function () {
+                                       location.href = '@Url.Content("/Dictionary/Currency")';
 
-            //       document.getElementById("currencyCode").value = code ? code : "";
-            //       document.getElementById("currencyName").value = name != "null" ? name : "";
-            //       document.getElementById("currencyRate").value = rate ? rate : "";
-
-            //       console.log(id, code, name, rate);
-
-            //   })
-
-            function changeGrid() {
-
-                console.log("changeGrid");
-                $.ajax({
-                        type: 'UPDATE',
-                        url: '@Url.Action("iEdit", "Dictionary")',
-                        data: {
-                            id: id,
-                            code: document.getElementById("currencyCode").value,
-                            name: document.getElementById("currencyName").value,
-                            rate: document.getElementById("currencyRate").value
-                        }
-                    })
-            }
-
-            function goBack() {
-                $(document).on('submit', 'form', function () {
-                    $.post('@Url.Content("/Dictionary/Currency")', function () { // urlPost, function
-                    }).done(function () {
-                   location.href = '@Url.Content("/Dictionary/Currency")';
-
-                });
+                                    });
 
 
-                });
-                return true;
-            }
+                                    });
+                                    return true;
+                                }
 
-            function empty() {
-                 $(document).on('submit', 'form', function () {
-                $.post('@Url.Content("/Dictionary/Currency")', function () { // urlPost, function
-                }).done(function () {
-                       location.href = '@Url.Content("/Dictionary/AddEditCurrency")';
-                });
+                            function empty() {
+                                 $(document).on('submit', 'form', function () {
+                                $.post('@Url.Content("/Dictionary/Currency")', function () { // urlPost, function
+                                }).done(function () {
+                                       location.href = '@Url.Content("/Dictionary/AddEditCurrency")';
+                                });
 
 
-                });
-                return true;
-            }
+                                });
+                                return true;
+                            }
 
-            function cancel() {
+                            function cancel() {
 
-             location.href = '@Url.Content("/Dictionary/Currency")';
+                             location.href = '@Url.Content("/Dictionary/Currency")';
 
-               };
+                             };}
                         </script>
-                    }
-
+                         
+                        }
 
                 </body>
 </html>

@@ -20,19 +20,25 @@
     <input type="hidden" id="landmarkId" value=@Html.DisplayFor(model=> model.LandmarkId)>
     <div class="w3-content" style="max-width:1400px">
         <p>
-        <button type="button" class="btn btn-primary btn-block" onclick="exportWord()">Export to Word</button>
-        @(Html.Kendo().Button()
-                                   .Name("btnBackt")
-                                       .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
-                                   .Content("Back To List")
-                                   .Events(e => e.Click("back"))
-        )
-        @(Html.Kendo().Button()
-                                    .Name("btnEdit")
+            <button type="button" class="btn btn-primary btn-block" onclick="exportWord()">Export to Word</button>
+            @(Html.Kendo().Button()
+                                       .Name("btnBackt")
+                                           .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
+                                       .Content("Back To List")
+                                       .Events(e => e.Click("back"))
+            )
+            @(Html.Kendo().Button()
+                                        .Name("btnEdit")
+                                            .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
+                                        .Content("Edit")
+                                        .Events(e => e.Click("edit"))
+            )
+            @(Html.Kendo().Button()
+                                    .Name("btnDelete")
                                         .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
-                                    .Content("Edit")
-                                    .Events(e => e.Click("edit"))
-        )
+                                    .Content("Delete")
+                                    .Events(e => e.Click("deleteLandmark"))
+            )
         </p>
         <!-- Header -->
         <header class="w3-container w3-center w3-padding-32">
@@ -299,6 +305,27 @@
         });
     })
 
+    function deleteLandmark() {
+        var id = $("#landmarkId").val();
+
+            $.ajax({
+                type: 'DELETE',
+                url: '@Url.Action("DeleteLandmark", "Home")',
+                data: { id: id },
+                success: function (response) {
+                    alert(response);
+                    back();
+                    
+                },
+                error: function (response) {
+                    alert(response);
+
+                    
+                }
+
+
+            })
+        }
     
     function comment() {
         var x = document.getElementById("toggle");

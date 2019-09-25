@@ -253,6 +253,14 @@ namespace iWasHere.Domain.Service
             return landmarkReview;
         }
 
+        public void DeleteLandmark(int landmarkId)
+        {
+            Models.Landmark landmark = new Models.Landmark() { LandmarkId = landmarkId };
+          
+                    _dbContext.Landmark.Remove(landmark);
+                    _dbContext.SaveChanges();
+
+        }
 
 
         #endregion
