@@ -10,7 +10,7 @@
     <body onload="hideSaveNew()">
         <div class="bg">
             <center>
-                <img src=@Url.Content("https://wallpaperplay.com/walls/full/c/3/0/320656.jpg") alt="LandmarkType" />
+                <img src=@Url.Content("https://wallpaperplay.com/walls/full/c/3/0/320656.jpg") alt="TicketType" />
             </center>
         </div>
         <br />
@@ -26,7 +26,7 @@
                         <span asp-validation-for="TicketTypeName" class="text-danger"></span>
                         <br />
                         <button type="submit" class="btn btn-warning" onclick="redirect()">Save</button>
-                        <button type="submit" class="btn btn-warning">Save and new</button>
+                        <button type="submit" class="btn btn-warning" id="saveNew">Save and new</button>
                         <button type="submit" class="btn btn-danger" onclick="redirect()">Cancel</button>
                     </div>
                     <div class="form-group">
