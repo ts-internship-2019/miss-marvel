@@ -24,14 +24,14 @@
                         <label>City Name:</label>
                         @(Html.Kendo().TextBox()
                         .Name("custom")
-                        .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCityName" })
+                        .HtmlAttributes(new { style = "width: 100%", title = "custom", id = "txtCityName" })
                         )
                     </p>
                     <p>
                         <label>City Code:</label>
                         @(Html.Kendo().TextBox()
                         .Name("custom")
-                        .HtmlAttributes(new { style = "width: 50%", title = "custom", id = "txtCityCode" })
+                        .HtmlAttributes(new { style = "width: 100%", title = "custom", id = "txtCityCode" })
                         )
 
 
@@ -44,7 +44,7 @@
                         .Placeholder("Judet..")
                         .DataTextField("CountyName")
                         .DataValueField("CountyId")
-                        .HtmlAttributes(new { style = "width:55%;" })
+                        .HtmlAttributes(new { style = "width:100%;" })
                         .Filter(FilterType.Contains)
                         .AutoBind(false)
                         .MinLength(3)
@@ -58,37 +58,37 @@
                         })
                         )
                     </p>
-                    <p>
+                    <div class="k-display-inline-block">
                         @(Html.Kendo().Button()
                                     .Name("btnSubmit")
-                                        .HtmlAttributes(new {style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
+                                        .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
                                     .Content("Save")
                                     .Events(e => e.Click("addCity"))
                         )
-                    </p>
-                    <p>
+
+
                         @(Html.Kendo().Button()
                             .Name("btnNew")
-                            .HtmlAttributes(new {style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
+                            .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
                             .Content("Save and New")
                             .Events(e => e.Click("saveNew"))
                         )
-                    </p>
 
+                        @(Html.Kendo().Button()
+                                    .Name("btnCancel")
+
+                                    .HtmlAttributes(new { style = "background-color:rgb(220, 53, 69); color:white", type = "button", @class = "btn1" })
+                                    //.HtmlAttributes(new { type = "button", @class = "k-primary" })
+                                    .Content("Cancel")
+                                    .Events(e => e.Click("back"))
+                        )
+                    </div>
                 </form>
             </div>
         </div>
         <div>
-            <p>
-                @(Html.Kendo().Button()
-                            .Name("btnCancel")
-
-                            .HtmlAttributes(new {style = "background-color:rgb(220, 53, 69); color:white", type = "button", @class = "btn1" })
-                            //.HtmlAttributes(new { type = "button", @class = "k-primary" })
-                            .Content("Cancel")
-                            .Events(e => e.Click("back"))
-                )
-            </p>
+            
+            
         </div>
 
         @section Scripts {
@@ -151,23 +151,22 @@
                 background-color: #f4511e;
                 border: none;
                 color: white;
-                padding: 10px 22px;
+                padding: 10px 15px;
                 text-align: center;
                 font-size: 16px;
-                width:170px;
+                width:130px;
                 opacity: 0.6;
                 transition: 0.3s;
-
             }
 
             .btn1 {
                 background-color: red;
                 border: none;
                 color: white;
-                padding: 10px 22px;
+                padding: 10px 15px;
                 text-align: center;
                 font-size: 16px;
-                width:170px;
+                width:80px;
                 opacity: 0.6;
                 transition: 0.3s;
             }
@@ -180,7 +179,7 @@
              .bg {
                 position:fixed;
                 left: -500px;
-                top: 71px;
+                top: 70px;
                 height: auto;
                 width: 100%;     
                 opacity: 0.4;
