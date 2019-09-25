@@ -32,15 +32,17 @@ namespace iWasHere.Web.Controllers
             _LandmarkService = LandmarkService;
             this.hostingEnvironment = hostingEnvironment;
         }
-        public IActionResult LandmarkList()
+        public IActionResult LandmarkList(string landmarkName, string City)
         {
-            LandmarkModelList landmarkModelList = new LandmarkModelList();
-            landmarkModelList.LandmarkList = _LandmarkService.GetLandmarkList();
-            for (int i = 0; i < landmarkModelList.LandmarkList.Count; i++)
-            {
-                landmarkModelList.LandmarkList[i].Pictures = _LandmarkService.GetLandmarkPictures(landmarkModelList.LandmarkList[i].LandmarkId);
-            }
+             LandmarkModelList landmarkModelList = new LandmarkModelList();
 
+              landmarkModelList.LandmarkList = _LandmarkService.GetLandmarkListFiltered(landmarkName,City);
+               for (int i = 0; i < landmarkModelList.LandmarkList.Count; i++)
+               {
+                   landmarkModelList.LandmarkList[i].Pictures = _LandmarkService.GetLandmarkPictures(landmarkModelList.LandmarkList[i].LandmarkId);
+                }
+
+           
             return View(landmarkModelList);
         }
         public IActionResult Index()
@@ -201,6 +203,8 @@ namespace iWasHere.Web.Controllers
             landmarkModel.City.CityName = landmarkDetails.City.CityName;
             landmarkModel.Latitude = landmarkDetails.Latitude;
             landmarkModel.Longitude = landmarkDetails.Longitude;
+            landmarkModel.Rating = Convert.ToInt32(landmarkDetails.LandmarkReview.Average(a => a.Rating));
+            
             for (int i = 0; i < priceList.Count; i++)
             {
                 if (priceList[i].TicketTypeId == 1)

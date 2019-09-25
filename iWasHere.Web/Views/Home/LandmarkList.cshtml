@@ -22,7 +22,37 @@
         <h1><b>LANDMARKS</b></h1>
         <p>Where the story <span class="w3-tag">BEGINS</span></p>
     </header>
+    <div class="w3-card-4 w3-margin w3-white">
 
+
+        <div class="w3-container">
+          
+           
+               
+                <div class="w3-col m8 s12">
+                    <div class="bgimg">
+
+                        <form asp-action="LandmarkList">
+                            <h5>Landmark Name:</h5>
+                            <input type="text" asp-for="LandmarkName" id="txtLandmarkName" />
+                            <h5>City:</h5>
+                            <input type="text" asp-for="City" id="txtCity" />
+                            <br /><br />
+                            <p>
+                                <input type="submit" value="Filter" id="Filter" class="btn" />
+                                <button type="submit" value="Delete Filters" onclick="deleteFilters()" id="delFilters" class="btn">Delete Filters</button>
+
+                            </p>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+  
     <!-- Grid -->
     <div class="w3-row">
 
@@ -55,7 +85,7 @@
                                 <p><input type="button" onClick="readLandmark(@Model.LandmarkList[i].LandmarkId)" value="Read More >>" class="w3-button w3-padding-large w3-white w3-border"></p>
                             </div>
                             <div class="w3-col m4 w3-hide-small">
-                                <p><span class="w3-padding-large w3-right"><b>Rating  </b> <span class="w3-tag">0/5</span></span></p>
+                                <p><span class="w3-padding-large w3-right"><b>Rating  </b> <span class="w3-tag">@Model.LandmarkList[i].Rating /10</span></span></p>
                             </div>
                         </div>
                     </div>
@@ -69,17 +99,11 @@
         <!-- Introduction menu -->
         <div class="w3-col l4">
             <!-- About Card -->
-            <div class="w3-card w3-margin w3-margin-top">
+            @*<div class="w3-card w3-margin w3-margin-top">
 
                 <h4><b>Filters:</b></h4>
                 <p>
-                <p><label>Landmark:</label></p>
-                <p>
-                    @(Html.Kendo().TextBox()
-                        .Name("custom")
-                        .HtmlAttributes(new { style = "width: 70%", title = "custom", id = "txtLandName" })
-                    )
-                </p>
+
                 <p><label>City:</label></p>
                 <p>
                     @(Html.Kendo().TextBox()
@@ -107,7 +131,7 @@
 
 
 
-            </div><hr>
+            </div><hr>*@
 
 
         </div>
@@ -124,6 +148,42 @@
         window.location = '/Home/LandmarkView?landmarkId=' + landmarkId
     }
 
+    function deleteFilters() {
+
+        $("#txtLandmarkName").val(null);
+        $("#txtCity").val(null);
+
+
+    }
+
 </script>
+
+<style>
+
+    
+    .btn {
+                background-color: #f4511e;
+                border: none;
+                color: white;
+                padding: 10px 15px;
+                text-align: center;
+                font-size: 16px;
+                width:130px;
+                opacity: 0.6;
+                transition: 0.3s;
+            }
+
+    .btn:hover, .btn1:hover {
+                    opacity: 1;
+                 
+                }
+</style>
+
+<style type="text/css">
+    .bgimg{
+        background-image:url('https://d13ezvd6yrslxm.cloudfront.net/wp/wp-content/images/Kamala-Khan-e1526301458912-700x374.jpg');
+        background-size:cover;
+    }
+</style>
 
 
