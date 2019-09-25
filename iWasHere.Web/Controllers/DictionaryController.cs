@@ -13,6 +13,8 @@ using iWasHere.Domain;
 using System.IO;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace iWasHere.Web.Controllers
 {
@@ -705,8 +707,9 @@ namespace iWasHere.Web.Controllers
         //{
         //    return View("LandmarkDetailsToWord");
         //}
-        [HttpPost]
-        public void /*FileResult */LandmarkDetailsDocument(int id)
+       
+
+        public IActionResult LandmarkDetailsDocument(int id)
         {
             Document landmarkDetaildoc = new Document();
 
@@ -733,27 +736,72 @@ namespace iWasHere.Web.Controllers
             landmarkModel.LandmarkType.DictionaryItemName = landmarkDetails.LandmarkType.DictionaryItemName;
 
             string templatePath  = $"{Directory.GetCurrentDirectory()}{@"\wwwroot\Templates\LandmarkDetails.docx"}";
-            //string templatePath = Path.Combine(Environment.CurrentDirectory, "LandmarkDetails.docx");
+            
             using (WordprocessingDocument wordDoc =
-        WordprocessingDocument.Open(templatePath, false))
+        WordprocessingDocument.Open(templatePath, true))
             {
-                IDictionary<String, BookmarkStart> bookmarkMap =
-      new Dictionary<String, BookmarkStart>();
 
-                foreach (BookmarkStart bookmarkStart in landmarkDetaildoc.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
+                string docText = null;
+                using (StreamReader sr = new StreamReader(wordDoc.MainDocumentPart.GetStream()))
                 {
-                    bookmarkMap[bookmarkStart.Name] = bookmarkStart;
+                    docText = sr.ReadToEnd();
+
+
+                    Regex regexText = new Regex("LandmarkCode");
+                    docText = regexText.Replace(docText, landmarkModel.LandmarkCode);
+                    regexText = new Regex("StudentPrice");
+                    docText = regexText.Replace(docText, landmarkModel.StudentPrice.ToString());
+                    sr.Close();
                 }
 
-                foreach (BookmarkStart bookmarkStart in bookmarkMap.Values)
-                {
-                    Run bookmarkText = bookmarkStart.NextSibling<Run>();
-                    if (bookmarkText != null)
-                    {
-                        bookmarkText.GetFirstChild<Text>().Text = "blah";
-                    }
-                }
+                byte[] byteArray = Encoding.UTF8.GetBytes(docText);
+                MemoryStream stream = new MemoryStream();
+                ////MemoryStream stream = new MemoryStream(byteArray);
+                //StreamReader sr2 = new StreamReader(stream);
+                //String s1 = sr2.ReadToEnd();
+
+                //using (WordprocessingDocument doc = WordprocessingDocument.Create(stream, DocumentFormat.OpenXml.WordprocessingDocumentType.Document, true))
+                //{
+                //    //if you don't use the using you should close the WordprocessingDocument here
+                //    doc.Close();
+                //}
+                //stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                //using (StreamWriter sw = new StreamWriter(wordDoc.MainDocumentPart.GetStream(FileMode.Create)))
+                //{
+                //    sw.Write(docText);
+
+                //}
+
+                //Stream s = wordDoc.MainDocumentPart.GetStream();
+                MemoryStream streamword = new MemoryStream();
+                wordDoc.Clone(streamword);
+                wordDoc.Close();
+       //         using (WordprocessingDocument wordDocexport =
+       //WordprocessingDocument.CreateFromTemplate(templatePath, true))
+       //         {
+
+       //             MainDocumentPart mainPart = wordDocexport.AddMainDocumentPart();
+
+       //             new Document(new Body()).Save(mainPart);
+
+       //             Body body = mainPart.Document.Body;
+       //             body.Append(new Paragraph(
+       //                         new Run(
+       //                             new Text(stream.ToString()))));
+
+       //             mainPart.Document.Save();
+                   
+
+       //             //if you don't use the using you should close the WordprocessingDocument here
+       //             //doc.Close();
+       //         }
+                ////stream.Position = 0;
+                //stream.Seek(0, SeekOrigin.Begin);
                 //return File(landmarkDetaildoc.ToDataSourceResult, landmarkDetaildoc.ContentType);
+                return File(streamword, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "LandmarkDetails.docx");
 
             }
 

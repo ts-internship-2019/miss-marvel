@@ -20,6 +20,7 @@
     <!-- w3-content defines a container for fixed size centered content,
     and is wrapped around the whole page content, except for the footer in this example -->
     <div class="w3-content" style="max-width:1400px">
+        <button type="button" class="btn btn-primary btn-block" onclick="exportWord()">Export to Word</button>
         @(Html.Kendo().Button()
                             .Name("btnSubmit")
                             .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white ; width:150px" })
@@ -31,7 +32,7 @@
             <h1><b>@Html.DisplayFor(model => model.LandmarkName)</b></h1>
             <h3>@Html.DisplayFor(model => model.LandmarkType.DictionaryItemName)</h3>
         </header>
-        
+
         <!-- Grid -->
         <div class="w3-row">
 
@@ -41,7 +42,7 @@
                 <!-- Blog entry -->
                 <div class="w3-card-4 w3-margin w3-white">
                     <div class="right-div">
-                       
+
                         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                             <div class="carousel-inner">
                                 @if (Model.Pictures != null)
@@ -187,4 +188,22 @@
             draggable: true
         });
     })
+     function exportWord() {
+          var url_string = window.location.href;
+                var url = new URL(url_string);
+
+         var id = url.searchParams.get("landmarkId");
+         window.location.href = '@Url.Action("LandmarkDetailsDocument", "Dictionary")/?id=' +id;
+         @*$.ajax({
+                type: 'GET',
+                url: '@Url.Action("LandmarkDetailsDocument", "Dictionary")',
+                data: { id: id },
+                success: function (response) {
+                    console.log(response);
+                },
+                    error: function (response) {
+
+                    }
+            })*@
+    }
 </script>
