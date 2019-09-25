@@ -29,7 +29,7 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Save" id="btnSave" onClick="goBack();" class="k-primary" />
+                <input type="submit" value="Save" id="btnSave" onClick="goBack()" class="k-primary" />
             </div>
 
         </form>
@@ -47,16 +47,8 @@
 }
 <script>
     function goBack() {
-        $(document).on('submit', 'form', function () {
-            $.post('@Url.Content("/Dictionary/Cities")'function () {
-
-            }).done(function () {
-                location.href = '@Url.Content("/Dictionary/Cities")';
-            });
-
-        });
-        return true;
-
+    
+        window.location = '/Dictionary/Cities'
     }
 
 

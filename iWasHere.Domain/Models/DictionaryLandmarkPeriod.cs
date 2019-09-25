@@ -16,7 +16,8 @@ namespace iWasHere.Domain.Models
         public int LandmarkPeriodId { get; set; }
 
         [Column(TypeName = "varchar(256)")]
-        [DisplayName("Interval pentru vizite")]
+        [Required (ErrorMessage ="This field is mandatory")]
+        [DisplayName("Take your time")]
         public string LandmarkPeriodName { get; set; }
 
         public virtual ICollection<Landmark> Landmark { get; set; }

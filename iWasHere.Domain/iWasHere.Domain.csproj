@@ -13,6 +13,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6" />
+    <PackageReference Include="Microsoft.Office.Interop.Word" Version="15.0.4797.1003" />
   </ItemGroup>
 
   <ItemGroup>
