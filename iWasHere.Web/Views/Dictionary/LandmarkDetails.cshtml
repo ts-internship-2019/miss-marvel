@@ -8,174 +8,146 @@
 <h1> @Html.DisplayFor(model => model.LandmarkName)</h1>
 
 <div>
+    <button type="button" class="btn btn-primary btn-block" onclick="exportWord">Export to Word</button> 
+
     <h4> @Html.DisplayFor(model => model.LandmarkType.DictionaryItemName)</h4>
     <hr />
 
-    <div>
-        <input type="hidden" id="latitude" value=@Html.DisplayFor(model => model.Latitude)>
-        <input type="hidden" id="longitude" value=@Html.DisplayFor(model => model.Longitude)>
-        <div style="margin-left:400px">
-            <aside>
-                 <div id="map-canvas" style="width:400px;height:400px"></div>
-
-            </aside>
-        </div>
-        <div>
-            <dt class="col-sm-2">
-                <label>Availability:</label>
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.LandmarkPeriodName)
-            </dd>
-            <dt class="col-sm-2">
-                <label>City:</label>
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.City.CityName)
-            </dd>
-            <p>
-                <dt class="col-sm-2">
-                    <label>Entry Fees:</label>
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.LandmarkTicket)
-                </dd>
-                @*<dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.LandmarkCode)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.LandmarkCode)*@
-                </dd>
-                <dt class="col-sm-2">
-                    <label>Student Price:</label>
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.StudentPrice)
-                </dd>
-                <dt class="col-sm-2">
-                    <label>Adult Price:</label>
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.AdultPrice)
-                </dd>
-                <dt class="col-sm-2">
-                    <label>Retired Price:</label>
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.RetiredPrice)
-                </dd>
 
 
-                <dt class="col-sm-2">
-                    <label></label>
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.LandmarkDescription)
-                </dd>
-        </div>
-        <dt class="col-sm-2">
-            <label>Pictures:</label>
-        </dt>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.LandmarkTicket)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.LandmarkTicket)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.LandmarkCode)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.LandmarkCode)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.StudentPrice)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.StudentPrice)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.AdultPrice)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.AdultPrice)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.RetiredPrice)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.RetiredPrice)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.LandmarkPeriodName)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.LandmarkPeriodName)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.City)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.City.CityName)
+    </dd>
 
-        @*@foreach (var img in Model.Pictures)
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.LandmarkPeriod.LandmarkPeriodName)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.LandmarkDescription)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.LandmarkDescription)
+    </dd>
+
+    <div class="w3-card w3-margin w3-margin-top">
+
+        <div id="googleMap" style="width:50%;height:400px;" class="map-container"></div>
+    </div><hr>
+
+    @*@foreach (var img in Model.Pictures)
         {
             <div>
                 <img src="@Url.Content("~/images/"+img.PictureName)" width="1000" />
             </div>
         }*@
-        <!--Carousel Wrapper-->
-        <div id="carousel-example-2" class="carousel slide carousel-fade z-depth-1-half" data-ride="carousel">
-            <!--Indicators-->
-            <ol class="carousel-indicators">
-                <li data-target="#carousel-example-2" data-slide-to="0" class="active"></li>
-                <li data-target="#carousel-example-2" data-slide-to="1"></li>
-                <li data-target="#carousel-example-2" data-slide-to="2"></li>
-            </ol>
-            <!--/.Indicators-->
-            <!--Slides-->
-            <div class="carousel-inner" role="listbox">
-                <div class="carousel-item active">
-                    <div class="view">
-                        <img class="d-block w-100" src="@Url.Content("~/images/"+Model.Pictures[0].PictureName)" alt="MissMarvel-logo">
-                        <div class="mask rgba-black-light"></div>
-                    </div>
-                
-                </div>
-                <div class="carousel-item">
-                    <!--Mask color-->
-                    <div class="view">
-                        <img class="d-block w-100" src="@Url.Content("~/images/"+Model.Pictures[1].PictureName)" alt="Second slide">
-                        <div class="mask rgba-black-light"></div>
-                    </div>
-                 
-                </div>
-                <div class="carousel-item">
-                    <!--Mask color-->
-                    <div class="view">
-                        <img class="d-block w-100" src="@Url.Content("~/images/"+Model.Pictures[2].PictureName)" alt="Third slide">
-                        <div class="mask rgba-black-light"></div>
-                    </div>
-                   
+
+
+    <div class="w3-row-padding w3-margin-top">
+        @foreach (var img in Model.Pictures)
+        {
+            <div class="w3-third">
+                <div class="w3-card">
+                    <img src="@Url.Content("~/images/"+img.PictureName)" style="width:50%">
+
                 </div>
             </div>
-            <!--/.Slides-->
-            <!--Controls-->
-            <a class="carousel-control-prev" href="#carousel-example-2" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carousel-example-2" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-            <!--/.Controls-->
-        </div>
-        <!--/.Carousel Wrapper-->
 
+        }
 
     </div>
-         
-
 
 
 </div>
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbRIxmMBjKw5IovRx6CF03hU8SDpqxtos&amp"></script>
+
 <script>
-    $(document).ready(function () {
-        var map = new google.maps.Map(document.getElementById('map-canvas'), {
-            center: {
-                lat: parseFloat($("#latitude").val()),
-                lng: parseFloat($("#longitude").val())
-            },
-            zoom: 15
-
+    var map;
+    var markers = [];
+    function myMap() {
+        var startLatLng = { lat: 44.4894, lng: 26.1267 };
+        map = new google.maps.Map(document.getElementById('googleMap'), {
+            zoom: 12,
+            center: startLatLng,
         });
 
+        map.addListener('click', function (event) {
+            clearMarkers();
+            addMarker(event.latLng);
+            document.getElementById("Latitude").value = event.latLng.lat();
+            document.getElementById("Longitude").value = event.latLng.lng();
+        });
+
+        addMarker(startLatLng);
+    }
+
+    function addMarker(location) {
         var marker = new google.maps.Marker({
-            position: {
-                lat: parseFloat($("#latitude").val()),
-                lng: parseFloat($("#longitude").val())
-            },
-            map: map,
-            draggable: true
+            position: location,
+            map: map
         });
-    })
+        markers.push(marker);
+    }
+
+    function setMapOnAll(map) {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+        }
+    }
+
+    function clearMarkers() {
+        setMapOnAll(null);
+    }
+
+    function showMarkers() {
+        setMapOnAll(map);
+    }
+
+    function deleteMarkers() {
+        clearMarkers();
+        markers = [];
+    }
+    function exportWord(id) {
+        url: '@Url.Action("LandmarkDetailsDocument", "Controllers/DictionaryController")',
+            data: { id:id };
+    }
 </script>
 
-
-
-<style>
-    aside {
-    width: 80%;
-    padding-left: .5rem;
-    margin-left: .5rem;
-    float: right;
-    box-shadow: inset 5px 0 5px -5px #29627e;
-    font-style: italic;
-    color: #29627e;
-}
-    aside > p {
-    margin: .5rem;
-}
-
-</style>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB96GQdBEPcmWURd_56ln3yLHQGLoMPCfs&callback=myMap"></script>

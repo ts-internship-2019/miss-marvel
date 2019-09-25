@@ -10,13 +10,13 @@ using Kendo.Mvc.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using iWasHere.Web;
 using iWasHere.Domain;
-using Microsoft.Office.Interop.Word;
-using DocumentFormat.OpenXml.Office2013.Excel;
-using Microsoft.AspNetCore.Authorization;
+using System.IO;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace iWasHere.Web.Controllers
 {
-    public class DictionaryController : Controller
+    public class DictionaryController : Controller 
     {
         private readonly DictionaryService _dictionaryService;
 
@@ -75,19 +75,12 @@ namespace iWasHere.Web.Controllers
         }
         public ActionResult DeleteCity([DataSourceRequest] DataSourceRequest request, int id)
         {
-            string msg = "";
-            List<LandmarkModel> list = _dictionaryService.CheckLandmark(id);
-            if (id != -1 && list.Count == 0)
+            if (id != -1)
             {
                 _dictionaryService.DeleteCity(id);
-                msg = "Element sters cu success.";
-            }
-            else
-            {
-                msg = "Elementul nu poate fi sters.";
             }
 
-            return Json(msg);
+            return Json(ModelState.ToDataSourceResult());
         }
 
 
@@ -110,21 +103,16 @@ namespace iWasHere.Web.Controllers
 
         public ActionResult AddCity (string cityName,string cityCode,string countyId)
         {
-            string msg = "";
+            var x = new DictionaryCity();
             if (cityName !=null && cityCode != null && countyId != null)
             {
-                 _dictionaryService.AddDictionaryCity(cityName,cityCode,Convert.ToInt32(countyId));
-                msg = "Element adaugat.";
-            }
-            else
-            {
-                msg = "Toate campurile sunt obligatorii.";
+                 x= _dictionaryService.AddDictionaryCity(cityName,cityCode,Convert.ToInt32(countyId));
             }
 
-            return Json(msg);
+            return Json(x);
         }
 
-        public IActionResult LandmarkDetails(int landmarkId = 44)
+        public IActionResult LandmarkDetails(int landmarkId = 33)
         {
             var landmarkDetails = _dictionaryService.GetLandmark(landmarkId, out List<TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType);
             LandmarkModel landmarkModel = new LandmarkModel();
@@ -137,8 +125,6 @@ namespace iWasHere.Web.Controllers
             landmarkModel.LandmarkType = new DictionaryLandmarkTypeModel();
             landmarkModel.City = new DictionaryCityModel();
             landmarkModel.City.CityName = landmarkDetails.City.CityName;
-            landmarkModel.Latitude = landmarkDetails.Latitude;
-            landmarkModel.Longitude = landmarkDetails.Longitude;
             for(int i = 0;i< priceList.Count;i++)
             {
                 if(priceList[i].TicketTypeId == 1)
@@ -165,60 +151,35 @@ namespace iWasHere.Web.Controllers
 
             return View();
         }
-        public ActionResult AddEditLandmarkType([Bind("DictionaryItemId, DictionaryItemCode, DictionaryItemName, Description")]DictionaryLandmarkType dt, int id, String buttonPressed)
+        public ActionResult AddEditLandmarkType([Bind("DictionaryItemId, DictionaryItemCode, DictionaryItemName, Description")]DictionaryLandmarkType dt, int id)
         {
 
             String exMessage;
-            if (dt.DictionaryItemName != null && dt.DictionaryItemCode != null)
+            if (ModelState.IsValid && dt.DictionaryItemCode != null)
             {
                 var result = _dictionaryService.AddEditDictionaryLandmarkType(dt, out exMessage);
                 if (result == null)
                 {
                     ModelState.AddModelError(string.Empty, exMessage);
-                    
-                     return View();
-                }
-            }
-          
-
-            if (id != 0)
-            {
-                if (String.Equals("SN", buttonPressed))
-                    return RedirectToAction("AddEditLandmarkType", "Dictionary");
-                else
-                    return View(_dictionaryService.GetDictionaryLandmarkType(id));
-            }
-            else
-            {
-                if (String.Equals("SN", buttonPressed))
-                    return RedirectToAction("AddEditLandmarkType", "Dictionary");
-                else
-                    return View();
-            }
-        }
-
-
-
-        public ActionResult AddDictionaryCountry([Bind("CountryId, CountryName, CountryCode")] DictionaryCountry dc, int id)
-        {
-            String exMessage;
-            if (dc.CountryName != null)
-            {
-                var result = _dictionaryService.AddEditDictionaryCountry(dc, out exMessage);
-                if (result == null)
-                {
-                    ModelState.AddModelError(string.Empty, exMessage);
                     return View();
                 }
             }
             if (id != 0)
             {
-                return View(_dictionaryService.GetDictionaryCountry(id));
+                return View(_dictionaryService.GetDictionaryLandmarkType(id));
             }
             else
             {
                 return View();
             }
+        }
+        public ActionResult AddDictionaryCountry(DictionaryCountryModel country)
+        {
+            if (ModelState.IsValid && country != null)
+            {
+                _dictionaryService.AddDictionaryCountry(country);
+            }
+            return View();
         }
 
         public ActionResult GetLT([DataSourceRequest] DataSourceRequest request, String LandmarkTypeId)
@@ -449,7 +410,27 @@ namespace iWasHere.Web.Controllers
 
 
 
-
+        public ActionResult AddDictionaryCountry([Bind("CountryId, CountryName, CountryCode")] DictionaryCountry dc, int id)
+        {
+            String exMessage;
+            if (dc.CountryName != null)
+            {
+                var result = _dictionaryService.AddEditDictionaryCountry(dc, out exMessage);
+                if (result == null)
+                {
+                    ModelState.AddModelError(string.Empty, exMessage);
+                    return View();
+                }
+            }
+            if (id != 0)
+            {
+                return View(_dictionaryService.GetDictionaryCountry(id));
+            }
+            else
+            {
+                return View();
+            }
+        }
 
 
         public ActionResult AddEditDictionaryCountry(DictionaryCountryModel country)
@@ -523,14 +504,12 @@ namespace iWasHere.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddEditTicketType(DictionaryTicketType ticketType, int id,string btn)
+        public IActionResult AddEditTicketType(DictionaryTicketType ticketType, int id)
         {
             if (id == 0)
             {
                 _dictionaryService.AddTicket(ticketType);
-                ModelState.Clear();
                 return View();
-
             }
             else
             {
@@ -541,26 +520,25 @@ namespace iWasHere.Web.Controllers
 
         }
 
+        public IActionResult IndexComments()
+        {
+            List<LandmarkReview> landmarkReviews = null;// _dictionaryService.GetDbCommentsAll();
+            return View(landmarkReviews);
+        }
 
-        //public IActionResult IndexComments()
-        //{
-        //    List<LandmarkReview> landmarkReviews = null;// _dictionaryService.GetDbCommentsAll();
-        //    return View(landmarkReviews);
-        //}
+        public IActionResult AddReview()
+        {
+            return View();
+        }
 
-        //public IActionResult AddReview()
-        //{
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult AddReview(LandmarkReview review, int id)
-        //{
-          
-        //        _dictionaryService.AddReview(review);
-        //        return View();
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddReview(LandmarkReview review, int id)
+        {
+            //if (id == 0)
+                _dictionaryService.AddReview(review);
+                return View();
+        }
 
   
 
@@ -679,6 +657,65 @@ namespace iWasHere.Web.Controllers
         {
             _dictionaryService.DeletePeriod(id);
             return Json(ModelState.ToDataSourceResult());
+        }
+
+
+        //public ActionResult LandmarkDetailsDocument(int id)
+        //{
+        //    return View("LandmarkDetailsToWord");
+        //}
+        [HttpPost]
+        public void /*FileResult */LandmarkDetailsDocument(int id)
+        {
+            Document landmarkDetaildoc = new Document();
+
+            LandmarkModel landmarkModel = new LandmarkModel();
+            var landmarkDetails = _dictionaryService.GetLandmark(id, out List<TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType);
+            landmarkModel.Pictures = _dictionaryService.GetLandmarkPictures(id);
+            landmarkModel.LandmarkName = landmarkDetails.LandmarkName;
+            landmarkModel.LandmarkDescription = landmarkDetails.LandmarkDescription;
+            landmarkModel.LandmarkTicket = landmarkDetails.LandmarkTicket;
+            landmarkModel.LandmarkCode = landmarkDetails.LandmarkCode;
+            landmarkModel.LandmarkPeriodName = landmarkDetails.LandmarkPeriod.LandmarkPeriodName;
+            landmarkModel.LandmarkType = new DictionaryLandmarkTypeModel();
+            landmarkModel.City = new DictionaryCityModel();
+            landmarkModel.City.CityName = landmarkDetails.City.CityName;
+            for (int i = 0; i < priceList.Count; i++)
+            {
+                if (priceList[i].TicketTypeId == 1)
+                    landmarkModel.StudentPrice = Convert.ToDecimal(priceList[i].TicketValue);
+                if (priceList[i].TicketTypeId == 3)
+                    landmarkModel.RetiredPrice = Convert.ToDecimal(priceList[i].TicketValue);
+                if (priceList[i].TicketTypeId == 137)
+                    landmarkModel.AdultPrice = Convert.ToDecimal(priceList[i].TicketValue);
+            }
+            landmarkModel.LandmarkType.DictionaryItemName = landmarkDetails.LandmarkType.DictionaryItemName;
+
+            string templatePath  = $"{Directory.GetCurrentDirectory()}{@"\wwwroot\Templates\LandmarkDetails.docx"}";
+            //string templatePath = Path.Combine(Environment.CurrentDirectory, "LandmarkDetails.docx");
+            using (WordprocessingDocument wordDoc =
+        WordprocessingDocument.Open(templatePath, false))
+            {
+                IDictionary<String, BookmarkStart> bookmarkMap =
+      new Dictionary<String, BookmarkStart>();
+
+                foreach (BookmarkStart bookmarkStart in landmarkDetaildoc.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
+                {
+                    bookmarkMap[bookmarkStart.Name] = bookmarkStart;
+                }
+
+                foreach (BookmarkStart bookmarkStart in bookmarkMap.Values)
+                {
+                    Run bookmarkText = bookmarkStart.NextSibling<Run>();
+                    if (bookmarkText != null)
+                    {
+                        bookmarkText.GetFirstChild<Text>().Text = "blah";
+                    }
+                }
+                //return File(landmarkDetaildoc.ToDataSourceResult, landmarkDetaildoc.ContentType);
+
+            }
+
         }
         #endregion
 
@@ -799,10 +836,6 @@ namespace iWasHere.Web.Controllers
 
 
         #endregion
-
-
-        
-
 
     }
 
