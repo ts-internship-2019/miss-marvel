@@ -17,19 +17,15 @@
 </style>
 <body class="w3-light-grey">
 
-    <input type="hidden" id="landmarkId" value=@Html.DisplayFor(model=> model.LandmarkId)>
+    <!-- w3-content defines a container for fixed size centered content,
+    and is wrapped around the whole page content, except for the footer in this example -->
     <div class="w3-content" style="max-width:1400px">
+        <button type="button" class="btn btn-primary btn-block" onclick="exportWord()">Export to Word</button>
         @(Html.Kendo().Button()
-                                   .Name("btnBackt")
-                                       .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
-                                   .Content("Back To List")
-                                   .Events(e => e.Click("back"))
-        )
-        @(Html.Kendo().Button()
-                                    .Name("btnEdit")
-                                        .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
-                                    .Content("Edit")
-                                    .Events(e => e.Click("edit"))
+                            .Name("btnSubmit")
+                            .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white ; width:150px" })
+                            .Content("Back To List")
+                            .Events(e => e.Click("back"))
         )
         <!-- Header -->
         <header class="w3-container w3-center w3-padding-32">
@@ -98,90 +94,14 @@
                 </div>
                 <hr>
                 <!--Gabi,Pune comentariile aici-->
-
                 <div class="w3-card-4 w3-margin w3-white">
 
-                    <div class="w3-container">
-                        <h3><b>User reviews</b></h3>
-                        <br />
-                    </div>
-
-                    <div class="w3-container">
-                        <button style="float:right" class="btn btn-dark" onclick="comment()" id="add"> Add Comment </button>
-                    </div>
-                    <br />
-                    <div class="w3-container">
-
-                    </div>
-                    <div class="w3-container">
-
-                    </div>
-
+                    <label>PlaceHolder Lista Comentarii</label>
                 </div>
+                <div class="w3-card-4 w3-margin w3-white">
 
-                @*<div id="toggle" style="display:none" *>*@
-                <div class="w3-card-4 w3-margin w3-white" id="toggle" style="display:none" *>
-
-                    <div class="w3-container">
-                        <h3><b>Insert a comment below</b></h3>
-                        <br />
-                    </div>
-
-                    <div class="w3-container">
-                        <p>
-                            <label class="control-label">Please rate this landmark:</label>
-                            <fieldset class="rating">
-                                @*<legend>Please rate this landmark:</legend>*@
-                                <input type="radio" id="star10" name="rating" value="10" onclick="getVal(this)" /><label for="star10" title="Rocks!">10 stars</label>
-                                <input type="radio" id="star9" name="rating" value="9" onclick="getVal(this)" /><label for="star9" title="Pretty good">9 stars</label>
-                                <input type="radio" id="star8" name="rating" value="8" onclick="getVal(this)" /><label for="star8" title="Good">8 stars</label>
-                                <input type="radio" id="star7" name="rating" value="7" onclick="getVal(this)" /><label for="star7" title="Not great,not terrible">7 stars</label>
-                                <input type="radio" id="star6" name="rating" value="6" onclick="getVal(this)" /><label for="star6" title="Better">6 star</label>
-                                <input type="radio" id="star5" name="rating" value="5" onclick="getVal(this)" /><label for="star5" title="We passed!">5 stars</label>
-                                <input type="radio" id="star4" name="rating" value="4" onclick="getVal(this)" /><label for="star4" title="Slightly better">4 stars</label>
-                                <input type="radio" id="star3" name="rating" value="3" onclick="getVal(this)" /><label for="star3" title="Meh">3 stars</label>
-                                <input type="radio" id="star2" name="rating" value="2" onclick="getVal(this)" /><label for="star2" title="Kinda bad">2 stars</label>
-                                <input type="radio" id="star1" name="rating" value="1" onclick="getVal(this)" /><label for="star1" title="Sucks big time">1 star</label>
-                            </fieldset>
-                        </p>
-                    </div>
-                    <br />
-                    <div class="w3-container">
-                        <br />
-                        <label class="control-label">Username</label>
-                        <input id="Username" class="form-control" value="anonymous" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="w3-container">
-                        <br />
-                        <label class="control-label">Review title</label>
-                        <input id="Title" class="form-control" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="w3-container">
-                        <br />
-                        <label class="control-label">Comment</label>
-                        <input id="Comment" class="form-control" />
-                        <span class="text-danger"></span>
-                    </div>
-
-                    <div class="w3-container">
-                        <br />
-                        <label class="control-label">
-                            Comment with the account you are logged in&nbsp;
-                        </label>
-                        <input type="checkbox" id="myCheck" onclick="checkuser()">
-                    </div>
-
-                    <div class="w3-container">
-                        <button type="submit" class="btn btn-dark" onclick="insert()"> Save Comment </button>
-                        <button type="submit" class="btn btn-danger" onclick="cancel()">Cancel</button>
-                    </div>
-                    <br />
-                    <br />
-                    <br />
+                    <label>PlaceHolder Adaugare Comentarii</label>
                 </div>
-                @*</div>*@
 
             </div>
 
@@ -247,13 +167,8 @@
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbRIxmMBjKw5IovRx6CF03hU8SDpqxtos&amp"></script>
 <script>
     function back() {
-        window.location = '/Home/LandmarkList'
+        window.location = '/Home/Index'
     }
-
-    function edit() {
-             window.location = '/Home/AddLandmark?id='+ $("#landmarkId").val()
-        }
-
     $(document).ready(function () {
         var map = new google.maps.Map(document.getElementById('map-canvas'), {
             center: {
@@ -264,8 +179,6 @@
 
         });
 
-        
-
         var marker = new google.maps.Marker({
             position: {
                 lat: parseFloat($("#latitude").val()),
@@ -275,161 +188,22 @@
             draggable: true
         });
     })
+     function exportWord() {
+          var url_string = window.location.href;
+                var url = new URL(url_string);
 
-    
-    function comment() {
-        var x = document.getElementById("toggle");
-        var y = document.getElementById("add");
-                x.style.display = "block";
-                y.style.display = "none";
-        }
+         var id = url.searchParams.get("landmarkId");
+         window.location.href = '@Url.Action("LandmarkDetailsDocument", "Dictionary")/?id=' +id;
+         @*$.ajax({
+                type: 'GET',
+                url: '@Url.Action("LandmarkDetailsDocument", "Dictionary")',
+                data: { id: id },
+                success: function (response) {
+                    console.log(response);
+                },
+                    error: function (response) {
 
-    function cancel() {
-        var x = document.getElementById("toggle");
-        var y = document.getElementById("add");
-                x.style.display = "none";
-                y.style.display = "block";
-        }
-
-
-    function getVal(btn) {
-
-        storedVal = btn.value;
-    }
-
-
-    function checkuser() {
-        var checkBox = document.getElementById("myCheck");
-    if (checkBox.checked == true) {
-        document.getElementById('Username').setAttribute('disabled', 'disabled');
-         }
-    else {
-         document.getElementById('Username').removeAttribute('disabled');
-         }
-
-    }
-
-
-
-    //var currentValue = 0;
-    //function handleClick(myRadio) {
-
-    //    currentValue = myRadio.value;
-    //}
-    function insert() {
-        $.ajax({
-                    type: 'PUT',
-                    url: '@Url.Action("AddComment", "Dictionary")',
-            data: {
-                stored: storedVal,
-                landmarkId: document.getElementById("landmarkId").value,
-                author: document.getElementById("Username").value,
-                cTitle: document.getElementById("Title").value,
-                comment: document.getElementById("Comment").value,
-                user: document.getElementById("myCheck").checked
-                     },
-        success: function (response) {
-            alert("Comment added");
-                    },
-        error: function (response) {
-            alert("There was an error while trying to add your comment");
                     }
-                })
-        }
-
-        var storedVal = 0;
+            })*@
+    }
 </script>
-
-<style>
-     .btn {
-                background-color: #f4511e;
-                border: none;
-                color: white;
-                padding: 10px 22px;
-                text-align: center;
-                font-size: 16px;
-                width:170px;
-                opacity: 0.6;
-                transition: 0.3s;
-
-            }
-
-      .btn:hover, .btn1:hover {
-                    opacity: 1;
-                 
-                }
-
-            .bg {
-                position: absolute;
-                left: 0;
-                top: 71px;
-                width: 100%;
-                height: auto;
-                opacity: 0.4;
-            }
-
-
-
-           
-
-
-             input[type=checkbox] {
-        transform: scale(1.3);
-    }
-
-    .rating {
-        float: left;
-    }
-
-        /* :not(:checked) is a filter, so that browsers that don’t support :checked don’t
-    follow these rules. Every browser that supports :checked also supports :not(), so
-    it doesn’t make the test unnecessarily selective */
-        .rating:not(:checked) > input {
-            position: absolute;
-            top: -9999px;
-            clip: rect(0,0,0,0);
-        }
-
-        .rating:not(:checked) > label {
-            float: right;
-            width: 1em;
-            padding: 0 .1em;
-            overflow: hidden;
-            white-space: nowrap;
-            cursor: pointer;
-            font-size: 200%;
-            line-height: 1.2;
-            color: #ddd;
-            text-shadow: 1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);
-        }
-
-            .rating:not(:checked) > label:before {
-                content: '★ ';
-            }
-
-        .rating > input:checked ~ label {
-            color: #f70;
-            text-shadow: 1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0,0,0,.5);
-        }
-
-        .rating:not(:checked) > label:hover,
-        .rating:not(:checked) > label:hover ~ label {
-            color: gold;
-            text-shadow: 1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
-        }
-
-        .rating > input:checked + label:hover,
-        .rating > input:checked + label:hover ~ label,
-        .rating > input:checked ~ label:hover,
-        .rating > input:checked ~ label:hover ~ label,
-        .rating > label:hover ~ input:checked ~ label {
-            color: #ea0;
-            text-shadow: 1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
-        }
-
-        .rating > label:active {
-            position: relative;
-            top: 2px;
-            left: 2px;
-        }
-</style>
