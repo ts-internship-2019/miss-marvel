@@ -8,6 +8,8 @@
 <h1> @Html.DisplayFor(model => model.LandmarkName)</h1>
 
 <div>
+    <button type="button" class="btn btn-primary btn-block" onclick="exportWord">Export to Word</button> 
+
     <h4> @Html.DisplayFor(model => model.LandmarkType.DictionaryItemName)</h4>
     <hr />
 
@@ -72,22 +74,22 @@
     </div><hr>
 
     @*@foreach (var img in Model.Pictures)
-    {
-        <div>
-            <img src="@Url.Content("~/images/"+img.PictureName)" width="1000" />
-        </div>
-    }*@
+        {
+            <div>
+                <img src="@Url.Content("~/images/"+img.PictureName)" width="1000" />
+            </div>
+        }*@
 
 
     <div class="w3-row-padding w3-margin-top">
         @foreach (var img in Model.Pictures)
         {
-        <div class="w3-third">
-            <div class="w3-card">
-                <img src="@Url.Content("~/images/"+img.PictureName)" style="width:50%">
-                
+            <div class="w3-third">
+                <div class="w3-card">
+                    <img src="@Url.Content("~/images/"+img.PictureName)" style="width:50%">
+
+                </div>
             </div>
-        </div>
 
         }
 
@@ -141,6 +143,10 @@
     function deleteMarkers() {
         clearMarkers();
         markers = [];
+    }
+    function exportWord(id) {
+        url: '@Url.Action("LandmarkDetailsDocument", "Controllers/DictionaryController")',
+            data: { id:id };
     }
 </script>
 

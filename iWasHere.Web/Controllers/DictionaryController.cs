@@ -10,11 +10,13 @@ using Kendo.Mvc.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using iWasHere.Web;
 using iWasHere.Domain;
-
+using System.IO;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace iWasHere.Web.Controllers
 {
-    public class DictionaryController : Controller
+    public class DictionaryController : Controller 
     {
         private readonly DictionaryService _dictionaryService;
 
@@ -655,6 +657,65 @@ namespace iWasHere.Web.Controllers
         {
             _dictionaryService.DeletePeriod(id);
             return Json(ModelState.ToDataSourceResult());
+        }
+
+
+        //public ActionResult LandmarkDetailsDocument(int id)
+        //{
+        //    return View("LandmarkDetailsToWord");
+        //}
+        [HttpPost]
+        public void /*FileResult */LandmarkDetailsDocument(int id)
+        {
+            Document landmarkDetaildoc = new Document();
+
+            LandmarkModel landmarkModel = new LandmarkModel();
+            var landmarkDetails = _dictionaryService.GetLandmark(id, out List<TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType);
+            landmarkModel.Pictures = _dictionaryService.GetLandmarkPictures(id);
+            landmarkModel.LandmarkName = landmarkDetails.LandmarkName;
+            landmarkModel.LandmarkDescription = landmarkDetails.LandmarkDescription;
+            landmarkModel.LandmarkTicket = landmarkDetails.LandmarkTicket;
+            landmarkModel.LandmarkCode = landmarkDetails.LandmarkCode;
+            landmarkModel.LandmarkPeriodName = landmarkDetails.LandmarkPeriod.LandmarkPeriodName;
+            landmarkModel.LandmarkType = new DictionaryLandmarkTypeModel();
+            landmarkModel.City = new DictionaryCityModel();
+            landmarkModel.City.CityName = landmarkDetails.City.CityName;
+            for (int i = 0; i < priceList.Count; i++)
+            {
+                if (priceList[i].TicketTypeId == 1)
+                    landmarkModel.StudentPrice = Convert.ToDecimal(priceList[i].TicketValue);
+                if (priceList[i].TicketTypeId == 3)
+                    landmarkModel.RetiredPrice = Convert.ToDecimal(priceList[i].TicketValue);
+                if (priceList[i].TicketTypeId == 137)
+                    landmarkModel.AdultPrice = Convert.ToDecimal(priceList[i].TicketValue);
+            }
+            landmarkModel.LandmarkType.DictionaryItemName = landmarkDetails.LandmarkType.DictionaryItemName;
+
+            string templatePath  = $"{Directory.GetCurrentDirectory()}{@"\wwwroot\Templates\LandmarkDetails.docx"}";
+            //string templatePath = Path.Combine(Environment.CurrentDirectory, "LandmarkDetails.docx");
+            using (WordprocessingDocument wordDoc =
+        WordprocessingDocument.Open(templatePath, false))
+            {
+                IDictionary<String, BookmarkStart> bookmarkMap =
+      new Dictionary<String, BookmarkStart>();
+
+                foreach (BookmarkStart bookmarkStart in landmarkDetaildoc.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
+                {
+                    bookmarkMap[bookmarkStart.Name] = bookmarkStart;
+                }
+
+                foreach (BookmarkStart bookmarkStart in bookmarkMap.Values)
+                {
+                    Run bookmarkText = bookmarkStart.NextSibling<Run>();
+                    if (bookmarkText != null)
+                    {
+                        bookmarkText.GetFirstChild<Text>().Text = "blah";
+                    }
+                }
+                //return File(landmarkDetaildoc.ToDataSourceResult, landmarkDetaildoc.ContentType);
+
+            }
+
         }
         #endregion
 

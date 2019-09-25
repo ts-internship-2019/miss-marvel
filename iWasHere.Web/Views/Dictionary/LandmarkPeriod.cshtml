@@ -35,7 +35,7 @@
     .Columns(columns =>
     {
         columns.Bound(c => c.LandmarkPeriodId).Hidden();
-        columns.Bound(c => c.LandmarkPeriodName).Width(900).Title("Interval pentru vizite");
+        columns.Bound(c => c.LandmarkPeriodName).Width(900).Title("Visit Periods");
         columns.Template("<button id=\"btnDelete\" onclick=\"deleteLandmarkPeriod(#=LandmarkPeriodId#)\">Delete</button>");
         columns.Template("<button id=\"btnEdit\" onclick=\"editLandmarkPeriod(#=LandmarkPeriodId#)\" width:\"10\">Edit</button>");
         
@@ -43,7 +43,6 @@
     })
     .HtmlAttributes(new { style = "height: 500px;", id = "LandmarkPeriodGrid" })
     .Scrollable()
-    .Sortable()
     .Pageable(pageable => pageable
     .Refresh(true)
     .PageSizes(true)
@@ -96,7 +95,6 @@
                       
                 })
     }
-
 
 </script>
 
