@@ -2,13 +2,8 @@
 
 @{
     ViewData["Title"] = "Adauga Judet";
-    //Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@*<head>
-        <meta name="viewport" content="width=device-width" />
-        <title>Add County</title>
-    </head>*@
 <div style="font-family: 'Source Sans Pro, sans-serif';">
     <h2>Add/Edit County</h2>
 </div>
@@ -22,15 +17,14 @@
 
     <div class="row" style="font-family: 'Source Sans Pro, sans-serif';">
         <div class="col-md-4">
-            <h4>County</h4>
-            @using (Html.BeginForm("AddCounty", "Dictionary", FormMethod.Post))
+            @using (Html.BeginForm("AddCounty", "Dictionary", FormMethod.Post, new { onsubmit = "return checkForm(this)" }))
             {
-                <h5>Nume judet</h5>
+                <h5>County Name</h5>
                 <input type="text" asp-for="CountyName" id="textBoxCountyName" />
-                <h5>Cod judet</h5>
+                <h5>County Code</h5>
                 <input type="text" asp-for="CountyCode" id="textBoxCountyCode" />
 
-                <h4>Tara</h4>
+                <h4>Country</h4>
                 <div>
                     <p>
                         @(Html.Kendo().ComboBoxFor(model => model.CountryId)
@@ -40,8 +34,7 @@
                           .MinLength(1)
                           .Filter(FilterType.Contains)
                           .Placeholder("Select a country!")
-                          //.Text(Model.Country.CountryName)
-                          .HtmlAttributes(new { style = "width:60%; id='countries'" })
+                          .HtmlAttributes(new { style = "width:60%", id = "countries" })
                       .Filter("StartsWith")
                       .DataSource(source =>
                       {
@@ -58,23 +51,19 @@
                 @Html.HiddenFor(a => a.CountyId)
                 <div>
 
-                    <button onclick="VerifyValues()" class="btn btn-primary" style="margin-top: 2em" name="submitButton" value="Save">Save</button>
-                    @if (Model == null)
-                    {
-                        <button onclick="VerifyValues(); return empty()" class="btn btn-primary" style="margin-top: 2em" name="submitButton" value="SaveAndNew">Save and New </button>
-                    }
+                    <button onclick="checkForm()" class="btn btn-primary" style="margin-top: 2em" name="submitButton" value="Save">Save</button>
+                    <button onclick="empty() " class="btn btn-primary" style="margin-top: 2em" name="submitButton2" value="SaveAndNew">Save and New </button>
                     <input type="button" class="btn btn-primary" style="margin-top: 2em" name="cancelButton" value="Cancel/Back" onclick="return canceladd();" />
                 </div>
             }
-
         </div>
     </div>
 
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-<script>
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+    <script>
 
     function canceladd() {
 
@@ -82,16 +71,8 @@
 
     }
 
-    function isEmpty(str) {
-        return str === null || str.match(/^ *$/) !== null;
-    }
-
-    function hasLetters(str) {
-        return str === null || str.match(/^[a-zA-Z]+$/) !== null;
-    }
-
     function empty() {
-            $(document).on('submit', 'form', function () {
+        $(document).on('submit', 'form', function () {
         $.post('@Url.Content("/Dictionary/County")', function () {
         }).done(function () {
                 location.href = '@Url.Content("/Dictionary/AddEditCounty")';
@@ -101,83 +82,87 @@
         return true;
     }
 
-    function VerifyValues() {
-        if ( isEmpty($('#textBoxCountyName').val()) ) {
+    function checkForm(form)
+    {
 
-            alert("County name is mandatory!");
+        if(form.textBoxCountyName.value == "") {
+          alert("Error: County name is empty!");
+          form.textBoxCountyName.focus();
+          return false;
+            }
+
+        if(form.textBoxCountyCode.value == "") {
+          alert("Error: County code is empty!");
+          form.textBoxCountyCode.focus();
+          return false;
+        }
+
+        var re = /^[A-Za-z]+$/;
+
+        if(!re.test(form.textBoxCountyName.value)) {
+          alert("Error: County name contains invalid characters!");
+          form.textBoxCountyName.focus();
+          return false;
+        }
+
+        if(!re.test(form.textBoxCountyCode.value)) {
+          alert("Error: County code contains invalid characters!");
+          form.textBoxCountyCode.focus();
+          return false;
+        }
+
+        if( !$('#countries').val() ) {
+            alert("Error: A country was not selected!");
+            form.countries.focus();
             return false;
         }
-
-        if ( isEmpty($('#textBoxCountyCode').val()) ) {
-
-            alert("County code is mandatory!");
-            return false;
-        }
-
-        if (!/^[a-zA-Z]*$/g.test($('#textBoxCountyName').val())) {
-
-            alert("Only letters are allowed in that field!");
-            return false;
-        }
-
-        if (!/^[a-zA-Z]*$/g.test($('#textBoxCountyCode').val())) {
-            alert("Only letters allowed in that field!");
-            return false;
-        }
-
-        else return true;
+        return true;
     }
 
-     function redirect() {
+    </script>
 
-          location.href = '@Url.Content("/Dictionary/County")';
-     };
-
-</script>
-
-<style>
-    .k-primary {
-        min-width: 200px;
-        color: black;
-        background-color: cadetblue;
-    }
-
-    .btn {
-        background-color: #f4511e;
-        border: none;
-        color: white;
-        padding: 10px 22px;
-        text-align: center;
-        font-size: 16px;
-        width: 170px;
-        opacity: 0.6;
-        transition: 0.3s;
-    }
-
-    .btn1 {
-        background-color: red;
-        border: none;
-        color: white;
-        padding: 10px 22px;
-        text-align: center;
-        font-size: 16px;
-        width: 170px;
-        opacity: 0.6;
-        transition: 0.3s;
-    }
-
-        .btn:hover, .btn1:hover {
-            opacity: 1;
+    <style>
+        .k-primary {
+            min-width: 200px;
+            color: black;
+            background-color: cadetblue;
         }
 
-                .bg {
-                    position:fixed;
-                    left: -500px;
-                    top: 71px;
-                    height: auto;
-                    width: 100%;     
-                    opacity: 0.4;
-                           
-                    }
-            </style>
-        </body >
+        .btn {
+            background-color: #f4511e;
+            border: none;
+            color: white;
+            padding: 10px 22px;
+            text-align: center;
+            font-size: 16px;
+            width: 170px;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+
+        .btn1 {
+            background-color: red;
+            border: none;
+            color: white;
+            padding: 10px 22px;
+            text-align: center;
+            font-size: 16px;
+            width: 170px;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+
+            .btn:hover, .btn1:hover {
+                opacity: 1;
+            }
+
+        .bg {
+            position: fixed;
+            left: -500px;
+            top: 71px;
+            height: auto;
+            width: 100%;
+            opacity: 0.4;
+        }
+    </style>
+</body>

@@ -32,7 +32,7 @@ namespace iWasHere.Web.Controllers
             _LandmarkService = LandmarkService;
             this.hostingEnvironment = hostingEnvironment;
         }
-        public IActionResult Index()
+        public IActionResult LandmarkList()
         {
             LandmarkModelList landmarkModelList = new LandmarkModelList();
             landmarkModelList.LandmarkList = _LandmarkService.GetLandmarkList();
@@ -42,6 +42,10 @@ namespace iWasHere.Web.Controllers
             }
 
             return View(landmarkModelList);
+        }
+        public IActionResult Index()
+        {
+            return View();
         }
 
         public IActionResult Privacy()
@@ -185,6 +189,7 @@ namespace iWasHere.Web.Controllers
         {
             var landmarkDetails = _LandmarkService.GetLandmark(landmarkId, out List<TicketXlandmark> priceList, out DictionaryCurrencyType dictionaryCurrencyType);
             LandmarkModel landmarkModel = new LandmarkModel();
+            landmarkModel.LandmarkId = landmarkDetails.LandmarkId;
             landmarkModel.Pictures = _LandmarkService.GetLandmarkPictures(landmarkId);
             landmarkModel.LandmarkName = landmarkDetails.LandmarkName;
             landmarkModel.LandmarkDescription = landmarkDetails.LandmarkDescription;

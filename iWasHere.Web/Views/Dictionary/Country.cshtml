@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width" />
 </head>
 
-<h1 style="color:black; margin-top:50px;"><b style="font-family: 'Source Sans Pro, sans-serif';">Country</b></h1>
+<h1 style="color:black; margin-top:20px;"><b style="font-family: 'Source Sans Pro, sans-serif';">Country</b></h1>
 
 <body>
 
@@ -66,8 +66,8 @@
           .Columns(columns =>
           {
               columns.Bound(p => p.CountryId).Hidden();
-              columns.Bound(p => p.CountryName).Width(400);
-              columns.Bound(p => p.CountryCode).Width(400);
+              columns.Bound(p => p.CountryName);
+              columns.Bound(p => p.CountryCode).Width(550);
 
               columns.Command(c =>
               {

@@ -15,7 +15,7 @@
    
     <body>
 
-        <h1 style="color:black; margin-top:50px;"><b style="font-family: 'Source Sans Pro, sans-serif';">Landmark</b></h1>
+        <h1 style="color:black; margin-top:20px;"><b style="font-family: 'Source Sans Pro, sans-serif';">Landmark</b></h1>
 
         <div class="display-field">
             <img src=@Url.Content("https://cdn1.iconfinder.com/data/icons/thin-line-icons/128/GeoTag_Tag_Mark_Landmark_Pin_Map-512.png") alt="LandmarkImg" width=100 height=100 />
@@ -53,16 +53,18 @@
               .Name("grid")
               .HtmlAttributes(new { style = "height: 500px", id = "grdLandmarkType" })
               .Columns(columns =>
-                {
-                    columns.Bound(p => p.DictionaryItemId).Hidden();
-                    columns.Bound(p => p.DictionaryItemCode);
-                    columns.Bound(p => p.DictionaryItemName);
-                    columns.Bound(p => p.Description);
-                    columns.Template("<button class='btn btn-danger' id=\"btnDelete\" onclick=\"deleteLandmarkType(#=DictionaryItemId#)\">Delete</button>");
-                    columns.Command(c =>
-                 {
-                    c.Custom("EditRecord").Text("Edit").Click("dgChange").HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white;" });
-                    });
+              {
+                  columns.Bound(p => p.DictionaryItemId).Hidden();
+                  columns.Bound(p => p.DictionaryItemCode);
+                  columns.Bound(p => p.DictionaryItemName);
+                  columns.Bound(p => p.Description);
+                  columns.Template("<button class='btn btn-danger' id=\"btnDelete\" onclick=\"deleteLandmarkType(#=DictionaryItemId#)\">Delete</button>");
+                  columns.Command(c =>
+                  {
+                      c.Custom("EditRecord").Text("Edit").Click("dgChange").HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white" });
+                  });
+
+    
               })
               .Scrollable()
 
