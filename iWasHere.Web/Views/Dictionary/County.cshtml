@@ -1,10 +1,9 @@
 ﻿@model IEnumerable<iWasHere.Domain.Models.DictionaryCounty>
 
 @{
-    ViewData["Title"] = "County";
+    ViewData["Title"] = "Dictionary County";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1 style="color:black; margin-top:50px;"><b style="font-family: 'Source Sans Pro, sans-serif';">County</b></h1>
 
 
 <html>
@@ -14,18 +13,23 @@
     <title>County</title>
 </head>
 
+        <div style="font-family: 'Source Sans Pro, sans-serif';">
+            <h2>DictionaryCounty</h2>
+        </div>
 <body>
-    @*<p>
-        <a asp-action="AddEditCounty">Create New</a>
-    </p>*@
+    <div style="float:right" class="display-field">
+        <h1 style="color:black; margin-top:10px;"><b style="font-family: 'Source Sans Pro, sans-serif';">County</b></h1>
+        <img src=@Url.Content("https://png.pngtree.com/svg/20170809/district_and_county_706289.png") alt="Currency Imag" width=100 height=100 />
 
+    </div>
+    <br /><br />
     <div>
         <td>
             <label for="filterTXT">County Name:</label>
         </td>
         @(Html.Kendo().TextBox()
-             .Name("CountyName")
-             .HtmlAttributes(new { style = "width: 100%", title = "custom", id = "txtFilter" })
+                .Name("CountyName")
+                .HtmlAttributes(new { style = "width: 100%", title = "custom", id = "txtFilter" })
         )
         <br /><br />
         <td>
@@ -93,8 +97,8 @@
               columns.Bound(p => p.CountryId).Hidden();
               columns.Command(c =>
               {
-                  c.Custom("EditRecord").Text("Edit").Click("dgChange").HtmlAttributes(new {style = "background-color:rgb(255, 153, 0); color:white" });
-                  c.Custom("DeleteRecord").Text("Delete").Click("getCountyId").HtmlAttributes(new {  style = "background-color:rgb(220, 53, 69); color:white"});
+                  c.Custom("EditRecord").Text("Edit").Click("dgChange").HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white" });
+                  c.Custom("DeleteRecord").Text("Delete").Click("getCountyId").HtmlAttributes(new { style = "background-color:rgb(220, 53, 69); color:white" });
               });
           })
           .Scrollable()
@@ -164,5 +168,13 @@
             }
 
     </script>
+
+
+    <style>
+        .k-primary {
+            min-width: 200px;
+        }
+    </style>
+
 </body>
 </html>
