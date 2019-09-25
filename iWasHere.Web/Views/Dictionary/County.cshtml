@@ -15,9 +15,9 @@
 </head>
 
 <body>
-    <h1 style="color:black; margin-top:10px;"><b style="font-family: 'Source Sans Pro, sans-serif';">County</b></h1>
 
     <div class="display-field">
+        <h1 style="color:black; margin-top:10px;"><b style="font-family: 'Source Sans Pro, sans-serif';">County</b></h1>
         <img src=@Url.Content("https://png.pngtree.com/svg/20170809/district_and_county_706289.png") alt="Currency Imag" width=100 height=100 />
     </div>
 
@@ -83,8 +83,6 @@
         </td>
         <br /><br />
     </div>
-
-
 
     @(Html.Kendo().Grid<iWasHere.Domain.Models.DictionaryCounty>()
           .Name("grid")
