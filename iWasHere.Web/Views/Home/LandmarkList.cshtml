@@ -89,16 +89,16 @@
                 </p>
                 <p>
                     @(Html.Kendo().Button()
-                             .Name("btnSubmit")
+                             .Name("btnFilter")
                                  .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
                              .Content("Filter")
-                             .Events(e => e.Click("addCity"))
+                             .Events(e => e.Click("Filter"))
                     )
                     @(Html.Kendo().Button()
-                                        .Name("btnSubmit")
+                                        .Name("btnDeleteFilters")
                                             .HtmlAttributes(new { style = "background-color:rgb(255, 153, 0); color:white", type = "button", @class = "btn" })
                                         .Content("Delete Filters")
-                                        .Events(e => e.Click("addCity"))
+                                        .Events(e => e.Click("deleteFilters"))
                     )
                 </p>
 

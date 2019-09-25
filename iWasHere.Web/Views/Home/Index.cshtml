@@ -4,3 +4,139 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<body id="myPage">
+
+    <!-- Sidebar on click -->
+    <nav class="w3-sidebar w3-bar-block w3-white w3-card w3-animate-left w3-xxlarge" style="display:none;z-index:2" id="mySidebar">
+        <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-display-topright w3-text-teal">
+            Close
+            <i class="fa fa-remove"></i>
+        </a>
+        <a href="#" class="w3-bar-item w3-button">Link 1</a>
+        <a href="#" class="w3-bar-item w3-button">Link 2</a>
+        <a href="#" class="w3-bar-item w3-button">Link 3</a>
+        <a href="#" class="w3-bar-item w3-button">Link 4</a>
+        <a href="#" class="w3-bar-item w3-button">Link 5</a>
+    </nav>
+
+
+
+    <!-- Image Header -->
+    <div class="w3-display-container w3-animate-opacity">
+        <img src="https://wallpaperplay.com/walls/full/c/3/0/320656.jpg" alt="boat" style="width:100%;min-height:350px;max-height:600px;">
+        <div class="w3-container w3-display-bottomleft w3-margin-bottom">
+            <button onclick="seeList()" class="w3-button w3-xlarge w3-theme w3-hover-teal" title="Go To W3.CSS">VIEW LANDMARKS</button>
+        </div>
+    </div>
+
+
+
+    <!-- Team Container -->
+    <div class="w3-container w3-padding-64 w3-center" id="team">
+        <h2>MISS MARVEL TEAM</h2>
+        <p>Meet the awesome people that worked on this project:</p>
+
+        <div class="w3-row">
+            <br>
+
+            <div class="w3-quarter">
+                <img src="~/images/677339cb-8436-436d-9fc3-fe9fa274db1e_Mihnea Petre_240px.jpg" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
+                <h3>Mihnea</h3>
+                <p>"Restarteaza Charisma si o sa mearga."</p>
+            </div>
+
+            <div class="w3-quarter">
+                <img src="~/images/878b01ae-b008-43b9-803d-da9a0fef45d0_Catalin Gruia_240px.jpg" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
+                <h3>Catalin</h3>
+                <p>"%#&^$$ in el de web."</p>
+            </div>
+
+            <div class="w3-quarter">
+                <img src="~/images/2e0dbd90-4985-40bb-a3a1-34eae306ae67_Dorin Ciobanu_240px.jpg" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
+                <h3>Dorin</h3>
+                <p>Boss man</p>
+            </div>
+
+            <div class="w3-quarter">
+                <img src="~/images/0af17e3d-f449-42f6-aeb0-a01a44c5213c_Victor Nistor_240px.jpg" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
+                <h3>Victor</h3>
+                <p>"Design se scrie Design nu Designe"</p>
+            </div>
+            <div class="raw" style="margin-left:200px">
+                <div class="w3-quarter">
+                    <img src="~/images/c4d25d7e-a72d-4aed-95cf-3e98e681c72e_Iuliana Turcu_240px.jpg" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
+                    <h3>Iuliana</h3>
+                    <p>Miss "Cum dau commit?</p>
+                </div>
+                <div class="w3-quarter">
+                    <img src="~/images/4454ac40-f80b-4900-ad00-55c05b1d4cb7_WhatsApp Image 2019-09-25 at 15.19.28.jpeg" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
+                    <h3>Corina</h3>
+                    <p>"Designe-ul se face la 3 dimineata"</p>
+                </div>
+                <div class="w3-quarter">
+                    <img src="~/images/c89b8c16-1270-49f2-94ac-db588dbd0c86_Gabriel Ghinea_240px.jpg" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
+                    <h3>Gabriel</h3>
+                    <p>"Noi sa fim sanatosi"</p>
+                </div>
+         
+            </div>
+        </div>
+    </div>
+
+    
+
+   
+
+
+
+    <script>
+       function seeList()
+       {
+
+           window.location ='/Home/LandmarkList'
+        }
+        // Script for side navigation
+        function w3_open() {
+            var x = document.getElementById("mySidebar");
+            x.style.width = "300px";
+            x.style.paddingTop = "10%";
+            x.style.display = "block";
+        }
+
+        // Close side navigation
+        function w3_close() {
+            document.getElementById("mySidebar").style.display = "none";
+        }
+
+        // Used to toggle the menu on smaller screens when clicking on the menu button
+        function openNav() {
+            var x = document.getElementById("navDemo");
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+            }
+        }
+    </script>
+
+    <style>
+        
+       
+        .bg {
+            
+            position: fixed;
+            left: -500px;
+            top: 70px;
+            height: auto;
+            width: 100%;
+            opacity: 0.4;
+        }
+    </style>
+
+</body>
+
