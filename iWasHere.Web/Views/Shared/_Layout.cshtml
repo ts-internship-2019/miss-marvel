@@ -59,9 +59,9 @@
 </head>
 <body>
     <header>
-        <div class="bg">
+        @*<div class="bg">
                 <img src=@Url.Content("https://wallpaperplay.com/walls/full/c/3/0/320656.jpg") alt="MissMarvel Imag" />
-        </div>
+        </div>*@
         <nav id="naav" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light  border-bottom box-shadow mb-2 k-var-hover-background">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
@@ -181,6 +181,7 @@
                                                                       });
 
                                               });
+                                                   items.Add().Text("LANDMARKS").Url("/Home/LandmarkList");
 
                                       })
                                       .Direction(ViewBag.Direction)
