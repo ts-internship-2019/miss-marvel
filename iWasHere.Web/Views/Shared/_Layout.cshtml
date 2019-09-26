@@ -113,10 +113,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/Dictionary/TicketType">TicketTypes</a>
                         </li>*@
-                        <li class="nav-item">
-                            <div class="dic">
+                        <li style="color:lightblue" class="nav-item">
+                            <div style="color:lightskyblue" class="dic">
                                 @(Html.Kendo().Menu()
                                       .Name("Menu")
+                                         .HtmlAttributes(new { style = "color:black; background-color:lightblue;" })
                                       .Items(items =>
                                               {
                                                   items.Add().Text("Home").Url("/Home/Index");
