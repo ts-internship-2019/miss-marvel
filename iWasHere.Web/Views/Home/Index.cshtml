@@ -15,11 +15,70 @@
 
 
     <!-- Image Header -->
-    <div class="w3-display-container w3-animate-opacity">
-        <img src="https://wallpaperplay.com/walls/full/c/3/0/320656.jpg" alt="boat" style="width:100%;min-height:350px;max-height:600px;">
-        <div class="w3-container w3-display-bottomleft w3-margin-bottom">
-            <button onclick="seeList()" class="w3-button w3-xlarge w3-theme w3-hover-teal" title="Go To W3.CSS">VIEW LANDMARKS</button>
+    @*<div class="w3-display-container w3-animate-opacity">
+            <img src="https://wallpaperplay.com/walls/full/c/3/0/320656.jpg" alt="boat" style="width:100%;min-height:350px;max-height:600px;">
+            <div class="w3-container w3-display-bottomleft w3-margin-bottom">
+                <button onclick="seeList()" class="w3-button w3-xlarge w3-theme w3-hover-teal" title="Go To W3.CSS">VIEW LANDMARKS</button>
+            </div>
+        </div>*@
+
+    <!--Carousel Wrapper-->
+    <div id="carousel-example-2" class="carousel slide carousel-fade z-depth-1-half" data-ride="carousel">
+        <!--Indicators-->
+        <ol class="carousel-indicators">
+            <li data-target="#carousel-example-2" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-example-2" data-slide-to="1"></li>
+            <li data-target="#carousel-example-2" data-slide-to="2"></li>
+        </ol>
+        <!--/.Indicators-->
+        <!--Slides-->
+        <div class="carousel-inner" role="listbox">
+            <div class="carousel-item active">
+                <div class="view">
+                    <img class="d-block w-100" src="https://i.imgur.com/KjgiWBr.png" alt="MissMarvel-logo">
+                    <div class="mask rgba-black-light"></div>
+                </div>
+                <div class="carousel-caption">
+                    <h3 class="h3-responsive">Find your adventure with us</h3>
+                    <p>Coming soon</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <!--Mask color-->
+                <div class="view">
+                    <img class="d-block w-100" src="https://i.imgur.com/9WhItE4.png" alt="Second slide">
+                    <div class="mask rgba-black-light"></div>
+                </div>
+                <div class="carousel-caption">
+                    <h3 class="h3-responsive">Eiffel Tower</h3>
+                    <p>Paris,France</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <!--Mask color-->
+                <div class="view">
+                    <img class="d-block w-100" src="https://i.imgur.com/67Dyuu3.png" alt="Third slide">
+                    <div class="mask rgba-black-light"></div>
+                </div>
+                <div class="carousel-caption">
+                    <h3 class="h3-responsive">Yellowstone National Park</h3>
+                    <p>Wyoming, Montana,USA</p>
+                </div>
+            </div>
         </div>
+        <!--/.Slides-->
+        <!--Controls-->
+        <a class="carousel-control-prev" href="#carousel-example-2" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carousel-example-2" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+        <!--/.Controls-->
+    </div>
+    <!--/.Carousel Wrapper-->
     </div>
 
 
@@ -35,58 +94,57 @@
             <div class="w3-quarter">
                 <img src="~/images/677339cb-8436-436d-9fc3-fe9fa274db1e_Mihnea Petre_240px.jpg" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
                 <h3>Mihnea</h3>
-                <p>"Restarteaza Charisma si o sa mearga."</p>
+                @*<p>"Restarteaza Charisma si o sa mearga."</p>*@
             </div>
 
             <div class="w3-quarter">
                 <img src="~/images/878b01ae-b008-43b9-803d-da9a0fef45d0_Catalin Gruia_240px.jpg" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
                 <h3>Catalin</h3>
-                <p>"%#&^$$ in el de web."</p>
+                @*<p>“Be strong,” I whisper to my wifi signal.</p>*@
             </div>
 
             <div class="w3-quarter">
                 <img src="~/images/2e0dbd90-4985-40bb-a3a1-34eae306ae67_Dorin Ciobanu_240px.jpg" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
                 <h3>Dorin</h3>
-                <p>Boss man</p>
+                @*<p>Recommended by 4 out of 5 people who recommend things.</p>*@
             </div>
 
             <div class="w3-quarter">
                 <img src="~/images/0af17e3d-f449-42f6-aeb0-a01a44c5213c_Victor Nistor_240px.jpg" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
                 <h3>Victor</h3>
-                <p>"Design se scrie Design nu Designe"</p>
+                @*<p>When I am upsetti I eat some spaguetti.</p>*@
             </div>
             <div class="raw" style="margin-left:200px">
                 <div class="w3-quarter">
                     <img src="~/images/c4d25d7e-a72d-4aed-95cf-3e98e681c72e_Iuliana Turcu_240px.jpg" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
                     <h3>Iuliana</h3>
-                    <p>Miss "Cum dau commit?</p>
+                    @*<p>Why look up at the stars when the biggest star is me</p>*@
                 </div>
                 <div class="w3-quarter">
-                    <img src="~/images/4454ac40-f80b-4900-ad00-55c05b1d4cb7_WhatsApp Image 2019-09-25 at 15.19.28.jpeg" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
+                    <img src="~/images/c89b8c16-1270-49f2-94ac-db588dbd0c86_corina_240px.png" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
                     <h3>Corina</h3>
-                    <p>"Designe-ul se face la 3 dimineata"</p>
+                    @*<p>Throwing kindness around like confetti.</p>*@
                 </div>
                 <div class="w3-quarter">
                     <img src="~/images/c89b8c16-1270-49f2-94ac-db588dbd0c86_Gabriel Ghinea_240px.jpg" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
                     <h3>Gabriel</h3>
-                    <p>"Noi sa fim sanatosi"</p>
+                    @*<p>Words cannot express my love & passion for Fridays!</p>*@
                 </div>
-         
+
             </div>
         </div>
     </div>
 
-    
 
-   
+
+
 
 
 
     <script>
-       function seeList()
-       {
+        function seeList() {
 
-           window.location ='/Home/LandmarkList'
+            window.location = '/Home/LandmarkList'
         }
         // Script for side navigation
         function w3_open() {
@@ -113,10 +171,9 @@
     </script>
 
     <style>
-        
-       
+
+
         .bg {
-            
             position: fixed;
             left: -500px;
             top: 70px;

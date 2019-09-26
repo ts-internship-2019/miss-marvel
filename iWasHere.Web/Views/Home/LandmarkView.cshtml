@@ -114,15 +114,16 @@
                                 {
                                     <div>
                                         <ul style="list-style-type:none;">
-                                            <li><h4>@item.ReviewTitle</h4></li>
-                                            <li>@item.UserId</li>
-                                            <li>
-                                                @for (var i = 0; i < item.Rating; i++)
-                                                {<span style="color:gold">&#9733;</span>}
+                                            
+                                            <li><h5>@item.ReviewTitle</h5></li>
+                                            <li><i><Author: /i> @item.UserId</li>
+                                                <li>@for (var i = 0; i < item.Rating; i++)
+                                                {<span style="color:orangered">&#9733;</span>}
                                                 @for (var i = 0; i < 10 - item.Rating; i++)
-                                                {<span style="color:gold; opacity: 0.7">&#9733;</span>}
+                                                {<span style="color:orangered; opacity: 0.3">&#9733;</span>}
                                             </li>
-                                            <li>@item.ReviewComment</li>
+                                            <li> <i>@item.ReviewComment</i></li>
+                                            <br />
                                         </ul>
                                     </div>}
                             }
@@ -197,7 +198,7 @@
                     </div>
 
                     <div class="w3-container">
-                        <button type="submit" class="btn btn-dark" onclick="insert()"> Save Comment </button>
+                        <button type="submit" class="btn btn-dark" onclick="check()"> Save Comment </button>
                         <button type="submit" class="btn btn-danger" onclick="cancel()">Cancel</button>
                     </div>
                     <br />
@@ -299,6 +300,26 @@
         });
     })
 
+    	
+	function check() {
+           if (storedVal==0) {
+                alert("Please rate this landmark before proceeding.");
+                isValid = false;
+            }
+            var isValid = true;
+            if (document.getElementById("Title").value == "") {
+                alert("Please insert a title before submiting your request");
+                isValid = false;
+            }
+            if (document.getElementById("Comment").value == "") {
+                alert("Please insert a comment before submiting your request");
+                isValid = false;
+            }
+            if (isValid == true) {
+                addrev();
+            }
+        }
+
     
     function comment() {
         var x = document.getElementById("toggle");
@@ -325,21 +346,17 @@
         var checkBox = document.getElementById("myCheck");
     if (checkBox.checked == true) {
         document.getElementById('Username').setAttribute('disabled', 'disabled');
+        document.getElementById('Username').value = '';
          }
     else {
-         document.getElementById('Username').removeAttribute('disabled');
+        document.getElementById('Username').removeAttribute('disabled');
+        document.getElementById('Username').value = 'anonymous';
          }
 
     }
 
 
-
-    //var currentValue = 0;
-    //function handleClick(myRadio) {
-
-    //    currentValue = myRadio.value;
-    //}
-    function insert() {
+    function addrev() {
         $.ajax({
                     type: 'PUT',
                     url: '@Url.Action("AddComment", "Dictionary")',
@@ -352,7 +369,9 @@
                 user: document.getElementById("myCheck").checked
                      },
         success: function (response) {
+                window.location.reload();
             alert("Comment added");
+
                     },
         error: function (response) {
             alert("There was an error while trying to add your comment");
@@ -408,10 +427,14 @@
     follow these rules. Every browser that supports :checked also supports :not(), so
     it doesn’t make the test unnecessarily selective */
         .rating:not(:checked) > input {
-            position: absolute;
-            top: -9999px;
-            clip: rect(0,0,0,0);
-        }
+        position: absolute;
+        /* top: -9999px; */
+        clip: rect(0, 0, 0, 0);
+        height: 0;
+        width: 0;
+        overflow: hidden;
+        opacity: 0;
+}
 
         .rating:not(:checked) > label {
             float: right;

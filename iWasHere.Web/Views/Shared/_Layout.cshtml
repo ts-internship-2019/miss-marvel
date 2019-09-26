@@ -59,7 +59,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-warning border-bottom box-shadow mb-2 k-var-hover-background">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-2 k-var-hover-background">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">iWasHere.Web</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -102,7 +102,7 @@
                                       .Items(items =>
                                       {
                                           items.Add().Text("Home").Url("/Home/Index");
-                                          items.Add().Text("Privacy").Url("/Home/Privacy");
+                                          //items.Add().Text("Privacy").Url("/Home/Privacy");
                                           items.Add()
                                               .Text("Dictionary")/*.Url("/Dictionary/Index")*/
                                               .Items(children =>
@@ -110,6 +110,7 @@
                                                   children.Add().Text("Landmark")/*.Url("/Dictionary/LandmarkType")*/
                                                   .Items(innerChildren =>
                                                   {
+                                                      innerChildren.Add().Text("Landmark List").Url("/Home/LandmarkList");
                                                       innerChildren.Add().Text("Landmark Types").Url("/Dictionary/LandmarkType");
                                                       innerChildren.Add().Text("Add Landmark Type ").Url("/Dictionary/AddEditLandmarkType");
                                                       innerChildren.Add().Text("Add Landmark").Url("/Home/AddLandmark");

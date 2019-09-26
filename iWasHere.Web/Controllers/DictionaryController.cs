@@ -515,13 +515,13 @@ namespace iWasHere.Web.Controllers
             }
         }
 
-        public IActionResult Review(string landmarkId)
-        {
-            LandmarkReview landmarkReview = new LandmarkReview();
-            landmarkReview.LandmarkId = Convert.ToInt32(landmarkId);
-            return View(landmarkReview);
+        //public IActionResult Review(string landmarkId)
+        //{
+        //    LandmarkReview landmarkReview = new LandmarkReview();
+        //    landmarkReview.LandmarkId = Convert.ToInt32(landmarkId);
+        //    return View(landmarkReview);
 
-        }
+        //}
 
         public IActionResult DeleteTicketType([DataSourceRequest] DataSourceRequest request, int id)
         {
