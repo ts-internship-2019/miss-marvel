@@ -9,7 +9,9 @@ using System.Linq;
 using System.Text;
 
 using System.Configuration;
-
+using System.IO;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace iWasHere.Domain.Service
 {
@@ -343,13 +345,14 @@ namespace iWasHere.Domain.Service
             errMsg = null;
             try
             {
-                Models.Landmark validation = _dbContext.Landmark.FirstOrDefault(a => a.LandmarkName.Equals(landmark.LandmarkName));
+                Models.Landmark validation = _dbContext.Landmark.AsNoTracking().FirstOrDefault(a => a.LandmarkName.Equals(landmark.LandmarkName));
+               
                 if (validation != null && validation.LandmarkId != landmark.LandmarkId)
                 {
                     errMsg = "The name exists already";
                     return null;
                 }
-                validation = _dbContext.Landmark.FirstOrDefault(a => a.LandmarkCode.Equals(landmark.LandmarkCode));
+                validation = _dbContext.Landmark.AsNoTracking().FirstOrDefault(a => a.LandmarkCode.Equals(landmark.LandmarkCode));
                 if (validation != null && validation.LandmarkId != landmark.LandmarkId)
                 {
                     errMsg = "The code exists already";
@@ -377,7 +380,7 @@ namespace iWasHere.Domain.Service
                 else
                 {
 
-                    _dbContext.Update(landmark);
+                    _dbContext.Landmark.Update(landmark);
                     _dbContext.SaveChanges();
                     List<TicketXlandmark> oldPriceList = _dbContext.TicketXlandmark.Where((a => Convert.ToInt32(a.LandmarkId) == landmark.LandmarkId)).Select(
                  price => new TicketXlandmark
@@ -392,9 +395,17 @@ namespace iWasHere.Domain.Service
              .ToList();
                     for (int i = 0; i < priceList.Count; i++)
                     {
-                        priceList[i].TicketXlandmarkId = oldPriceList[i].TicketXlandmarkId;
-                        _dbContext.TicketXlandmark.Update(priceList[i]);
-                        _dbContext.SaveChanges();
+                        if (oldPriceList[i].TicketXlandmarkId != 0)
+                        {
+                            priceList[i].TicketXlandmarkId = oldPriceList[i].TicketXlandmarkId;
+                            _dbContext.TicketXlandmark.Update(priceList[i]);
+                            _dbContext.SaveChanges();
+                        }
+                        else
+                        {
+                            _dbContext.TicketXlandmark.Update(priceList[i]);
+                            _dbContext.SaveChanges();
+                        }
                     }
                 }
 
@@ -407,9 +418,103 @@ namespace iWasHere.Domain.Service
             }
         }
 
+        public void updateCurrency(DictionaryCurrencyType currency)
+        {
+
+            _dbContext.DictionaryCurrencyType.Update(currency);
+            _dbContext.SaveChanges();
+        }
 
 
-        public Models.Landmark GetLandmark(int landmarkId, out List<Models.TicketXlandmark> priceList, out DictionaryCurrencyType currency)
+        public Stream Export(int id)
+        {
+            
+            LandmarkModel landmark = _dbContext.Landmark.Select(a => new LandmarkModel()
+            {
+                LandmarkId = a.LandmarkId,
+                LandmarkName = a.LandmarkName,
+                LandmarkDescription = a.LandmarkDescription,
+                Latitude = a.Latitude,
+                Longitude = a.Longitude,
+                CityName = _dbContext.DictionaryCity.Where(d => d.CityId == a.CityId).Select(b => b.CityName).FirstOrDefault().ToString()
+            }).Where(a => a.LandmarkId == id).FirstOrDefault();
+
+            double rating = _dbContext.LandmarkReview.Average(a => a.Rating);
+            LandmarkReview firstReview = _dbContext.LandmarkReview.FirstOrDefault(a => a.LandmarkId == landmark.LandmarkId);
+
+            var stream = new MemoryStream();
+
+            using (WordprocessingDocument doc = WordprocessingDocument.Create(stream, DocumentFormat.OpenXml.WordprocessingDocumentType.Document, true))
+            {
+
+                MainDocumentPart mainPart = doc.AddMainDocumentPart();
+
+                new Document(new Body()).Save(mainPart);
+
+                Body body = mainPart.Document.Body;
+                if (firstReview != null)
+                {
+                    body.Append(
+                          new Body(
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                            new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Landmark name: " + landmark.LandmarkName))),
+                           new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                            new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Landmark description: " + landmark.LandmarkDescription))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("City : " + landmark.CityName))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Rating : " + rating.ToString()))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("First comment : "))),
+                           new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Title-" + firstReview.ReviewTitle))),
+                            new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Content-" + firstReview.ReviewComment))),
+                             new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Rating : " + firstReview.Rating.ToString()))),
+                              new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("User : " + firstReview.UserId)))
+
+                                  ));
+
+                }
+                else
+                {
+                    body.Append(
+                          new Body(
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                            new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Landmark name: " + landmark.LandmarkName))),
+                           new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                            new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("Landmark description: " + landmark.LandmarkDescription))),
+                          new DocumentFormat.OpenXml.Wordprocessing.Paragraph(
+                              new DocumentFormat.OpenXml.Wordprocessing.Run(
+                              new DocumentFormat.OpenXml.Wordprocessing.Text("City : " + landmark.CityName)))
+                          ));
+                }
+              
+                mainPart.Document.Save();
+            }
+
+            stream.Seek(0, SeekOrigin.Begin);
+
+            return stream;
+        }
+
+    
+
+
+public Models.Landmark GetLandmark(int landmarkId, out List<Models.TicketXlandmark> priceList, out DictionaryCurrencyType currency)
         {
 
 
@@ -447,14 +552,14 @@ namespace iWasHere.Domain.Service
                 
                 if (landmarkType.DictionaryItemId == 0)
                 {
-                    Models.DictionaryLandmarkType validation = _dbContext.DictionaryLandmarkType.FirstOrDefault(a => a.DictionaryItemName.Equals(landmarkType.DictionaryItemName));
-                    if(validation != null)
+                    Models.DictionaryLandmarkType validation = _dbContext.DictionaryLandmarkType.AsNoTracking().FirstOrDefault(a => a.DictionaryItemName.Equals(landmarkType.DictionaryItemName));
+                    if(validation != null && validation.DictionaryItemId != landmarkType.DictionaryItemId)
                     {
                         errMsg = "The name exists already";
                         return null;
                     }
-                    validation = _dbContext.DictionaryLandmarkType.FirstOrDefault(a => a.DictionaryItemCode.Equals(landmarkType.DictionaryItemCode));
-                   if(validation != null)
+                    validation = _dbContext.DictionaryLandmarkType.AsNoTracking().FirstOrDefault(a => a.DictionaryItemCode.Equals(landmarkType.DictionaryItemCode));
+                   if(validation != null && validation.DictionaryItemId != landmarkType.DictionaryItemId)
                     {
                         errMsg = "The code exists already";
                         return null;

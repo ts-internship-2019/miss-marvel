@@ -95,6 +95,19 @@
 
 
     <script>
+        $(document).ready(function () {
+          $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("getXmlBnr", "Home")',
+                 success: function (response) {
+                     console.log(response);
+                  
+                    },
+                        error: function (response) {
+                        alert("An error has occured");
+                    }
+                })
+    })
        function seeList()
        {
 
@@ -107,6 +120,7 @@
             x.style.paddingTop = "10%";
             x.style.display = "block";
         }
+
 
         // Close side navigation
         function w3_close() {

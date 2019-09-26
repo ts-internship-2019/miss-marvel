@@ -12,6 +12,7 @@ using iWasHere.Domain.Models;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using System.Xml;
 
 namespace iWasHere.Web.Controllers
 {
@@ -127,7 +128,7 @@ namespace iWasHere.Web.Controllers
                 l.Latitude = landmark.Latitude;
                 l.Longitude = landmark.Longitude;
                 List<TicketXlandmark> pricesList = new List<TicketXlandmark>();
-                if (StudentPrice != null)
+                if (StudentPrice != null && Convert.ToInt32(CurrencyId) != 0)
                 {
 
                     pricesList.Add(new TicketXlandmark(0, l.LandmarkId, 1, Convert.ToInt32(CurrencyId), Convert.ToDecimal(StudentPrice)));
@@ -153,6 +154,26 @@ namespace iWasHere.Web.Controllers
 
             return Json(x);
 
+        }
+
+        public IActionResult Export(int id)
+        {
+            return File(_LandmarkService.Export(id), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Landmark.docx");
+        }
+
+        public string getXmlBnr([DataSourceRequest] DataSourceRequest request)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load("https://www.bnr.ro/nbrfxrates.xml");
+            XmlNode node = doc.GetElementsByTagName("Rate")[10];
+
+            DictionaryCurrencyType currency = new DictionaryCurrencyType();
+            currency.CurrencyTypeId = 1687840;
+            currency.CurrencyName = "Euro";
+            currency.CurrencyCode = "EUR";
+            currency.CurrencyExRate = Convert.ToDecimal(node.InnerText);
+            _LandmarkService.updateCurrency(currency);
+            return node.InnerText;
         }
         public JsonResult GetLandmarkPeriod(string text)
         {
