@@ -540,10 +540,19 @@ namespace iWasHere.Web.Controllers
         {
             if (id == 0)
             {
-                _dictionaryService.AddTicket(ticketType);
-                ModelState.Clear();
-                return View();
-
+                if (btn=="saveN")
+                {
+                    _dictionaryService.AddTicket(ticketType);
+                    ModelState.Clear();
+                    return View();
+                }
+                else
+                {
+                    _dictionaryService.AddTicket(ticketType);
+                    ModelState.Clear();
+                    return View("TicketType");
+                }
+             
             }
             else
             {
@@ -603,6 +612,22 @@ namespace iWasHere.Web.Controllers
             }
 
 
+            return Json(_dbContext.SaveChanges());
+
+        }
+
+
+        public IActionResult saveTicket(string name)
+        {
+            
+            MissMarvelContext _dbContext = new MissMarvelContext();
+
+
+            _dbContext.DictionaryTicketType.Add(new DictionaryTicketType
+            {
+                TicketTypeName = name
+            });
+               
             return Json(_dbContext.SaveChanges());
 
         }
