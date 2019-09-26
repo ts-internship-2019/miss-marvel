@@ -21,18 +21,18 @@
                         <input asp-for="TicketTypeName" class="form-control" id="test" />
                         <span asp-validation-for="TicketTypeName" class="text-danger"></span>
                         <br />
-                        <button type="submit" class="btn btn-warning" onclick="redirect()">Save</button>
+
 
 
                     </div>
                     <div class="form-group">
-
 
                     </div>
                 </form>
             </div>
 
         </div>
+        <button type="submit" class="btn btn-warning" onclick="btnadd()">Save</button>
         <button type="submit" class="btn btn-warning" id="saveNew" value="saveNew" onclick="insert()">Save and new</button>
         <button type="submit" class="btn btn-danger" onclick="redirect()">Cancel</button>
 
@@ -83,23 +83,58 @@
     //    }
     //    setTimeout(clear, 50);
     //}
-     function insert() {
-        $.ajax({
-                    type: 'PUT',
-                    url: '@Url.Action("saveTicket", "Dictionary")',
-            data: {
-               
-                name: document.getElementById("test").value
-                     },
-        success: function (response) {
-            alert("Ticket added");
-            document.getElementById("test").value = '';
-                    },
-        error: function (response) {
-            alert("There was an error while trying to add your ticket");
-                    }
-                })
+    function insert() {
+        if (document.getElementById("test").value != "") {
+            $.ajax({
+                type: 'PUT',
+                url: '@Url.Action("saveTicket", "Dictionary")',
+                data: {
+                    name: document.getElementById("test").value
+                },
+                success: function (response) {
+                    alert("Ticket added");
+                    document.getElementById("test").value = '';
+                },
+                error: function (response) {
+                    alert("There was an error while trying to add your ticket");
+                }
+            })
         }
+        else {
+             alert("Please insert a value submiting your request");
+        }
+
+      
+    }
+
+
+
+    function btnadd() {
+        if (document.getElementById("test").value != "") {
+            $.ajax({
+                type: 'PUT',
+                url: '@Url.Action("saveTicket", "Dictionary")',
+                data: {
+                    name: document.getElementById("test").value
+                },
+                success: function (response) {
+                    alert("Ticket added");
+                    window.location = '/Dictionary/TicketType';
+                    document.getElementById("test").value = '';
+                },
+                error: function (response) {
+                    alert("There was an error while trying to add your ticket");
+                }
+            })
+        }
+        else {
+             alert("Please insert a value submiting your request");
+        }
+
+      
+    }
+
+    
 
     
 </script>
