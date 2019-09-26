@@ -521,13 +521,22 @@ namespace iWasHere.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddEditTicketType(DictionaryTicketType ticketType, int id,string btn)
+        public IActionResult AddEditTicketType(DictionaryTicketType ticketType, int id, string btn)
         {
             if (id == 0)
             {
-                _dictionaryService.AddTicket(ticketType);
-                ModelState.Clear();
-                return View();
+                if (btn == "saveN")
+                {
+                    _dictionaryService.AddTicket(ticketType);
+                    ModelState.Clear();
+                    return View();
+                }
+                else
+                {
+                    _dictionaryService.AddTicket(ticketType);
+                    ModelState.Clear();
+                    return View("TicketType");
+                }
 
             }
             else
@@ -592,6 +601,20 @@ namespace iWasHere.Web.Controllers
 
         }
 
+        public IActionResult saveTicket(string name)
+        {
+
+            MissMarvelContext _dbContext = new MissMarvelContext();
+
+
+            _dbContext.DictionaryTicketType.Add(new DictionaryTicketType
+            {
+                TicketTypeName = name
+            });
+
+            return Json(_dbContext.SaveChanges());
+
+        }
 
 
 
